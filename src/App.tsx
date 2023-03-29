@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import css from "./styles/App.module.scss";
+import WordTable from "./components/WordTable";
+import { WordList } from "./types";
+import { Text } from "./components/Text";
+
+const exampleWords: WordList = [
+  {
+    front: { word: "bleh", lang: "en" },
+    back: { word: "ok", lang: "es" },
+  },
+  {
+    front: { word: "bleh", lang: "en" },
+    back: { word: "ok", lang: "es" },
+  },
+  {
+    front: { word: "bleh", lang: "en" },
+    back: { word: "ok", lang: "es" },
+  },
+];
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <img
+          src="https://placehold.co/600x100"
+          className={css.logo}
+          alt="logo"
+        />
       </header>
+      <div className={css.container}>
+        <Text type="paragraph">lol ok</Text>
+        <WordTable words={exampleWords} />
+      </div>
     </div>
   );
 }
