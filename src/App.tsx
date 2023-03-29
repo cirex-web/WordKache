@@ -31,7 +31,7 @@ function App() {
         />
       </header>
       <div className={css.container}>
-        <Text type="paragraph">lol ok</Text>
+        <Text type="paragraph">Welcome back! We've generated N flashcards from your recent translation activity. Review them here: </Text>
         <WordTable words={exampleWords} />
       </div>
     </div>
