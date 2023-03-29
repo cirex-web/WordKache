@@ -124,7 +124,7 @@ const obtainCurrentTranslation = () => {
 
     if (document.hidden) return; //needs to be the active page (otherwise a waste of resources)
     const translatorConfig = getMatchingTranslatorConfig();
-    if (!translatorConfig) return; //not a translation site
+    if (!translatorConfig) return; //not a compatible translation site
     const inputText = scrapeText(translatorConfig.input.text);
     const inputLang = scrapeText(translatorConfig.input.lang);
     const outputLang = scrapeText(translatorConfig.output.lang);
