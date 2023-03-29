@@ -1,14 +1,18 @@
 
-console.log("Wordable Content script running!")
+console.log("Wordable Content script running!");
+
+
+let url: URL = new URL("http://undefined");
+
 type scrapeMethod = {
-    type: "URL",
-    regex: string
+    type: "URL_REGEX",
+    regex: string //returned string is the first capture group
 } | {
-    type: "URL",
+    type: "URL_PARAM",
     param: string
 } | {
     type: "DOM",
-    js: string //given DOM element, return desired string
+    js: (body: HTMLElement) => string //function that takes in DOM element and returns desired string
 };
 
 interface Config {
@@ -26,36 +30,60 @@ interface Config {
     }
 };
 
-const configs: Config[] = [
+const translationSiteConfigurations: Config[] = [
     {
         "urlChecks": {
             "urlParams": {
-                op: "translate"
+                "op": "translate"
             },
             "host": "translate.google.com",
         },
         "input": {
             "text": {
-                "type": "URL",
+                "type": "URL_PARAM",
                 "param": "text"
             },
 
             "lang": {
                 "type": "DOM",
-                "js": `
-                (body)=>{
-                    body.querySelectorAll('[aria-selected="true"] [jsname="V67aGc"]')[0].textContent.split(" ")[0]
-                }
-                `
+                "js":
+                    (body) => {
+                        const matches = body.querySelectorAll('[aria-selected="true"] [jsname="V67aGc"]');
+                        console.assert(matches.length);
+                        return (matches[0].textContent ?? "").split(" ")[0];
+                    }
+
             }
 
         },
         "output": {
             "lang": {
-                "type": "URL",
+                "type": "URL_PARAM",
                 "param": "tl"
             }
         }
+    },
+    {
+        urlChecks:{
+            host:"www.deepl.com"
+        },
+        input:{
+            lang:{
+                type:"URL_REGEX",
+                regex:"#(.*?)\/"
+            },
+            text:{
+                type:"URL_REGEX",
+                regex:".*\/(.*)"
+            }
+        },
+        output:{
+            lang:{
+                type:"URL_REGEX",
+                regex:"#.*\/(.+?)\/"
+            }
+        }
+
     }
 ];
 
@@ -71,13 +99,37 @@ const _isValidTranslatorURL = (url: URL, translatorConfig: Config) => {
     return true;
 
 }
-const isValidTranslatorURL = () => {
-    const url = new URL(window.location.href);
-
-    for (const translatorConfig of configs) {
-        if (_isValidTranslatorURL(url, translatorConfig)) return true;
+const scrapeText = (method: scrapeMethod): string => {
+    switch (method.type) {
+        case "DOM":
+            return method.js(document.body);
+        case "URL_PARAM":
+            return url.searchParams.get(method.param) ?? "";
+        case "URL_REGEX":
+            const regex = RegExp(method.regex);
+            const matches = regex.exec(decodeURI(url.toString()));
+            return matches?.[1] ?? ""; 
     }
-    return false;
 }
-setInterval(()=>console.log(isValidTranslatorURL()),1000); //for internal redirects or whatever
-export {}
+
+const getMatchingTranslatorConfig = () => {
+
+    for (const translatorConfig of translationSiteConfigurations) {
+        if (_isValidTranslatorURL(url, translatorConfig)) return translatorConfig;
+    }
+    return null;
+}
+const obtainCurrentTranslation = () => {
+    url = new URL(window.location.href); //should be the only place where url is updated
+
+    if (document.hidden) return; //needs to be the active page (otherwise a waste of resources)
+    const translatorConfig = getMatchingTranslatorConfig();
+    if (!translatorConfig) return; //not a translation site
+    const inputText = scrapeText(translatorConfig.input.text);
+    const inputLang = scrapeText(translatorConfig.input.lang);
+    const outputLang = scrapeText(translatorConfig.output.lang);
+    console.log(`input ${inputText} (${inputLang})`);
+    console.log(`output lang: ${outputLang}`)
+}
+setInterval(obtainCurrentTranslation, 1000); //keep searching even if no matches found to account for internal redirects or whatever
+export { }
