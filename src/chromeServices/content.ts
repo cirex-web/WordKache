@@ -1,4 +1,5 @@
-console.log("what's up?")
+
+console.log("Wordable Content script running!")
 type scrapeMethod = {
     type: "URL",
     regex: string
@@ -11,10 +12,10 @@ type scrapeMethod = {
 };
 
 interface Config {
-    domain: string,
-    domainChecks?: {
+    urlChecks: {
+        host: string,
         subpage?: string,
-        urlParams?: {}[]
+        urlParams?: { [key: string]: (string | number) }
     }
     input: {
         text: scrapeMethod,
@@ -25,13 +26,13 @@ interface Config {
     }
 };
 
-const config: Config[] = [
+const configs: Config[] = [
     {
-        "domain": "translate.google.com",
-        "domainChecks": {
+        "urlChecks": {
             "urlParams": {
-                "op": "translate" //TODO: match a generic obj ts I forgot
-            }
+                op: "translate"
+            },
+            "host": "translate.google.com",
         },
         "input": {
             "text": {
@@ -49,7 +50,7 @@ const config: Config[] = [
             }
 
         },
-        output: {
+        "output": {
             "lang": {
                 "type": "URL",
                 "param": "tl"
@@ -57,4 +58,26 @@ const config: Config[] = [
         }
     }
 ];
-export { }
+
+const _isValidTranslatorURL = (url: URL, translatorConfig: Config) => {
+    const checks = translatorConfig.urlChecks;
+    if (checks.host !== url.hostname) return false;
+    for (const [key, value] of Object.entries(checks.urlParams ?? {})) {
+        if (url.searchParams.get(key) !== value) {
+            return false;
+        };
+    }
+    if (checks.subpage && checks.subpage !== url.pathname) return false;
+    return true;
+
+}
+const isValidTranslatorURL = () => {
+    const url = new URL(window.location.href);
+
+    for (const translatorConfig of configs) {
+        if (_isValidTranslatorURL(url, translatorConfig)) return true;
+    }
+    return false;
+}
+setInterval(()=>console.log(isValidTranslatorURL()),1000); //for internal redirects or whatever
+export {}
