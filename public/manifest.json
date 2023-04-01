@@ -1,6 +1,6 @@
 {
-  "name": "Wordable - Learn while you translate!",
-  "description": "A Chrome Extension that keeps track of what you translate and helps you learn those words.",
+  "name": "Kache - Saving your translations",
+  "description": "Never let your online translations go to waste again!",
   "version": "1.0",
   "manifest_version": 3,
   "action": {
@@ -14,7 +14,12 @@
   },
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
   ],
   "content_scripts": [
     {

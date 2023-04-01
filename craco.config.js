@@ -1,6 +1,3 @@
-
-const glob = require("glob");
-
 module.exports = {
     webpack: {
         configure: (webpackConfig, {env, paths}) => {
@@ -8,8 +5,8 @@ module.exports = {
                 ...webpackConfig,
                 entry: {
                     main: [env === 'development' && require.resolve('react-dev-utils/webpackHotDevClient'),paths.appIndexJs].filter(Boolean),
-                    content: './src/chromeServices/content.ts',
-                    background: './src/chromeServices/background.ts'
+                    content: './src/chromeServices/contentScripts/content.ts',
+                    background: './src/chromeServices/background/background.ts'
                 },
                 output: {
                     ...webpackConfig.output,

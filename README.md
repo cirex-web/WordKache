@@ -1,2 +1,2 @@
-# Kache - Saving Your Translations
+# WordKache - Saving Your Translations
 
