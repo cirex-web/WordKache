@@ -7,8 +7,7 @@ export function processCurrentSnapshot(translationData: TranslationSnapshot) {
     const timeDifferenceMs = curTime - previousTime;
     if (timeDifferenceMs >= 2000) {
         if (translationData.inputText !== "" && translationData.outputText !== "") {
-
-            console.log(JSON.stringify(translationData));
+            chrome.runtime.sendMessage(JSON.stringify(translationData)); //TODO: finish message passing and also debug logging
         }
     }
     previousTime = curTime;

@@ -7,7 +7,7 @@ import { addLocationChangeCallback, getURL } from "./urlMonitor";
 
 
 console.log("Kache Content script running!");
-let siteConfigId: undefined | number = undefined;
+let siteConfigId: undefined | number | null = undefined;
 
 
 const _isValidTranslatorURL = (url: URL, translatorConfig: SiteConfig) => {
@@ -38,12 +38,12 @@ const scrapeTextFromTextbox = (getTextbox: getTextBox) => {
     const textBox = getTextbox(document.body);
     return textBox?.textContent ?? "";
 }
-const getMatchingTranslatorConfig = (): number | undefined => {
+const getMatchingTranslatorConfig = (): number | null => {
     const url = getURL();
     for (let i = 0; i < siteConfigs.length; i++) {
         if (_isValidTranslatorURL(url, siteConfigs[i])) return i;
     }
-    return undefined;
+    return null;
 }
 
 let previousTranslationValues: TranslationSnapshot = {
@@ -79,11 +79,14 @@ const getTranslationSnapshot = (siteConfigId: number): TranslationSnapshot => {
 //     }
 // }
 const keyPressEventHandler = (key: string) => {
-    if (typeof siteConfigId === "undefined") {
+    
+    if (siteConfigId === undefined || siteConfigId === null) {
         console.warn("Keypress event handler not disposed of properly - siteConfigId is undefined");
         return;
     }
-    processCurrentSnapshot(getTranslationSnapshot(siteConfigId)); //snapshot right before UI components change
+    if(key.length===1||key==='Backspace'||key==='Click'){
+        processCurrentSnapshot(getTranslationSnapshot(siteConfigId)); //snapshot right before UI components change
+    }
 }
 
 addLocationChangeCallback(() => {
@@ -91,16 +94,12 @@ addLocationChangeCallback(() => {
     const newSiteConfigId = getMatchingTranslatorConfig();
     if (siteConfigId !== newSiteConfigId) {
         siteConfigId = newSiteConfigId;
-        if (typeof siteConfigId !== "undefined") {
+        if (siteConfigId !== null) {
             console.log(`Listening for activity in textbox on site ${siteConfigs[siteConfigId].urlChecks.host}`)
             siteConfigs[siteConfigId].input.getTextBox(document.body)?.addEventListener('keydown', (event) => keyPressEventHandler(event.key));
-            siteConfigs[siteConfigId].input.getTextBox(document.body)?.addEventListener('click', () => keyPressEventHandler("click"));
+            siteConfigs[siteConfigId].input.getTextBox(document.body)?.addEventListener('click', () => keyPressEventHandler('Click'));
         } else {
             console.log("No site configurations found")
         }
     }
 });
-
-// main().then(() => {
-//     console.log("Kache stopped")
-// });
