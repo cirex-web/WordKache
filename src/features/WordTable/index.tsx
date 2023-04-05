@@ -1,5 +1,5 @@
 import React from "react";
-import { WordList } from "../types";
+import { WordList } from "../../types";
 
 const WordTable = ({ words }: { words: WordList }) => {
   return (

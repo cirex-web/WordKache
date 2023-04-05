@@ -1,0 +1,5 @@
+.container{
+    border-right:4px solid gray;
+    height: 100%;
+    position: relative;
+}
