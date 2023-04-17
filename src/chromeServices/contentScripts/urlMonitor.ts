@@ -15,6 +15,6 @@ export const getURL = (): URL => {
 }
 
 
-export const addLocationChangeCallback = (callback: EventListenerOrEventListenerObject): void => {
+export const onLocationChange = (callback: EventListenerOrEventListenerObject): void => {
     window.addEventListener('locationchange', callback)
 }

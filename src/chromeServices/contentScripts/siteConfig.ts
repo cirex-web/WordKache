@@ -1,6 +1,6 @@
-import { SiteConfig } from "../configTypes";
+import { ISiteConfig } from "../types";
 
-export const siteConfigs: SiteConfig[] = [
+export const siteConfigs: ISiteConfig[] = [
     {
         "urlChecks": {
             "urlParams": {
@@ -38,28 +38,28 @@ export const siteConfigs: SiteConfig[] = [
             }
         }
     },
-    {
-        urlChecks: {
-            host: "www.deepl.com"
-        },
-        input: {
-            lang: {
-                type: "URL_REGEX",
-                regex: "#(.*?)\/"
-            },
-            getTextBox: (body) => body.querySelector("d-textarea")
-        },
-        output: {
-            lang: {
-                type: "URL_REGEX",
-                regex: "#.*\/(.+?)\/"
-            },
-            text: {
-                type: "DOM",
-                js: (body) => body.querySelectorAll("d-textarea")[1]?.textContent ?? ""
-            }
+    // {
+    //     urlChecks: {
+    //         host: "www.deepl.com"
+    //     },
+    //     input: {
+    //         lang: {
+    //             type: "URL_REGEX",
+    //             regex: "#(.*?)\/"
+    //         },
+    //         getTextBox: (body) => body.querySelector("d-textarea")
+    //     },
+    //     output: {
+    //         lang: {
+    //             type: "URL_REGEX",
+    //             regex: "#.*\/(.+?)\/"
+    //         },
+    //         text: {
+    //             type: "DOM",
+    //             js: (body) => body.querySelectorAll("d-textarea")[1]?.textContent ?? ""
+    //         }
 
-        }
+    //     }
 
-    }
+    // }
 ];
