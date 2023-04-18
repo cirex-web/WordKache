@@ -30,15 +30,17 @@ const WordTable = ({ words }: { words: WordList }) => {
         <col span={1} style={{ width: "50%" }}></col>
       </colgroup>
       <tbody>
-        {filteredCards.map((wordEntry, i) => (
-          <tr
-            key={i}
-            style={{ backgroundColor: wordEntry.good ? "green" : "red" }}
-          >
-            <td>{wordEntry.front.text}</td>
-            <td>{wordEntry.back.text}</td>
-          </tr>
-        ))}
+        {filteredCards.map(
+          (wordEntry, i) =>
+            wordEntry.good && (
+              <tr
+                key={i}
+              >
+                <td>{wordEntry.front.text}</td>
+                <td>{wordEntry.back.text}</td>
+              </tr>
+            )
+        )}
       </tbody>
     </table>
   );
