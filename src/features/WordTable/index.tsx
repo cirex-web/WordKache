@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { WordList } from "../../types";
+import { Card } from "../../chromeServices/types"; //TODO: this sucks
+import { ChromeStorage } from "../../chromeServices/storage"; //TODO: also this
 
 const WordTable = ({ words }: { words: WordList }) => {
+  const [cards, setCards] = useState<Card[]>([]); //TODO: oh gosh move this somewhere else maybe a context
+  useEffect(() => {
+    chrome.storage.local.onChanged.addListener((changes) => {
+      if ("pending" in changes) {
+        setCards(changes.pending.newValue as Card[]);
+      }
+    });
+    ChromeStorage.get("pending").then((res)=>setCards(res as Card[])); 
+  }, []);
+
   return (
     <table>
       <colgroup>
@@ -9,10 +21,10 @@ const WordTable = ({ words }: { words: WordList }) => {
         <col span={1} style={{ width: "50%" }}></col>
       </colgroup>
       <tbody>
-        {words.map((wordEntry, i) => (
+        {cards.map((wordEntry, i) => (
           <tr key={i}>
-            <td>{wordEntry.front.word}</td>
-            <td>{wordEntry.back.word}</td>
+            <td>{wordEntry.front.text}</td>
+            <td>{wordEntry.back.text}</td>
           </tr>
         ))}
       </tbody>

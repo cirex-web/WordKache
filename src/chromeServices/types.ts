@@ -45,3 +45,15 @@ export interface IRequestParserConfig {
     match: (url: URL) => boolean;
     parseBody: (body: any) => any;
 };
+
+type Lang = 'en' | 'es' | string;
+export interface Card {
+    front: {
+        text: string,
+        lang: Lang
+    },
+    back: {
+        text: string,
+        lang: Lang
+    }
+}

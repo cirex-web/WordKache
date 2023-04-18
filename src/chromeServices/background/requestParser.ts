@@ -8,19 +8,17 @@ class RequestParser {
     }
     parseRequest(requestDetails: chrome.webRequest.WebRequestBodyDetails) {
         const requestBody = requestDetails.requestBody!;
-        if (!requestBody.error) {
-            return {
-                id: requestDetails.requestId,
-                input: this.#config.parseBody(requestBody.formData)
-            };
 
-        }
-        return {};
+        return {
+            id: requestDetails.requestId,
+            input: requestBody.error?"":this.#config.parseBody(requestBody.formData)
+        };
 
     }
-    match(url: URL) {
-        return this.#config.match(url);
+    match(url: string) {
+        
+        return this.#config.match(new URL(url));
     }
 }
 
-export const RequestParsers = requestParserConfig.map((config) => new RequestParser(config));
+export const requestParsers = requestParserConfig.map((config) => new RequestParser(config));

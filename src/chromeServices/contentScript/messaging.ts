@@ -6,6 +6,7 @@ const sessionId = nanoid();
 port.onMessage.addListener((msg) => {
     console.log("from port", msg);
 });
+
 /** just validates that whatever data is sent is actually in the proper format */
 const _sendSnapshot = (data: MTranslationSnapshot) => {
     port.postMessage(data);
