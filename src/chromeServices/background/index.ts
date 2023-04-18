@@ -51,7 +51,6 @@ const addFlashcard = async (snapshot: MTranslationSnapshot) => {
             lang: snapshot.outputLang
         }
     });
-    console.log(existingPendingCards);
     await ChromeStorage.setPair("pending", existingPendingCards);
 
 }

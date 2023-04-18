@@ -14,7 +14,6 @@ export const getURL = (): URL => {
     return new URL(getURLString());
 }
 
-
 export const onLocationChange = (callback: EventListenerOrEventListenerObject): void => {
     window.addEventListener('locationchange', callback)
 }

@@ -1,3 +1,4 @@
+import { logger } from "../logger";
 import { ITranslationSnapshot, MTranslationSnapshot } from "../types";
 import { sendSnapshot } from "./messaging";
 
@@ -7,7 +8,7 @@ let snapshotBeforeDeletionStarted: MTranslationSnapshot;
 let prevAction: "addition" | "deletion";
 
 export function processCurrentSnapshot(snapshot: ITranslationSnapshot) {
-    console.log(snapshot);
+    logger.debug(snapshot);
     if (snapshot.inputText === previousInput) return; //user performed some non text mutation operation (like clicking, doing CMD-A, etc.)
     previousInput = snapshot.inputText;
     const curTimeMs = +new Date();
@@ -16,7 +17,7 @@ export function processCurrentSnapshot(snapshot: ITranslationSnapshot) {
 
 
     //let's see if there's anything viable to send over (NOTE: this gets further processed in the backend)
-    if (timeDifferenceMs >= 200 && prevAction !== currentAction) {
+    if (timeDifferenceMs >= 200 && !snapshot.newInputText.startsWith(snapshot.inputText)) {
         if (snapshot.inputText !== "" && snapshot.outputText !== "") {
             sendSnapshot({ ...snapshot, inputTime: previousTimeMs });
         }
@@ -25,6 +26,5 @@ export function processCurrentSnapshot(snapshot: ITranslationSnapshot) {
     }
     previousTimeMs = curTimeMs;
     prevAction = currentAction;
-    console.assert(snapshot.newInputText.length !== snapshot.inputText.length);
 }
 

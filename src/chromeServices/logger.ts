@@ -1,9 +1,13 @@
 import { ChromeStorage } from "./storage";
+const COLORS = {
+    "DEBUG": "gray",
+    "INFO": "lightblue"
+} as const
 
-export const LOGGER = {
-    PRINT:(s:string,type:string)=>console.log(`[WordKache][${type}] ${s}`),
-    DEBUG:(s:string)=>LOGGER.PRINT(s,"DEBUG"),
-    INFO:(s:string)=>LOGGER.PRINT(s,"INFO")
+export const logger = {
+    print: (type: "DEBUG" | "INFO",...args:any[]) => console.log(`%c[WordKache]%c[${type}]`, 'color:"rgb(24 100 205)";font-weight:bold', `color:${COLORS[type]}`,...args),
+    debug: (...args:any[]) => logger.print("DEBUG", ...args),
+    info: (...args:any[]) => logger.print("INFO", ...args)
 
 }
 export const sendLog = async (message: string | { [key: string | number]: any }) => {

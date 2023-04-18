@@ -1,11 +1,16 @@
+import { logger } from "../logger";
 import { IExtendedTranslationSnapshot, MTranslationSnapshot } from "../types";
 import { nanoid } from 'nanoid'
-const port = chrome.runtime.connect({ name: "snapshot" });
-const sessionId = nanoid();
-
-port.onMessage.addListener((msg) => {
-    console.log("from port", msg);
-});
+let port: chrome.runtime.Port;
+const connect = () => {
+    logger.debug("Created port connection")
+    port = chrome.runtime.connect({ name: "snapshot" });
+    port.onMessage.addListener((msg) => {
+        logger.info("from port", msg);
+    });
+    port.onDisconnect.addListener(connect);
+}
+connect();
 
 /** just validates that whatever data is sent is actually in the proper format */
 const _sendSnapshot = (data: MTranslationSnapshot) => {
@@ -13,5 +18,5 @@ const _sendSnapshot = (data: MTranslationSnapshot) => {
 }
 export const sendSnapshot = (snapshot: IExtendedTranslationSnapshot) => {
     _sendSnapshot(snapshot);
-    console.log("sent!", snapshot)
+    logger.info("sent!", snapshot)
 }
