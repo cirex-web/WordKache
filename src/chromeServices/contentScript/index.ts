@@ -24,11 +24,7 @@ const keyPressEventHandler = (event: Event) => {
     const target = event.target as HTMLInputElement;
     processCurrentSnapshot({ ...existingMatchedSite.getTranslationSnapshot(), newInputText: target.value }); //snapshot right before UI components (like the textbox) change
 }
-const selectEventHandler = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    console.log(target.selectionStart, target.selectionEnd);
 
-}
 onLocationChange(() => {
 
     const matchedSite = getMatchingTranslatorConfig();
@@ -36,13 +32,13 @@ onLocationChange(() => {
         if (existingMatchedSite !== null) {
             //remove existing event listeners if possible
             existingMatchedSite.getTextbox().removeEventListener('input', keyPressEventHandler);
-            existingMatchedSite.getTextbox().removeEventListener('keydown', selectEventHandler);
+            existingMatchedSite.getTextbox().removeEventListener('focusout', keyPressEventHandler);
 
         }
         if (matchedSite !== null) {
             logger.info(`Listening for activity in text box on site ${matchedSite}`)
             matchedSite.getTextbox().addEventListener('input', keyPressEventHandler);
-            matchedSite.getTextbox().addEventListener('keydown', selectEventHandler);
+            matchedSite.getTextbox().addEventListener('focusout', keyPressEventHandler);
 
         } else {
             logger.info("No site configurations found")

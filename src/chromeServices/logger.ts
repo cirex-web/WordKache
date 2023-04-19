@@ -1,16 +1,27 @@
 import { ChromeStorage } from "./storage";
 const COLORS = {
     "DEBUG": "gray",
-    "INFO": "lightblue"
+    "INFO": "lightblue",
+    "WARN": "yellow"
 } as const
+let existingLogs: any[] = []
+ChromeStorage.get("logs").then((logs) => {
+    if (logs) existingLogs = logs as any[];
+});
 
 export const logger = {
-    print: (type: "DEBUG" | "INFO",...args:any[]) => console.log(`%c[WordKache]%c[${type}]`, 'color:"rgb(24 100 205)";font-weight:bold', `color:${COLORS[type]}`,...args),
-    debug: (...args:any[]) => logger.print("DEBUG", ...args),
-    info: (...args:any[]) => logger.print("INFO", ...args)
+    print: (type: "DEBUG" | "INFO" | "WARN", ...args: any[]) => {
+        console.log(`%c[WordKache]%c[${type}][${+new Date()}]`, 'color:"rgb(24 100 205)";font-weight:bold', `color:${COLORS[type]}`, ...args);
+        for (const arg of args) {
+            sendLog(arg);
+        }
+    },
+    debug: (...args: any[]) => logger.print("DEBUG", ...args),
+    info: (...args: any[]) => logger.print("INFO", ...args),
+    warn: (...args: any[]) => logger.print("WARN", ...args)
 
 }
 export const sendLog = async (message: string | { [key: string | number]: any }) => {
-    const existingLogs: any[] = JSON.parse((await chrome.storage.local.get("logs"))["logs"]) || [];
-    await ChromeStorage.set({ logs: JSON.stringify([...existingLogs, { time: +new Date(), message }]) });
+    existingLogs.push({ time: +new Date(), message });
+    await ChromeStorage.setPair("logs", existingLogs);
 }

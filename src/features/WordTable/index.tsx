@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { WordList } from "../../types";
 import { Card } from "../../chromeServices/types"; //TODO: this sucks
 import { ChromeStorage } from "../../chromeServices/storage"; //TODO: also this
-import { similar } from "../../utils/stringMatching";
+import { similar } from "../../utils/strings";
 
 const WordTable = ({ words }: { words: WordList }) => {
   const [cards, setCards] = useState<Card[]>([]); //TODO: oh gosh move this somewhere else maybe a context
   useEffect(() => {
     chrome.storage.local.onChanged.addListener((changes) => {
-      //TODO: prehaps some actually typed storage?
+      //TODO: perhaps some actually typed storage?
       if ("pending" in changes) {
         setCards(changes.pending.newValue as Card[]);
       }
@@ -16,16 +16,17 @@ const WordTable = ({ words }: { words: WordList }) => {
     ChromeStorage.get("pending").then((res) => setCards(res as Card[]));
   }, []);
   const filteredCards = [];
+  let latestGoodText = "";
+  for (let i = cards.length - 1; i >= 0; --i) {
+    const good =
+      i === cards.length - 1 || !similar(cards[i].front.text, latestGoodText);
 
-  for (let i = 0; i < cards.length; i++) {
     filteredCards.push({
       ...cards[i],
-      good:
-        i === cards.length - 1 ||
-        !similar(cards[i].front.text, cards[i + 1].front.text),
+      good: good,
     });
+    if (good) latestGoodText = cards[i].front.text;
   }
-  filteredCards.reverse();
   console.log(filteredCards);
 
   return (

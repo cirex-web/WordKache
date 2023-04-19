@@ -5,7 +5,6 @@ const getTranspositions = (ar: number[]) => {
     for (let i = 0; i < ar.length; i++) {
         transpositions += +(sortedAr[i] !== ar[i]); //looks sus but I have to do this or ts will complain
     }
-    console.log(sortedAr);
     return transpositions;
 }
 /** Classic Jaro similarity score implementation (I think) */
@@ -35,15 +34,34 @@ const jaroScore = (a: string, b: string) => {
     }
     if (matches.length === 0) return 0;
     const transpositions = getTranspositions(matches) / 2;
-    console.log(matches, transpositions, (matches.length / a.length + matches.length / b.length + (matches.length - transpositions) / matches.length) / 3);
     return (matches.length / a.length + matches.length / b.length + (matches.length - transpositions) / matches.length) / 3;
 
 }
+/**
+ * Note that order of params matters
+ * @param a First string
+ * @param b Second (transformed) string 
+ * @returns Whether or not they're "similar"
+ */
 export const similar = (a: string, b: string) => {
-    if (a.startsWith(b)) return true;
-    for (let length = a.length; length <= b.length; length++) {
+    // if (a.length > b.length) [a, b] = [b, a]; //shorter string first
+    for (let length = Math.min(a.length, b.length); length <= b.length; length++) {
         if (jaroScore(a, b.substring(0, length)) >= .8) return true;
     }
     return false;
 }
 
+// type RecursiveObject = { [key: string|number]: RecursiveObject | string };
+// export const sanitize = <T>(s: T):T extends string?string:RecursiveObject => {
+//     if (typeof s === 'object') {
+//         for (const [key, val] of Object.entries(s)) {
+//             s[key] = sanitize(val);
+//         }
+//         return s;
+//     } else {
+//         return s.trimEnd().trimStart(); //the actual sanitize method
+//     }
+// }
+export const sanitize = (s: string) => {
+    return s.trimEnd().trimStart();
+} 

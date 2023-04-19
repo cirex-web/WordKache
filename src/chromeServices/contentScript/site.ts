@@ -1,3 +1,4 @@
+import { sanitize } from "../../utils/strings";
 import { ISiteConfig, scrapeMethod } from "../types";
 import { siteConfigs } from "./siteConfig";
 import { getURL } from "./urlMonitor";
@@ -24,6 +25,7 @@ export class Site {
                 return matches?.[1] ?? "";
         }
     }
+
     getTextbox = () => {
         const textBox = this.#siteConfig.input.getTextBox(document.body);
         if (textBox === null) throw new Error(`Textbox for site config of URL ${this} does not exist. Please fix ASAP`);
@@ -36,7 +38,6 @@ export class Site {
         return this.#siteConfig.urlChecks.host;
     }
     getTranslationSnapshot = () => {
-        console.assert(!document.hidden);
         const inputText = Site.scrapeText(this.#siteConfig.input.text);
         const inputLang = Site.scrapeText(this.#siteConfig.input.lang);
         const outputLang = Site.scrapeText(this.#siteConfig.output.lang);

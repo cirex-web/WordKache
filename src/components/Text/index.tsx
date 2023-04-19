@@ -9,7 +9,6 @@ export const Text = ({
   children: string;
   noWrap?: boolean;
 }) => {
-  console.log(type);
   return (
     <div
       className={css[type]}
