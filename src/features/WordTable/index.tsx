@@ -8,6 +8,7 @@ const WordTable = ({ words }: { words: WordList }) => {
   const [cards, setCards] = useState<Card[]>([]); //TODO: oh gosh move this somewhere else maybe a context
   useEffect(() => {
     chrome.storage.local.onChanged.addListener((changes) => {
+      //TODO: prehaps some actually typed storage?
       if ("pending" in changes) {
         setCards(changes.pending.newValue as Card[]);
       }
@@ -16,12 +17,16 @@ const WordTable = ({ words }: { words: WordList }) => {
   }, []);
   const filteredCards = [];
 
-  for (let i = 0; i < cards.length - 1; i++) {
+  for (let i = 0; i < cards.length; i++) {
     filteredCards.push({
       ...cards[i],
-      good: !similar(cards[i].front.text, cards[i + 1].front.text),
+      good:
+        i === cards.length - 1 ||
+        !similar(cards[i].front.text, cards[i + 1].front.text),
     });
   }
+  filteredCards.reverse();
+  console.log(filteredCards);
 
   return (
     <table>
@@ -33,9 +38,7 @@ const WordTable = ({ words }: { words: WordList }) => {
         {filteredCards.map(
           (wordEntry, i) =>
             wordEntry.good && (
-              <tr
-                key={i}
-              >
+              <tr key={i}>
                 <td>{wordEntry.front.text}</td>
                 <td>{wordEntry.back.text}</td>
               </tr>

@@ -40,7 +40,7 @@ const jaroScore = (a: string, b: string) => {
 
 }
 export const similar = (a: string, b: string) => {
-    if (a.length > b.length) [a, b] = [b, a];
+    if (a.startsWith(b)) return true;
     for (let length = a.length; length <= b.length; length++) {
         if (jaroScore(a, b.substring(0, length)) >= .8) return true;
     }

@@ -14,7 +14,11 @@ connect();
 
 /** just validates that whatever data is sent is actually in the proper format */
 const _sendSnapshot = (data: MTranslationSnapshot) => {
-    port.postMessage(data);
+    try {
+        port.postMessage(data);
+    } catch (e) {
+        alert("WordKache extension context invalidated - Please refresh the page.");
+    }
 }
 export const sendSnapshot = (snapshot: IExtendedTranslationSnapshot) => {
     _sendSnapshot(snapshot);
