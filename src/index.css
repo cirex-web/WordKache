@@ -1,6 +1,9 @@
 :root {
   font-size: 62.5%;
 }
+::-webkit-scrollbar {
+  display: none;
+}
 .material-symbols-outlined {
   font-variation-settings:
   'FILL' 0,

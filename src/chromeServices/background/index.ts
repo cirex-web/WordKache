@@ -1,7 +1,8 @@
 import { logger } from "../logger";
 import { ChromeStorage } from "../../utils/storage";
-import { Card, MTranslationSnapshot } from "../types";
+import { MTranslationSnapshot } from "../types";
 import { requestParsers } from "./requestParser";
+import { Card } from "../../types";
 
 logger.info("Kache background script init!")
 
@@ -69,7 +70,7 @@ chrome.runtime.onConnect.addListener(
             port.onMessage.addListener(function (translationSnapshot: MTranslationSnapshot) {
                 translationSnapshot.inputLang = normalizeLanguage(translationSnapshot.inputLang);
                 translationSnapshot.outputLang = normalizeLanguage(translationSnapshot.outputLang);
-                
+
                 if (currentWebRequest.input === translationSnapshot.inputText && currentWebRequest.timeCompleted && +new Date() - currentWebRequest.timeCompleted >= 200) {
                     //if there was no network request (cuz the translation app cached the data somewhere or if the request is complete)
                     const timeAfterDefinitionLoad = (+new Date() - (currentWebRequest.timeCompleted ?? 0));

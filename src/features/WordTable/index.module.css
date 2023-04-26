@@ -13,20 +13,20 @@ table {
   flex-grow: 1;
   overflow: hidden;
   font-size: 1.2rem;
+  background-color: black;
 }
 
-tr:not(:first-child) {
+/* tr:not(:first-child) {
   border-top: 2px solid rgb(190, 190, 190);
+} */
+tr {
+  color: white;
 }
 td {
   padding: 6px;
 }
-tr:nth-of-type(odd) {
-  background-color: rgb(214, 214, 214);
-}
 tr:hover {
   background-color: rgba(128, 128, 128, 0.575);
-}
-td:first-child {
-  border-right: 3px black solid;
+  color: gold;
+  cursor: pointer;
 }
