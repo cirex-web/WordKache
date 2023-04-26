@@ -1,10 +1,15 @@
+type Lang = 'en' | 'es' | string;
+
 export interface Word {
-    word: string,
-    lang: "en" | "es",
-    location?: string[] //file paths or something
+    text: string,
+    lang: Lang
 }
 
 export interface WordEntry {
+    front: Word,
+    back: Word
+}
+export interface Card {
     front: Word,
     back: Word
 }

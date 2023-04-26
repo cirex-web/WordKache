@@ -6,7 +6,7 @@ export const Text = ({
   noWrap,
 }: {
   type: "paragraph" | "heading";
-  children: string;
+  children: React.ReactNode;
   noWrap?: boolean;
 }) => {
   return (
