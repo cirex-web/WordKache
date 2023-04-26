@@ -2197,7 +2197,8 @@ if (!chrome.storage) {
                     "text": "whaat"
                 }
             }
-        ]
+        ],
+        
     };
     type EventListener = (changes: {
         [key: string]: chrome.storage.StorageChange;

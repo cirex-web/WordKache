@@ -16,7 +16,7 @@ function App() {
         setCards(changes.pending.newValue as Card[]);
       }
     });
-    ChromeStorage.get("pending").then((res) => setCards(res as Card[]));
+    ChromeStorage.get("pending").then((res) => setCards((res ?? []) as Card[]));
   }, []);
   return (
     <>
