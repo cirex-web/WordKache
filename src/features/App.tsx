@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { Card, WordList } from "../types";
 import { Text } from "../components/Text";
 import { FolderNav } from "./FolderNav";
 import { ChromeStorage } from "../utils/storage";
-
+import logo from "../assets/logo.png";
+import { TableHeader } from "./TableHeader";
 function App() {
   const [cards, setCards] = useState<Card[]>([]);
 
@@ -25,16 +25,14 @@ function App() {
           width: "200px",
           display: "flex",
           flexDirection: "column",
+          borderRight: "3px solid white",
         }}
       >
-        <img
-          src="https://placehold.co/600x300"
-          className={css.logo}
-          alt="logo"
-        />
+        <img src={logo} className={css.logo} alt="logo" />
         <FolderNav />
       </div>
       <div style={{ overflow: "scroll" }}>
+        <TableHeader />
         <WordTable cards={cards} />
       </div>
     </>

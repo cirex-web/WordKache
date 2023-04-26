@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card } from "../../types";
 import { similar } from "../../utils/strings";
 import "./index.module.css";
+import { Text } from "../../components/Text";
 const WordTable = ({ cards }: { cards: Card[] }) => {
   const filteredCards = [];
   let latestGoodText = "";
@@ -19,18 +20,22 @@ const WordTable = ({ cards }: { cards: Card[] }) => {
 
   return (
     <table>
-      <colgroup>
-        <col span={1} style={{ width: "50%" }}></col>
-        <col span={1} style={{ width: "50%" }}></col>
-      </colgroup>
       <tbody>
         {filteredCards.map(
           (wordEntry, i) =>
             wordEntry.good && (
               <tr key={i}>
-                <td>{wordEntry.front.text}</td>
-                <td>{wordEntry.back.text}</td>
-              </tr>//TODO: words typed to saved words ratio
+                <td>
+                  <Text type="paragraph" noWrap>
+                    {wordEntry.front.text}
+                  </Text>
+                </td>
+                <td>
+                  <Text type="paragraph" noWrap>
+                    {wordEntry.back.text}
+                  </Text>
+                </td>
+              </tr> //TODO: words typed to saved words ratio
             )
         )}
       </tbody>

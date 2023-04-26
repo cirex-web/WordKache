@@ -11,7 +11,10 @@ export const RecursiveFolder = ({
   return (
     <>
       <li className={css.folder}>
-        <div className={css.folderName} style={{ paddingLeft: 20 * depth }}>
+        <div
+          className={css.folderName}
+          style={{ paddingLeft: 20 * depth + 10 }}
+        >
           <Text type="paragraph" noWrap>
             {folders.name}
           </Text>

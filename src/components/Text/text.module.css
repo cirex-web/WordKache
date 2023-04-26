@@ -1,4 +1,9 @@
 .paragraph{
-    font-size: 1.3rem;
-    color: rgba(0, 0, 0, 0.632);
+    font-size: 1.25rem;
+    color: #f2f4f5;
+}
+.heading{
+    font-size: 1.8rem;
+    color: #f2f4f5;
+
 }

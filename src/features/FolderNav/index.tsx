@@ -7,7 +7,7 @@ const treeStructure: AllFiles = [
     name: "Just Collected",
   },
   {
-    name: "OHHHH FOLDERiojsdojfg",
+    name: "OHHHH FOLDERiojsdojfgdfgdfgdfg",
     subFolders: [
         {
             "name":"Folder 1",
@@ -19,7 +19,18 @@ const treeStructure: AllFiles = [
         },
         {
             "name":"Folder 2"
-        }
+        },
+        {
+          "name":"Folder 1",
+          "subFolders":[
+              {
+                  "name":"Hello Andrew"
+              }
+          ]
+      },
+      {
+          "name":"Folder 2"
+      }
     ]
   },
 ];

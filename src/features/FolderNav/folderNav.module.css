@@ -1,5 +1,5 @@
-.container{
-    border-right:4px solid gray;
-    height: 100%;
-    position: relative;
+.container {
+  height: 100%;
+  position: relative;
+  overflow: scroll;
 }
