@@ -14,13 +14,12 @@ table {
   overflow: hidden;
   font-size: 1.2rem;
   background-color: black;
-
 }
 
 /* tr:not(:first-child) {
   border-top: 2px solid rgb(190, 190, 190);
 } */
-tr{
+tr {
   color: white;
 }
 td {
@@ -28,5 +27,6 @@ td {
 }
 tr:hover {
   background-color: rgba(128, 128, 128, 0.575);
+  color: gold;
+  cursor: pointer;
 }
-
