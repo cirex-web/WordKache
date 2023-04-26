@@ -42,7 +42,7 @@ const WordTable = ({ words }: { words: WordList }) => {
               <tr key={i}>
                 <td>{wordEntry.front.text}</td>
                 <td>{wordEntry.back.text}</td>
-              </tr>//words typed to saved words ratio
+              </tr>//TODO: words typed to saved words ratio
             )
         )}
       </tbody>
