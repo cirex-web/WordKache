@@ -27,8 +27,8 @@ const treeStructure: AllFiles = [
 export const FolderNav = () => {
   return (
     <div className={css.container}>
-      {treeStructure.map((folders) => (
-        <RecursiveFolder folders={folders} />
+      {treeStructure.map((folders,i) => (
+        <RecursiveFolder folders={folders} key={i} />
       ))}
     </div>
   );

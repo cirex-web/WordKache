@@ -1,4 +1,4 @@
-import { ChromeStorage } from "./storage";
+import { ChromeStorage } from "../utils/storage";
 const COLORS = {
     "DEBUG": "gray",
     "INFO": "lightblue",

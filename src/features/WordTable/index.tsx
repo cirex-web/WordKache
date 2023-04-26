@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { WordList } from "../../types";
 import { Card } from "../../chromeServices/types"; //TODO: this sucks
-import { ChromeStorage } from "../../chromeServices/storage"; //TODO: also this
+import { ChromeStorage } from "../../utils/storage"; //TODO: also this
 import { similar } from "../../utils/strings";
-
+import "./index.module.css"
 const WordTable = ({ words }: { words: WordList }) => {
   const [cards, setCards] = useState<Card[]>([]); //TODO: oh gosh move this somewhere else maybe a context
   useEffect(() => {
-    chrome.storage.local.onChanged.addListener((changes) => {
+    chrome.storage?.local.onChanged.addListener((changes) => {
       //TODO: perhaps some actually typed storage?
       if ("pending" in changes) {
         setCards(changes.pending.newValue as Card[]);
@@ -42,7 +42,7 @@ const WordTable = ({ words }: { words: WordList }) => {
               <tr key={i}>
                 <td>{wordEntry.front.text}</td>
                 <td>{wordEntry.back.text}</td>
-              </tr>
+              </tr>//words typed to saved words ratio
             )
         )}
       </tbody>

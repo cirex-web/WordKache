@@ -1,5 +1,5 @@
 import { logger } from "../logger";
-import { ChromeStorage } from "../storage";
+import { ChromeStorage } from "../../utils/storage";
 import { Card, MTranslationSnapshot } from "../types";
 import { requestParsers } from "./requestParser";
 
