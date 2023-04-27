@@ -4,7 +4,7 @@ import css from "./index.module.css";
 export const TableHeader = () => {
   return (
     <div className={css.header}>
-      <Text type="heading">
+      <Text type="heading" bold>
         Just Collected
         <div className={css.buttons}>
           <Icon name="ios_share" />

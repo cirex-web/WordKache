@@ -35,7 +35,7 @@ const WordTable = ({ cards }: { cards: Card[] }) => {
                     {wordEntry.back.text}
                   </Text>
                 </td>
-              </tr> //TODO: words typed to saved words ratio
+              </tr>
             )
         )}
       </tbody>

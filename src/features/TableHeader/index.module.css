@@ -1,9 +1,7 @@
 .header{
     text-align: center;
-    background-color: var(--light-gray);
+    background-color: var(--dark-2);
     padding:5px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
     position: sticky;
     top: 0;
 }

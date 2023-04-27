@@ -7,27 +7,32 @@ li {
 
 table {
   margin: auto;
-  /* border-collapse: collapse; */
+  border-collapse: collapse;
   width: 100%;
   text-align: left;
   flex-grow: 1;
   overflow: hidden;
   font-size: 1.2rem;
-  table-layout: fixed;
   border-spacing: 5px;
+  table-layout: fixed;
 }
 
 tr {
-  color: white;
+  transition: .2s all;
 }
+
 td {
-  padding: 6px;
+  padding: 3px 12px;
   white-space:nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   width: 50%;
+  
+}
+tr:not(:first-child){
+  border-top: .1px solid var(--dark-2);
 }
 tr:hover {
-  background-color: var(--light-gray);
+  background-color: var(--dark-2);
   cursor: pointer;
 }

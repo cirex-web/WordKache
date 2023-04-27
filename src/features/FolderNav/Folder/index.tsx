@@ -1,3 +1,4 @@
+import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
 import { FileDirectory } from "../../../types";
 import css from "./folder.module.css";
@@ -11,14 +12,13 @@ export const RecursiveFolder = ({
   return (
     <>
       <li className={css.folder}>
-        <div
-          className={css.folderName}
-          style={{ paddingLeft: 20 * depth + 10 }}
-        >
-          <Text type="paragraph" noWrap>
+        {/* <div style={{ paddingLeft: depth * 20 }}> */}
+          <Text type="paragraph" noWrap className={css.folderName}>
+            <Icon name="expand_more" />
             {folders.name}
           </Text>
-        </div>
+        {/* </div> */}
+
         {folders.subFolders && (
           <ul className={css.children}>
             {folders.subFolders.map((folders, i) => (

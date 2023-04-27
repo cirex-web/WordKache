@@ -2,4 +2,13 @@
   height: 100%;
   position: relative;
   overflow: scroll;
+  padding-left: 10px;
+}
+
+.title{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 2px solid white;
+  margin-bottom: 5px;
 }

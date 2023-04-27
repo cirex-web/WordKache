@@ -1,13 +1,15 @@
 :root {
   font-size: 62.5%;
-  --dark-gray: #333648;
-  --light-gray: #464853;
+  --dark-1: #2d3047;
+  --dark-2: #759197;
+  --light-1: #f2f4f5;
 }
 ::-webkit-scrollbar {
   display: none;
 }
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+  font-size: inherit;
 }
 html {
   height: 100vh;
@@ -15,20 +17,20 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+  scrollbar-color: #6969dd #e0e0e0;
+  color: var(--light-1);
 }
 body {
   margin: 0;
   font-family: "Open Sans", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 500px;
+  width: 600px;
   outline: 3px solid black;
-  height: 250px;
-
+  height: 450px;
 }
 #root {
   display: flex;
   height: 100%;
-  background-color: var(--dark-gray);
-
+  background-color: var(--dark-1);
 }
