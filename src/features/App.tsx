@@ -5,7 +5,7 @@ import { Card, WordList } from "../types";
 import { Text } from "../components/Text";
 import { FolderNav } from "./FolderNav";
 import { ChromeStorage } from "../utils/storage";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import { TableHeader } from "./TableHeader";
 function App() {
   const [cards, setCards] = useState<Card[]>([]);
