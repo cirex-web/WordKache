@@ -23,15 +23,28 @@ const treeStructure: AllFiles = [
         name: "Folder 2",
       },
       {
-        name: "Folder 1",
-        subFolders: [
+        name: "Depth 2",
+        subFolders:[
           {
-            name: "Hello Andrew",
-          },
-        ],
-      },
-      {
-        name: "Folder 2",
+            name:"Depth 3",
+            subFolders:[
+              {
+                name:"Depth 4",
+                subFolders:[
+                  {
+                    name:"Depth 5",
+                    subFolders:[
+                      {
+                        name:"lol good job",
+                        
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
     ],
   },

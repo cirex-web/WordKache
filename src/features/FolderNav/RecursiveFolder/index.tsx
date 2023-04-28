@@ -24,7 +24,7 @@ export const RecursiveFolder = ({
         type="paragraph"
         noWrap
         className={css.folderName}
-        style={{ paddingLeft: depth * 20 }}
+        style={{ paddingLeft: depth * 12 }} //12 just looks good, okay?
         onClick={() => setActive(!active)}
       >
         <Icon
