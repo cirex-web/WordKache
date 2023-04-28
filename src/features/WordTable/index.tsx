@@ -16,7 +16,7 @@ const WordTable = ({ cards }: { cards: Card[] }) => {
     });
     if (good) latestGoodText = cards[i].front.text;
   }
-  console.log(filteredCards);
+  // console.log(filteredCards);
 
   return (
     <table>

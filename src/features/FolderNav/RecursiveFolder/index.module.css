@@ -3,7 +3,13 @@
     align-items: center;
     padding: 2.5px 0;
 }
+
 .folderName:hover{
     background-color: var(--dark-2);
     font-weight: bold;
+    cursor: pointer;
+
+}
+.children{
+    overflow: hidden;
 }

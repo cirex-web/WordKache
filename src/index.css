@@ -1,8 +1,10 @@
 :root {
   font-size: 62.5%;
-  --dark-1: #2d3047;
-  --dark-2: #759197;
-  --light-1: #f2f4f5;
+  --dark-1: #0d0a0b;
+  --dark-2: #454955;
+  --light-1: #f3eff5;
+  --accent-1: #72b01d;
+  --accent-2: #3F7D20;
 }
 ::-webkit-scrollbar {
   display: none;
@@ -26,11 +28,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 600px;
-  outline: 3px solid black;
   height: 450px;
 }
 #root {
-  display: flex;
+  display: grid;
+  grid-template-columns: 200px 1fr;
   height: 100%;
   background-color: var(--dark-1);
 }

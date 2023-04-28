@@ -1,14 +1,13 @@
 .container {
-  height: 100%;
   position: relative;
   overflow: scroll;
   padding-left: 10px;
 }
 
-.title{
+.title {
   display: flex;
   align-items: center;
   gap: 5px;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid var(--light-1);
   margin-bottom: 5px;
 }

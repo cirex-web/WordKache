@@ -22,10 +22,8 @@ function App() {
     <>
       <div
         style={{
-          width: "200px",
-          display: "flex",
-          flexDirection: "column",
-          borderRight: "3px solid white",
+
+          borderRight: "3px solid var(--light-1)",
         }}
       >
         <img src={logo} className={css.logo} alt="logo" />

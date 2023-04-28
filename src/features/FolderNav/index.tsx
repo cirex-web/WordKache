@@ -1,7 +1,7 @@
 import { Icon } from "../../components/Icon";
 import { Text } from "../../components/Text";
 import { AllFiles } from "../../types";
-import { RecursiveFolder } from "./Folder";
+import { RecursiveFolder } from "./RecursiveFolder";
 import css from "./folderNav.module.css";
 
 const treeStructure: AllFiles = [
@@ -9,7 +9,7 @@ const treeStructure: AllFiles = [
     name: "Just Collected",
   },
   {
-    name: "OHHHH FOLDERiojsdojfgdfgdfgdfg",
+    name: "Really looooong folder name lorem ipsum asdfjoisjadiofjsdofijiwdjfi",
     subFolders: [
       {
         name: "Folder 1",

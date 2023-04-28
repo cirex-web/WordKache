@@ -7,19 +7,21 @@ export const Text = ({
   bold,
   className,
   dark,
-  padding
+  style,
+  onClick,
 }: {
-  type: "paragraph" | "heading";
+  type?: "paragraph" | "heading";
   children: React.ReactNode;
   noWrap?: boolean;
   bold?: boolean;
   className?: string;
   dark?: boolean;
-  padding?:string
+  style?: React.CSSProperties;
+  onClick?: React.MouseEventHandler<HTMLSpanElement>;
 }) => {
   return (
-    <div
-      className={css[type] + " " + className}
+    <span
+      className={(type ? css[type] : "") + " " + className}
       style={{
         ...(noWrap
           ? {
@@ -30,10 +32,12 @@ export const Text = ({
           : {}),
         fontWeight: bold ? "bold" : "",
         color: dark ? "var(--dark-1)" : "inherit",
-        padding
+        ...style,
+        
       }}
+      onClick={onClick}
     >
       {children}
-    </div>
+    </span>
   );
 };
