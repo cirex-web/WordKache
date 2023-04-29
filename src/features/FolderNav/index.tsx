@@ -10,9 +10,11 @@ const treeStructure: AllFiles = [
   },
   {
     name: "Really looooong folder name lorem ipsum asdfjoisjadiofjsdofijiwdjfi",
+    open: true,
     subFolders: [
       {
         name: "Folder 1",
+        open: true,
         subFolders: [
           {
             name: "Hello Andrew",
@@ -24,27 +26,26 @@ const treeStructure: AllFiles = [
       },
       {
         name: "Depth 2",
-        subFolders:[
+        subFolders: [
           {
-            name:"Depth 3",
-            subFolders:[
+            name: "Depth 3",
+            subFolders: [
               {
-                name:"Depth 4",
-                subFolders:[
+                name: "Depth 4",
+                subFolders: [
                   {
-                    name:"Depth 5",
-                    subFolders:[
+                    name: "Depth 5",
+                    subFolders: [
                       {
-                        name:"lol good job",
-                        
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                        name: "lol good job",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   },
@@ -58,7 +59,11 @@ export const FolderNav = () => {
         Folders
       </Text>
       {treeStructure.map((folders, i) => (
-        <RecursiveFolder folders={folders} key={i} onHeightChange={()=>console.log("parent height change")} />
+        <RecursiveFolder
+          folders={folders}
+          key={i}
+          onHeightChange={() => console.log("parent height change")}
+        />
       ))}
     </div>
   );

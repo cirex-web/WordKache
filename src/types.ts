@@ -17,6 +17,7 @@ export type WordList = WordEntry[]
 
 export interface FileDirectory {
     name: string,
+    open?:boolean
     subFolders?: FileDirectory[]
 }
 export type AllFiles = FileDirectory[]

@@ -23,7 +23,8 @@ export const RecursiveFolder = ({
   const subfolderRef = useRef<HTMLUListElement>(null);
 
   const [subfolderHeight, setSubFolderHeight] = useState(0);
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(!!folders.open);
+
   const updateHeight = useCallback(
     (delta: number) => {
       // console.log("Updating height for", folders.name, delta);
@@ -58,6 +59,7 @@ export const RecursiveFolder = ({
             opacity: folders.subFolders?.length ? 1 : 0,
             transform: `rotate(${active ? 0 : -90}deg)`,
             transition: ".2s transform",
+            pointerEvents: folders.subFolders?.length?"auto":"none"
           }}
           onMouseDown={() => {
             setActive((active) => !active);
@@ -73,7 +75,11 @@ export const RecursiveFolder = ({
         <ul
           ref={subfolderRef}
           style={{
-            height: active ? subfolderHeight : 0,
+            height: active
+              ? subfolderHeight === 0
+                ? "auto"
+                : subfolderHeight
+              : 0,
           }}
           className={css.children}
         >
