@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
 import { FileDirectory } from "../../../types";
@@ -27,11 +34,14 @@ export const RecursiveFolder = ({
   );
 
   useLayoutEffect(() => {
-    if (subfolderRef.current) {
-      console.log("init height!", subfolderRef.current.scrollHeight);
-      setSubFolderHeight(subfolderRef.current.scrollHeight);
-    }
-  }, []);
+    setTimeout(() => {
+      const subfolder = subfolderRef.current;
+      if (subfolder) {
+        console.log("init height!", subfolder.scrollHeight);
+        setSubFolderHeight(subfolder.scrollHeight);
+      }
+    }, 500); //wait for font loading/dimension final updates
+  }, [subfolderRef]);
 
   return (
     <li className={css.folder}>
@@ -40,17 +50,14 @@ export const RecursiveFolder = ({
         noWrap
         className={css.folderName}
         style={{ paddingLeft: depth * 12 }} //12 just looks good, okay?
-        
       >
-        <span>
-
-        </span>
+        <span></span>
         <Icon
           name="expand_more"
           style={{
             opacity: folders.subFolders?.length ? 1 : 0,
             transform: `rotate(${active ? 0 : -90}deg)`,
-            transition:".2s transform"
+            transition: ".2s transform",
           }}
           onMouseDown={() => {
             setActive((active) => !active);

@@ -25,6 +25,7 @@ html {
 body {
   margin: 0;
   font-family: "Open Sans", Arial, sans-serif;
+  font-display:optional;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 600px;
