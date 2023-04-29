@@ -58,7 +58,7 @@ export const FolderNav = () => {
         Folders
       </Text>
       {treeStructure.map((folders, i) => (
-        <RecursiveFolder folders={folders} key={i} />
+        <RecursiveFolder folders={folders} key={i} onHeightChange={()=>console.log("parent height change")} />
       ))}
     </div>
   );

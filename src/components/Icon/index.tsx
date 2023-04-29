@@ -1,12 +1,10 @@
-export const Icon = ({
-  name,
-  style,
-}: {
+interface IconProps extends React.HTMLProps<HTMLSpanElement> {
   name: string;
-  style?: React.CSSProperties
-}) => {
+}
+
+export const Icon = ({ name, ...rest }:IconProps) => {
   return (
-    <span className="material-symbols-outlined" style={style}>
+    <span className="material-symbols-outlined" {...rest}>
       {name}
     </span>
   );

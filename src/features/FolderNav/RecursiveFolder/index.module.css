@@ -12,4 +12,5 @@
 }
 .children{
     overflow: hidden;
+    transition: .2s height;
 }

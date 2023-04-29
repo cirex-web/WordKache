@@ -22,12 +22,12 @@ function App() {
     <>
       <div
         style={{
-
           borderRight: "3px solid var(--light-1)",
         }}
       >
         <img src={logo} className={css.logo} alt="logo" />
         <FolderNav />
+
       </div>
       <div style={{ overflow: "scroll" }}>
         <TableHeader />
