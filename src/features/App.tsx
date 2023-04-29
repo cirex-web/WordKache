@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
-import { Card, WordList } from "../types";
-import { Text } from "../components/Text";
+import { Card } from "../types";
 import { FolderNav } from "./FolderNav";
 import { ChromeStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";

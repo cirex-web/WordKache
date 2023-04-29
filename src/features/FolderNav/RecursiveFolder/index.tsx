@@ -1,8 +1,6 @@
 import {
   useCallback,
-  useEffect,
   useLayoutEffect,
-  useReducer,
   useRef,
   useState,
 } from "react";
@@ -51,6 +49,7 @@ export const RecursiveFolder = ({
         noWrap
         className={css.folderName}
         style={{ paddingLeft: depth * 12 }} //12 just looks good, okay?
+        noSelect
       >
         <span></span>
         <Icon
@@ -59,7 +58,7 @@ export const RecursiveFolder = ({
             opacity: folders.subFolders?.length ? 1 : 0,
             transform: `rotate(${active ? 0 : -90}deg)`,
             transition: ".2s transform",
-            pointerEvents: folders.subFolders?.length?"auto":"none"
+            pointerEvents: folders.subFolders?.length ? "auto" : "none",
           }}
           onMouseDown={() => {
             setActive((active) => !active);

@@ -1,24 +1,24 @@
 import css from "./text.module.css";
 
+interface ITextProps extends React.HTMLProps<HTMLSpanElement> {
+  type?: "paragraph" | "heading";
+  noWrap?: boolean;
+  bold?: boolean;
+  dark?: boolean;
+  noSelect?: boolean;
+}
+
 export const Text = ({
   type,
   children,
   noWrap,
   bold,
-  className,
   dark,
   style,
-  onClick,
-}: {
-  type?: "paragraph" | "heading";
-  children: React.ReactNode;
-  noWrap?: boolean;
-  bold?: boolean;
-  className?: string;
-  dark?: boolean;
-  style?: React.CSSProperties;
-  onClick?: React.MouseEventHandler<HTMLSpanElement>;
-}) => {
+  className,
+  noSelect,
+  ...rest
+}: ITextProps) => {
   return (
     <span
       className={(type ? css[type] : "") + " " + className}
@@ -32,10 +32,10 @@ export const Text = ({
           : {}),
         fontWeight: bold ? "bold" : "",
         color: dark ? "var(--dark-1)" : "inherit",
+        userSelect: noSelect ? "none" : "auto",
         ...style,
-        
       }}
-      onClick={onClick}
+      {...rest}
     >
       {children}
     </span>

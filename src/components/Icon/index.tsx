@@ -1,8 +1,8 @@
-interface IconProps extends React.HTMLProps<HTMLSpanElement> {
+interface IIconProps extends React.HTMLProps<HTMLSpanElement> {
   name: string;
 }
 
-export const Icon = ({ name, ...rest }:IconProps) => {
+export const Icon = ({ name, ...rest }:IIconProps) => {
   return (
     <span className="material-symbols-outlined" {...rest}>
       {name}
