@@ -1,4 +1,6 @@
 # WordKache - Save Your Translations
+##Running it
+`build.zip` should have the most recent stable build. Simply unzip it and drag it into chrome://extensions (turn on Developer Mode first) to run.
 
 ## Getting started/If the code doesn't work
 Run ```npm i``` to update/install all dependencies. Note that you need nodeJS installed.
