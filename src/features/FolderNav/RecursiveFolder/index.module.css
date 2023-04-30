@@ -10,6 +10,11 @@
     cursor: pointer;
 
 }
+.selectedFolderName{
+    composes:folderName;
+    font-weight: bold;
+    background-color: var(--dark-2);
+}
 .children{
     overflow: hidden;
     transition: .2s height;

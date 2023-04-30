@@ -1,12 +1,11 @@
-# WordKache - Saving Your Translations
+# WordKache - Save Your Translations
 
-## Getting started/Updating
-Run ```npm i``` to install all relevant dependencies. Note that you need node installed.
-
+## Getting started/If the code doesn't work
+Run ```npm i``` to update/install all dependencies. Note that you need nodeJS installed.
 
 To host just the popup part of the Chrome Extension, run `npm start`
 
-To get the production build (for testing), run `npm run build` and load the folder into chrome://extensions as an Unpacked Extension (make sure Developer Mode is on)
+To get the full production build, run `npm run build` and load the folder into chrome://extensions as an Unpacked Extension (make sure Developer Mode is on)
 
 
 ## Working with the code
@@ -17,3 +16,4 @@ To get the production build (for testing), run `npm run build` and load the fold
 - make sure it works on all screen sizes (it might use different elements)
 - multiple output translations?
 - Make sure weird input (like new lines and blank trailing/leading spaces) behave correctly in request (and sanitize it if it doesn’t)
+- Add host permission to manifest.json (for capturing network requests)

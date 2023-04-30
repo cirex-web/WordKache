@@ -1,16 +1,18 @@
 import {
   useCallback,
+  useContext,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
-import { FileDirectory } from "../../../types";
 import css from "./index.module.css";
+import { FileDirectory } from "../types";
+import { FolderContext, UseFolderContext } from "../../App";
 
 export const RecursiveFolder = ({
-  folders,
+  folders: folder,
   depth = 0,
   onHeightChange,
 }: {
@@ -19,13 +21,14 @@ export const RecursiveFolder = ({
   onHeightChange?: (delta: number) => void;
 }) => {
   const subfolderRef = useRef<HTMLUListElement>(null);
-
+  const { activeFolder, setActiveFolder } = UseFolderContext();
   const [subfolderHeight, setSubFolderHeight] = useState(0);
-  const [active, setActive] = useState(!!folders.open);
+  const [subfolderOpen, setSubfolderOpen] = useState(!!folder.open);
+  const selected = activeFolder.id === folder.id;
 
   const updateHeight = useCallback(
     (delta: number) => {
-      // console.log("Updating height for", folders.name, delta);
+      // console.log("Updating height for", folder.name, delta);
       setSubFolderHeight((prevHeight) => prevHeight + delta);
       if (onHeightChange) onHeightChange(delta); //propagate upwards
     },
@@ -36,7 +39,7 @@ export const RecursiveFolder = ({
     setTimeout(() => {
       const subfolder = subfolderRef.current;
       if (subfolder) {
-        console.log("init height!", subfolder.scrollHeight);
+        // console.log("init height!", subfolder.scrollHeight);
         setSubFolderHeight(subfolder.scrollHeight);
       }
     }, 500); //wait for font loading/dimension final updates
@@ -46,46 +49,48 @@ export const RecursiveFolder = ({
     <li className={css.folder}>
       <Text
         type="paragraph"
-        noWrap
-        className={css.folderName}
-        style={{ paddingLeft: depth * 12 }} //12 just looks good, okay?
+        className={selected ? css.selectedFolderName : css.folderName}
+        style={{ paddingLeft: depth * 12 }} //12px looks pretty good
         noSelect
+        onMouseDown={() => {
+          setActiveFolder(folder);
+        }}
       >
-        <span></span>
         <Icon
           name="expand_more"
           style={{
-            opacity: folders.subFolders?.length ? 1 : 0,
-            transform: `rotate(${active ? 0 : -90}deg)`,
+            opacity: folder.subFolders?.length ? 1 : 0,
+            transform: `rotate(${subfolderOpen ? 0 : -90}deg)`,
             transition: ".2s transform",
-            pointerEvents: folders.subFolders?.length ? "auto" : "none",
+            pointerEvents: folder.subFolders?.length ? "auto" : "none",
           }}
-          onMouseDown={() => {
-            setActive((active) => !active);
-            const newActive = !active; //setActive doesn't update active in this loop
+          onMouseDown={(ev) => {
+            const newActive = !subfolderOpen; //setActive doesn't update active in this loop
+            setSubfolderOpen(newActive);
             if (onHeightChange)
-              onHeightChange((newActive ? 1 : -1) * subfolderHeight); //call parent folder to notify
+              onHeightChange((newActive ? 1 : -1) * subfolderHeight); //call parent folder to notify height change
+            ev.stopPropagation();
           }}
         />
-        <Text noWrap>{folders.name}</Text>
+        <Text noWrap>{folder.name}</Text>
       </Text>
 
-      {folders.subFolders && (
+      {folder.subFolders && (
         <ul
           ref={subfolderRef}
           style={{
-            height: active
-              ? subfolderHeight === 0
+            height: subfolderOpen
+              ? subfolderHeight === 0 //first height run-through hasn't started yet...
                 ? "auto"
                 : subfolderHeight
               : 0,
           }}
           className={css.children}
         >
-          {folders.subFolders.map((folders, i) => (
+          {folder.subFolders.map((folder, i) => (
             <RecursiveFolder
-              folders={folders}
-              key={i}
+              folders={folder}
+              key={folder.id}
               depth={depth + 1}
               onHeightChange={updateHeight}
             />

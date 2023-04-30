@@ -37,3 +37,57 @@ body {
   height: 100%;
   background-color: var(--dark-1);
 }
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  margin: auto;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  flex-grow: 1;
+  overflow: hidden;
+  font-size: 1.2rem;
+  border-spacing: 5px;
+  table-layout: fixed;
+}
+
+tr {
+  transition: .2s all;
+}
+
+td {
+  padding: 3px 12px;
+  width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}
+tr:not(:first-child){
+  border-top: 1px solid var(--dark-2);
+}
+tr:hover {
+  background-color: var(--dark-2);
+  cursor: pointer;
+}
+button{
+  background-color: transparent;
+  outline: none;
+  border: 1px solid var(--light-1);
+  color: var(--light-1);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: .2s all;
+  /* TODO: just make font size into component */
+}
+button:hover{
+  background-color: var(--dark-2);
+}
+button:active:hover{
+  background-color: var(--dark-1);
+
+}

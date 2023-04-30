@@ -1,9 +1,12 @@
 .header{
     text-align: center;
     background-color: var(--dark-2);
-    padding:5px;
+    padding:5px 40px;
     position: sticky;
     top: 0;
+}
+.heading{
+    display: block;
 }
 .buttons{
     position: absolute;

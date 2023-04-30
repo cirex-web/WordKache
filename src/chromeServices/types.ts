@@ -32,7 +32,7 @@ export interface ITranslationSnapshot {
     inputLang: string;
     outputText: string;
     outputLang: string;
-    newInputText: string; //what the input will be right after the snapshot
+    newInputText: string|null; //what the input will be right after the snapshot
 }
 export interface IExtendedTranslationSnapshot extends ITranslationSnapshot {
     inputTime: number

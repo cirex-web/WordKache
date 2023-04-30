@@ -2,7 +2,9 @@ import { logger } from "../logger";
 import { ChromeStorage } from "../../utils/storage";
 import { MTranslationSnapshot } from "../types";
 import { requestParsers } from "./requestParser";
-import { Card } from "../../types";
+import { Card } from "../../storageTypes";
+import { similar } from "../../utils/strings";
+import { nanoid } from "nanoid";
 
 logger.info("Kache background script init!")
 
@@ -43,18 +45,27 @@ chrome.webRequest.onCompleted.addListener((request) => {
 });
 
 const addFlashcard = async (snapshot: MTranslationSnapshot) => {
-    const existingPendingCards: Card[] = await ChromeStorage.get("pending") as any ?? [];
-    existingPendingCards.push({
+    const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].location !== "root") continue;
+        if (similar(cards[i].front.text, snapshot.inputText)) {
+            cards.splice(i, 1);
+        } else {
+            break;
+        }
+    }
+    cards.push({
         front: {
             text: snapshot.inputText,
             lang: snapshot.inputLang
         }, back: {
             text: snapshot.outputText,
             lang: snapshot.outputLang
-        }
+        },
+        id: nanoid(),
+        location: "root" //The Just Collected folder
     });
-    await ChromeStorage.setPair("pending", existingPendingCards);
-
+    await ChromeStorage.setPair("cards", cards);
 }
 const normalizeLanguage = (lang: string) => {
     lang = lang.toLowerCase();
@@ -73,10 +84,10 @@ chrome.runtime.onConnect.addListener(
 
                 if (currentWebRequest.input === translationSnapshot.inputText && currentWebRequest.timeCompleted && +new Date() - currentWebRequest.timeCompleted >= 200) {
                     //if there was no network request (cuz the translation app cached the data somewhere or if the request is complete)
-                    const timeAfterDefinitionLoad = (+new Date() - (currentWebRequest.timeCompleted ?? 0));
+                    const timeAfterOutput = (+new Date() - (currentWebRequest.timeCompleted ?? 0));
                     const timeAfterInput = +new Date() - translationSnapshot.inputTime;
-                    logger.debug(`input to output time: ${timeAfterInput - timeAfterDefinitionLoad}`); //TODO: Do some more filtering here; also if this is negative it means that the web request legit does not match the current one (the user just retyped the thing for no apparent reason)
-                    logger.debug(`output time to now ${timeAfterDefinitionLoad}`);
+                    logger.debug(`input to output time: ${timeAfterInput - timeAfterOutput}`); //TODO: Do some more filtering here; also if this is negative it means that the web request legit does not match the current one (the user just retyped the thing for no apparent reason)
+                    logger.debug(`output time to now ${timeAfterOutput}`);
 
 
                     logger.info("Adding snapshot", translationSnapshot);
