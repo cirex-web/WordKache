@@ -1,5 +1,5 @@
 # WordKache - Save Your Translations
-##Running it
+## Running it
 `build.zip` should have the most recent stable build. Simply unzip it and drag it into chrome://extensions (turn on Developer Mode first) to run.
 
 ## Getting started/If the code doesn't work
