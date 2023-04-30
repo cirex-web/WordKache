@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card } from "../../storageTypes";
-import { similar } from "../../utils/strings";
+import {} from "../../utils/strings";
 import css from "./index.module.css";
 import { Text } from "../../components/Text";
-import { FolderContext, UseFolderContext } from "../App";
+import { UseFolderContext } from "../App";
 import { TableHeader } from "./TableHeader";
 import { WordPanel } from "./WordPanel";
 
@@ -20,33 +20,40 @@ const WordTable = ({
   return (
     <div className={css.container}>
       <TableHeader folderName={activeFolder.name} />
-      <table>
-        <tbody>
-          {cards
-            .filter((card) => card.location === activeFolder.id)
-            .map((card) => (
-              <tr
-                key={card.id}
-                onMouseDown={() => setActiveCard(card)}
-                className={card.id === activeCard?.id ? css.selected : ""}
-              >
-                <td>
-                  <Text type="paragraph" noWrap>
-                    {card.front.text}
-                  </Text>
-                </td>
-                <td>
-                  <Text type="paragraph" noWrap>
-                    {card.back.text}
-                  </Text>
-                </td>
-              </tr>
-            ))
-            .reverse()}
-        </tbody>
-      </table>
+      <div className={css.table}>
+        <table>
+          <tbody>
+            {cards
+              .filter((card) => card.location === activeFolder.id)
+              .map((card) => (
+                <tr
+                  key={card.id}
+                  onMouseDown={() => setActiveCard(card)}
+                  className={card.id === activeCard?.id ? css.selected : ""}
+                >
+                  <td>
+                    <Text type="paragraph" noWrap>
+                      {card.front.text}
+                    </Text>
+                  </td>
+                  <td>
+                    <Text type="paragraph" noWrap>
+                      {card.back.text}
+                    </Text>
+                  </td>
+                </tr>
+              ))
+              .reverse()}
+          </tbody>
+        </table>
+      </div>
 
-      {activeCard && <WordPanel cardInfo={activeCard} onSave={()=>moveCard(activeCard.id)}/>}
+      {activeCard && (
+        <WordPanel
+          cardInfo={activeCard}
+          onSave={() => moveCard(activeCard.id)}
+        />
+      )}
     </div>
   );
 };

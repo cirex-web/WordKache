@@ -10,12 +10,14 @@ export interface Card {
     front: Word,
     back: Word,
     location: string;
-    id:string;
+    id: string;
+    timeCreated: number;
+    source: string;
 }
 
 /** Official Storage Type */
 export interface Folder {
-    parentId?:string, //undefined means that it's top-level
-    name:string,
-    id:string
+    parentId?: string, //undefined means that it's top-level
+    name: string,
+    id: string
 }

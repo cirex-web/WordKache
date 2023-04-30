@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useContext,
   useLayoutEffect,
   useRef,
   useState,
@@ -9,7 +8,7 @@ import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
 import css from "./index.module.css";
 import { FileDirectory } from "../types";
-import { FolderContext, UseFolderContext } from "../../App";
+import { UseFolderContext } from "../../App";
 
 export const RecursiveFolder = ({
   folders: folder,

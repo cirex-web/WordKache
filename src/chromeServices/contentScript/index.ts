@@ -20,8 +20,10 @@ const takeSnapshot = (event: Event) => {
         return;
     }
     const target = event.target;
-    const newInputText = (target instanceof HTMLTextAreaElement) ? target.value : null;
-    processCurrentSnapshot({ ...existingMatchedSite.getTranslationSnapshot(), newInputText }); //snapshot right before UI components (like the textbox) change
+    const newInputText = (target instanceof HTMLTextAreaElement) ? target.value : (target instanceof HTMLElement ? target.textContent : null);
+
+
+    processCurrentSnapshot(existingMatchedSite.getTranslationSnapshot(newInputText)); //snapshot right before UI components (like the textbox) change
 }
 
 window.addEventListener("blur", takeSnapshot);

@@ -1,6 +1,6 @@
 import { logger } from "../logger";
-import { IExtendedTranslationSnapshot, MTranslationSnapshot } from "../types";
-import { nanoid } from 'nanoid'
+import { ITranslationSnapshot } from "../types";
+
 let port: chrome.runtime.Port;
 const connect = () => {
     logger.debug("Created port connection")
@@ -12,15 +12,11 @@ const connect = () => {
 }
 connect();
 
-/** just validates that whatever data is sent is actually in the proper format */
-const _sendSnapshot = (data: MTranslationSnapshot) => {
+export const sendSnapshot = (snapshot: ITranslationSnapshot) => {
     try {
-        port.postMessage(data);
+        port.postMessage(snapshot);
+        logger.info("sent!", snapshot)
     } catch (e) {
         alert("WordKache extension context invalidated - Please refresh the page.");
     }
-}
-export const sendSnapshot = (snapshot: IExtendedTranslationSnapshot) => {
-    _sendSnapshot(snapshot);
-    logger.info("sent!", snapshot)
 }

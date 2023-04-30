@@ -1,3 +1,4 @@
+
 export type scrapeMethod = {
     type: "URL_REGEX",
     regex: string //returned string is the first capture group
@@ -18,13 +19,18 @@ export interface ISiteConfig {
     }
     input: {
         getTextBox: getTextBox,
-        text: scrapeMethod,
+        /** You can leave this one blank if there's no way to get the text before it changes */
+        text?: scrapeMethod,
         lang: scrapeMethod
     },
     output: {
         lang: scrapeMethod,
         text: scrapeMethod
-    }
+    },
+    /** Identifying name */
+    name: string;
+    /** Optional frontend validation to make sure that output accurately reflects input (will override backend validation) */
+    validate?: () => boolean
 };
 
 export interface ITranslationSnapshot {
@@ -32,13 +38,12 @@ export interface ITranslationSnapshot {
     inputLang: string;
     outputText: string;
     outputLang: string;
-    newInputText: string|null; //what the input will be right after the snapshot
+    newInputText: string; //what the input will be right after the snapshot
+    /** If output has been validated on the frontend */
+    validated?: boolean;
+    inputTime: number;
+    source: string;
 }
-export interface IExtendedTranslationSnapshot extends ITranslationSnapshot {
-    inputTime: number
-}
-/** M stands for message passing */
-export interface MTranslationSnapshot extends IExtendedTranslationSnapshot { }
 
 /** For background script request capturing */
 export interface IRequestParserConfig {

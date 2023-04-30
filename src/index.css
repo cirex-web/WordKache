@@ -50,7 +50,7 @@ table {
   width: 100%;
   text-align: left;
   flex-grow: 1;
-  overflow: hidden;
+  overflow: scroll;
   font-size: 1.2rem;
   border-spacing: 5px;
   table-layout: fixed;

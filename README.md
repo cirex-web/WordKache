@@ -16,4 +16,4 @@ To get the full production build, run `npm run build` and load the folder into c
 - make sure it works on all screen sizes (it might use different elements)
 - multiple output translations?
 - Make sure weird input (like new lines and blank trailing/leading spaces) behave correctly in request (and sanitize it if it doesn’t)
-- Add host permission to manifest.json (for capturing network requests)
+- Add host permission to manifest.json (for capturing network requests) (if relevant)
