@@ -94,8 +94,8 @@ chrome.runtime.onConnect.addListener(
 
                 if (translationSnapshot.validated || (currentWebRequest.input === translationSnapshot.inputText && currentWebRequest.timeCompleted && +new Date() - currentWebRequest.timeCompleted >= 200)) {
                     //if there was no network request (cuz the translation app cached the data somewhere or if the request is complete)
-                    const timeAfterOutput = (+new Date() - (currentWebRequest.timeCompleted ?? 0));
-                    const timeAfterInput = +new Date() - translationSnapshot.inputTime;
+                    // const timeAfterOutput = (+new Date() - (currentWebRequest.timeCompleted ?? 0));
+                    // const timeAfterInput = +new Date() - translationSnapshot.inputTime;
                     // logger.debug(`input to output time: ${timeAfterInput - timeAfterOutput}`); //TODO: Do some more filtering here; also if this is negative it means that the web request legit does not match the current one (the user just retyped the thing for no apparent reason)
                     // logger.debug(`output time to now ${timeAfterOutput}`);
                     // logger.debug(timeAfterInput);
