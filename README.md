@@ -1,4 +1,5 @@
 # WordKache - Save Your Translations
+## Available on the [Chrome Web Store](https://chrome.google.com/webstore/detail/wordkache-save-your-trans/iggnlghjaffpnnngboejpclkpioimbog)
 ![img](https://www.codefactor.io/Content/badges/APlus.svg)
 ## Running it
 `build.zip` should have the most recent stable build. Simply unzip it and drag it into chrome://extensions (turn on Developer Mode first) to run.
