@@ -1,35 +1,17 @@
 ul,
+
 li {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-table {
-  margin: auto;
-  border-collapse: collapse;
-  width: 100%;
-  text-align: left;
-  flex-grow: 1;
-  overflow: hidden;
-  font-size: 1.2rem;
-  background-color: black;
 
-}
-
-/* tr:not(:first-child) {
-  border-top: 2px solid rgb(190, 190, 190);
-} */
-tr{
-  color: white;
-  width: 100%;  
-}
 td {
-  padding: 6px;
-  font-size: 100%;
-  width: 50%;
-  transition: font-size 0.5s, background-color 0.5s;
+  background-color: black;
+  transition: font-size 0.5s ease-in-out;
 }
+
 tr:hover {
   background-color: rgba(128, 128, 128, 0.575);
   height: 200%;
@@ -37,11 +19,21 @@ tr:hover {
 }
 
 td:hover{
-  color: black;
-  background-color: white;
   font-size: 200%;
-  width: 400%;
 }
 
+td:nth-child(1){
+  width: 50%;
+}
+td:nth-child(2){
+  width: 50%;
+}
 
+.icon_container{
+  right: 0;
+}
 
+.text_box{
+  position: sticky;
+  bottom: 0;
+}

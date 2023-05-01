@@ -2,10 +2,18 @@ import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
+import SearchBar from "./SearchBar";
 import { Card, WordList } from "../types";
 import { Text } from "../components/Text";
 import { FolderNav } from "./FolderNav";
 import { ChromeStorage } from "../utils/storage";
+
+import {
+  Container, Row, Col, Form, Input, Button, Navbar, Nav,
+  NavbarBrand, NavLink, NavItem, UncontrolledDropdown,
+  DropdownToggle, DropdownMenu, DropdownItem
+} from 'reactstrap';
+
 
 function App() {
   const [cards, setCards] = useState<Card[]>([]);
@@ -34,8 +42,11 @@ function App() {
         />
         <FolderNav />
       </div>
-      <div style={{ overflow: "scroll" }}>
+      <div style={{ overflow: "scroll"}}>
         <WordTable cards={cards} />
+      </div>
+      <div>
+        <SearchBar cards = {cards} />
       </div>
     </>
   );
