@@ -1,15 +1,15 @@
-import { sanitize } from "../../utils/strings";
-import { ISiteConfig, scrapeMethod } from "../types";
+import { ISiteConfig, ITranslationSnapshot, scrapeMethod } from "../types";
 import { siteConfigs } from "./siteConfig";
 import { getURL } from "./urlMonitor";
 
 
 
-/** Responsible for getting DOM elements/data and determining it if should do the aforementioned tasks */
+/** Responsible for getting DOM elements/data */
 export class Site {
 
     #siteConfig: ISiteConfig;
-
+    #previousInput: string = "";
+    #inputTime: number = +new Date();
     constructor(configData: ISiteConfig) {
         this.#siteConfig = configData;
     }
@@ -31,19 +31,34 @@ export class Site {
         if (textBox === null) throw new Error(`Textbox for site config of URL ${this} does not exist. Please fix ASAP`);
         return textBox;
     }
-    // getTextboxText = () => {
-    //     return this.getTextbox()?.textContent ?? "";
-    // }
     toString = () => {
         return this.#siteConfig.urlChecks.host;
     }
-    getTranslationSnapshot = () => {
-        const inputText = Site.scrapeText(this.#siteConfig.input.text);
+    getTranslationSnapshot = (newInputText: string | null): ITranslationSnapshot => {
+        //when newInputText is null it means that it didn't change
+        const inputText = this.#siteConfig.input.text ? Site.scrapeText(this.#siteConfig.input.text) : this.#previousInput;
+        //if not possible to get inputText (before change), just use previousInput, which is slightly less reliable        
+
         const inputLang = Site.scrapeText(this.#siteConfig.input.lang);
         const outputLang = Site.scrapeText(this.#siteConfig.output.lang);
         const outputText = Site.scrapeText(this.#siteConfig.output.text);
-        return { inputText, inputLang, outputText, outputLang };
+        const snapshot: ITranslationSnapshot = {
+            inputText,
+            inputLang,
+            outputText,
+            outputLang,
+            validated: this.#siteConfig.validate?.call(this),
+            newInputText: newInputText ?? this.#previousInput, //null check for newInputText
+            inputTime: this.#inputTime,
+            source: this.#siteConfig.name
+        };
+        if (newInputText !== null) { //an actual update (not some courtesy ping)
+            this.#inputTime = + new Date(); //it's for the next input
+            this.#previousInput = newInputText;
+        }
+        return snapshot;
     }
+
     matchURL = (url: URL) => {
         const checks = this.#siteConfig.urlChecks;
         if (checks.host !== url.hostname) return false;

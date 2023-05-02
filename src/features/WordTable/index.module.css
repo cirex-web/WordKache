@@ -1,3 +1,4 @@
+
 ul,
 
 li {
@@ -37,3 +38,21 @@ td:nth-child(2){
 table{
   object-fit: contain;
 }
+
+/* master branch styles begin here */
+
+.container {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+tr.selected {
+  background-color: var(--dark-2);
+  font-weight: bold;
+}
+.table {
+  overflow: scroll;
+  flex-grow: 1;
+}
+

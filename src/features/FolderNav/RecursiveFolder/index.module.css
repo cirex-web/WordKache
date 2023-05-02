@@ -1,0 +1,21 @@
+.folderName{
+    display: flex;
+    align-items: center;
+    padding: 2.5px 0;
+}
+
+.folderName:hover{
+    background-color: var(--dark-2);
+    font-weight: bold;
+    cursor: pointer;
+
+}
+.selectedFolderName{
+    composes:folderName;
+    font-weight: bold;
+    background-color: var(--dark-2);
+}
+.children{
+    overflow: hidden;
+    transition: .2s height;
+}

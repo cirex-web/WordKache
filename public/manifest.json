@@ -1,25 +1,23 @@
 {
-  "name": "Kache - Saving your translations",
-  "description": "Never let your online translations go to waste again!",
-  "version": "1.0",
+  "name": "WordKache - Save your translations",
+  "description": "Turn your online translations into studyable flashcards!",
+  "version": "0.1",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
-    "default_title": "Open the popup"
+    "default_title": "Open WordKache Popup"
   },
   "icons": {
-    "16": "logo192.png",
-    "48": "logo192.png",
-    "128": "logo192.png"
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
   },
   "permissions": [
-    "activeTab",
     "storage",
     "webRequest"
   ],
   "host_permissions": [
-    "https://*/*",
-    "http://*/*"
+    "*://translate.google.com/*"
   ],
   "content_scripts": [
     {

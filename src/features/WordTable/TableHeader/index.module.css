@@ -1,0 +1,13 @@
+.header{
+    text-align: center;
+    background-color: var(--dark-2);
+    padding:5px 40px;
+}
+.heading{
+    display: block;
+}
+.buttons{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}

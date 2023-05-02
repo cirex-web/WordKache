@@ -1,7 +1,9 @@
 import { ISiteConfig } from "../types";
 
+/** Note: All return statements from here should be sanitized (to match network requests) by default. Only languages will be converted in the backend into their two-letter counterparts. */
 export const siteConfigs: ISiteConfig[] = [
     {
+        name:"Google Translate",
         "urlChecks": {
             "urlParams": {
                 "op": "translate"
@@ -12,7 +14,7 @@ export const siteConfigs: ISiteConfig[] = [
             getTextBox: (body) => body.querySelector(`textarea`),
             text: {
                 type: "DOM",
-                js: (body) => body.querySelector(`[jsname="lKng5e"]`)?.textContent ?? ""
+                js: (body) => body.querySelector(`[jsname="lKng5e"]`)?.textContent?.trim() ?? ""
             },
             "lang": {
                 "type": "DOM",
@@ -33,33 +35,40 @@ export const siteConfigs: ISiteConfig[] = [
             },
             text: {
                 "type": "DOM",
-                js: (body) => body.querySelector(`[class="ryNqvb"]`)?.textContent ?? "",
+                js: (body) => body.querySelector(`[class="ryNqvb"]`)?.textContent?.trim() ?? "",
 
             }
         }
     },
-    // {
-    //     urlChecks: {
-    //         host: "www.deepl.com"
-    //     },
-    //     input: {
-    //         lang: {
-    //             type: "URL_REGEX",
-    //             regex: "#(.*?)\/"
-    //         },
-    //         getTextBox: (body) => body.querySelector("d-textarea")
-    //     },
-    //     output: {
-    //         lang: {
-    //             type: "URL_REGEX",
-    //             regex: "#.*\/(.+?)\/"
-    //         },
-    //         text: {
-    //             type: "DOM",
-    //             js: (body) => body.querySelectorAll("d-textarea")[1]?.textContent ?? ""
-    //         }
+    {
+        name:"DeepL", 
+        urlChecks: {
+            host: "www.deepl.com"
+        },
+        input: {
+            lang: {
+                type: "DOM",
+                js: (body) => {
+                    return body.querySelector("d-textarea[data-testid='translator-source-input']")?.getAttribute("lang")?.split("-")[0] ?? "";
+                }
+            },
 
-    //     }
+            getTextBox: (body) => body.querySelector(`[aria-labelledby="translation-source-heading"][role="textbox"]`)
+        },
+        output: {
+            lang: {
+                type: "DOM",
+                js: (body) => body.querySelector("d-textarea[data-testid='translator-target-input']")?.getAttribute("lang")?.split("-")[0] ?? ""
+            },
+            text: {
+                type: "DOM",
+                js: (body) => body.querySelector("#target-dummydiv")?.textContent?.trim() ?? ""
+            }
 
-    // }
+        },
+        validate: () => {
+            return !document.getElementById("dl_translator")?.classList.contains("lmt--active_translation_request");
+        }
+
+    }
 ];

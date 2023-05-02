@@ -62,6 +62,3 @@ export const similar = (a: string, b: string) => {
 //         return s.trimEnd().trimStart(); //the actual sanitize method
 //     }
 // }
-export const sanitize = (s: string) => {
-    return s.trimEnd().trimStart();
-} 

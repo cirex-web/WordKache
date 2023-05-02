@@ -1,28 +1,43 @@
 import css from "./text.module.css";
 
+interface ITextProps extends React.HTMLProps<HTMLSpanElement> {
+  type?: "paragraph" | "heading";
+  noWrap?: boolean;
+  bold?: boolean;
+  dark?: boolean;
+  noSelect?: boolean;
+}
+
 export const Text = ({
   type,
   children,
   noWrap,
-}: {
-  type: "paragraph" | "heading";
-  children: React.ReactNode;
-  noWrap?: boolean;
-}) => {
+  bold,
+  dark,
+  style,
+  className,
+  noSelect,
+  ...rest
+}: ITextProps) => {
   return (
-    <div
-      className={css[type]}
-      style={
-        noWrap
+    <span
+      className={(type ? css[type] : "") + " " + className}
+      style={{
+        ...(noWrap
           ? {
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
               overflow: "hidden",
             }
-          : {}
-      }
+          : {}),
+        fontWeight: bold ? "bold" : "",
+        color: dark ? "var(--dark-1)" : "inherit",
+        userSelect: noSelect ? "none" : "auto",
+        ...style,
+      }}
+      {...rest}
     >
       {children}
-    </div>
+    </span>
   );
 };

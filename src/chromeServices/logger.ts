@@ -23,5 +23,5 @@ export const logger = {
 }
 export const sendLog = async (message: string | { [key: string | number]: any }) => {
     existingLogs.push({ time: +new Date(), message });
-    await ChromeStorage.setPair("logs", existingLogs);
+    // await ChromeStorage.setPair("logs", existingLogs); //let's just let this be for now
 }

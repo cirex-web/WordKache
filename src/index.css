@@ -1,15 +1,17 @@
 :root {
   font-size: 62.5%;
+  --dark-1: #0d0a0b;
+  --dark-2: #454955;
+  --light-1: #f3eff5;
+  --accent-1: #72b01d;
+  --accent-2: #3F7D20;
 }
 ::-webkit-scrollbar {
   display: none;
 }
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 48
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+  font-size: inherit;
 }
 html {
   height: 100vh;
@@ -17,17 +19,75 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+  scrollbar-color: #6969dd #e0e0e0;
+  color: var(--light-1);
 }
 body {
   margin: 0;
   font-family: "Open Sans", Arial, sans-serif;
+  font-display:optional;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 500px;
-  outline: 3px solid black;
-  height: 250px;
+  width: 600px;
+  height: 450px;
 }
 #root {
-  display: flex;
+  display: grid;
+  grid-template-columns: 200px 1fr;
   height: 100%;
+  background-color: var(--dark-1);
+}
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  margin: auto;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  flex-grow: 1;
+  overflow: scroll;
+  font-size: 1.2rem;
+  border-spacing: 5px;
+  table-layout: fixed;
+}
+
+tr {
+  transition: .2s all;
+}
+
+td {
+  padding: 3px 12px;
+  width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}
+tr:not(:first-child){
+  border-top: 1px solid var(--dark-2);
+}
+tr:hover {
+  background-color: var(--dark-2);
+  cursor: pointer;
+}
+button{
+  background-color: transparent;
+  outline: none;
+  border: 1px solid var(--light-1);
+  color: var(--light-1);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: .2s all;
+  /* TODO: just make font size into component */
+}
+button:hover{
+  background-color: var(--dark-2);
+}
+button:active:hover{
+  background-color: var(--dark-1);
+
 }

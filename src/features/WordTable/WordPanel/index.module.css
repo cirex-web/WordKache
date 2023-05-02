@@ -1,0 +1,4 @@
+.container{
+    border-top: 3px solid var(--light-1);
+    padding: 10px;
+}
