@@ -1,6 +1,4 @@
 
-import React, { useEffect, useState } from "react";
-import { Card } from "../../types";
 import { similar } from "../../utils/strings";
 import Styles from "./index.module.css";
 import { Table, Input, Collapse} from 'reactstrap';
