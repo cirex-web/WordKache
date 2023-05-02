@@ -26,7 +26,6 @@ const WordTable = ({ cards }: { cards: Card[] }) => {
 
   //Toggle Search
   const [isOpen, setIsOpen] = useState(false);
-  const [searchInp, setInput] = useState('')
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -37,10 +36,14 @@ const WordTable = ({ cards }: { cards: Card[] }) => {
       'back.text'
     ]
   });
+  const [searchInp, setInput] = useState('')
   
   const results = fuse.search(searchInp);
   
   const searchResults = (searchInp.length == 0) ? filteredCards : results.map(result => result.item);
+
+  //Language
+  const [language, setLanguage] = useState('Translation');
 
    return (
     <>
@@ -48,14 +51,14 @@ const WordTable = ({ cards }: { cards: Card[] }) => {
       <tbody>
         <tr style = {{position: "sticky", top:"0"}}>
           <th style = {{textAlign: "left"}}> <FaSearch onClick={toggle}/> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Original</th>
-          <th style = {{textAlign: "center"}}>Translation</th>
+          <th style = {{textAlign: "center"}}>{language}</th>
         </tr>
         {searchResults.map(
           (wordEntry, i) =>
             wordEntry.good && (
               <tr key={i}>
                 <td>{wordEntry.front.text}</td>
-                <td>{wordEntry.back.text}</td>
+                <td onMouseEnter={() => setLanguage(wordEntry.back.lang)} onMouseLeave={() => setLanguage("Translation")}>{wordEntry.back.text}</td>
               </tr> //words typed to saved words ratio
             )
         )}
