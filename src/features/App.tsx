@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
-import SearchBar from "./SearchBar";
 import { Card, WordList } from "../types";
 import { Text } from "../components/Text";
 import { FolderNav } from "./FolderNav";
@@ -44,9 +43,6 @@ function App() {
       </div>
       <div style={{ overflow: "scroll"}}>
         <WordTable cards={cards} />
-      </div>
-      <div>
-        <SearchBar cards = {cards} />
       </div>
     </>
   );
