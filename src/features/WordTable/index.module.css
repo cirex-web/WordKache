@@ -29,11 +29,11 @@ td:nth-child(2){
   width: 50%;
 }
 
-.icon_container{
-  right: 0;
-}
-
 .text_box{
   position: sticky;
   bottom: 0;
+}
+
+table{
+  object-fit: contain;
 }

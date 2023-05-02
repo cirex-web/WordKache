@@ -4,6 +4,7 @@ import { similar } from "../../utils/strings";
 import Styles from "./index.module.css";
 import { Table, Input, Collapse} from 'reactstrap';
 import { FaSearch } from 'react-icons/fa';
+import Fuse from 'fuse.js';
 
 const WordTable = ({ cards }: { cards: Card[] }) => {
 
@@ -21,22 +22,35 @@ const WordTable = ({ cards }: { cards: Card[] }) => {
     if (good) latestGoodText = cards[i].front.text;
   }
   console.log(filteredCards);
-  
+
+
   //Toggle Search
   const [isOpen, setIsOpen] = useState(false);
   const [searchInp, setInput] = useState('')
 
   const toggle = () => setIsOpen(!isOpen);
 
+  //Search
+  const fuse = new Fuse(filteredCards, {
+    keys: [
+      'front.text',
+      'back.text'
+    ]
+  });
+  
+  const results = fuse.search(searchInp);
+  
+  const searchResults = (searchInp.length == 0) ? filteredCards : results.map(result => result.item);
+
    return (
     <>
     <Table bordered hover dark>
       <tbody>
         <tr style = {{position: "sticky", top:"0"}}>
-          <th style = {{textAlign: "left"}}> <FaSearch className = {Styles.icon_container} onClick={toggle}/> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Original</th>
+          <th style = {{textAlign: "left"}}> <FaSearch onClick={toggle}/> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Original</th>
           <th style = {{textAlign: "center"}}>Translation</th>
         </tr>
-        {filteredCards.map(
+        {searchResults.map(
           (wordEntry, i) =>
             wordEntry.good && (
               <tr key={i}>
