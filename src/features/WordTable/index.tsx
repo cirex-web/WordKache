@@ -28,19 +28,17 @@ const WordTable = ({
     keys: ["front.text", "back.text"],
   });
 
-  const [searchInp, setInput] = useState("");
+  const [searchInput, setInput] = useState("");
 
-  const results = fuse.search(searchInp);
-
-  const searchResults = !searchInp.length
+  const searchResults = !searchInput.length
     ? cards
-    : results.map((result) => result.item);
+    : fuse.search(searchInput).map((result) => result.item);
 
   //Language
 
   return (
     <div className={css.container}>
-      <TableHeader folderName={activeFolder.name} />
+      <TableHeader folderName={activeFolder.name} setSearchInput={setInput} />
       <div className={css.tableContainer}>
         <table>
           <thead>
@@ -80,12 +78,6 @@ const WordTable = ({
           </tbody>
         </table>
       </div>
-
-      <Input
-        placeholder="type a word"
-        onChange={(event) => setInput(event.currentTarget.value)}
-      />
-
       {activeCard && (
         <WordPanel
           cardInfo={activeCard}

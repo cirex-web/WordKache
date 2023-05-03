@@ -3,17 +3,39 @@
   background-color: var(--dark-2);
   padding: 10px 20px;
   border-bottom: 2px solid var(--light-1);
+  position: relative;
 }
 .heading {
   display: block;
-  line-height: 1em;
-  overflow: visible;
 }
 .buttonsTray {
   position: absolute;
-  right: 10px;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
 }
 .buttons {
   display: flex;
   gap: 10px;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+  justify-content: flex-end;
+}
+.inputContainer {
+  transition: 0.2s all;
+  width: 0;
+  overflow: hidden;
+  display: flex;
+
+}
+.inputContainer input {
+  margin: 10px 2px;
+  flex-grow: 1;
+}
+.buttons span {
+  cursor: pointer;
 }
