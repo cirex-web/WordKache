@@ -2,5 +2,17 @@
 .input{
     font-family: inherit;
     font-size: 1.5rem;
-    padding: 2px 5px;
+    padding: 4px 5px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    border: none;
+    background-color: var(--light-1);
+
+}
+.input:focus-visible:active{
+    outline: 2px solid var(--accent-2);
+
+}
+.input:focus-visible{
+    outline: 2px solid var(--accent-1);
 }
