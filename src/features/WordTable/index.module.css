@@ -22,3 +22,10 @@ tr.selected {
   overflow: scroll;
   flex-grow: 1;
 }
+
+.emptyState{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

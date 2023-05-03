@@ -28,8 +28,9 @@ const WordTable = ({
 
   const searchResults = !searchInput.length
     ? cards
-    : fuse.search(searchInput).map((result) => result.item);
-
+    : fuse.search(searchInput).map((result) => result.item).reverse();
+  
+ 
   return (
     <div className={css.container}>
       <TableHeader
@@ -38,12 +39,15 @@ const WordTable = ({
         cards={cards}
       />
       <div className={css.tableContainer}>
-        <table>
-          <thead>
-            <tr>
-              <th>
-                <Text type="subheading">Original</Text>
-              </th>
+          {
+            searchResults.length ?(
+            <table>
+            <thead>
+              <tr>
+                <th>
+                  <Text type="subheading">Original</Text>
+                </th>
+
 
               <th>
                 <Text type="subheading">Translation</Text>
@@ -71,8 +75,10 @@ const WordTable = ({
                 </tr>
               ))
               .reverse()}
-          </tbody>
+          </tbody> 
         </table>
+        ):
+          <div className = {css.emptyState}><Text type="subheading" > Sorry, it seems you don't have any words </Text></div>}
       </div>
       {activeCard && (
         <WordPanel
