@@ -6,22 +6,18 @@ import { UseFolderContext } from "../App";
 import { TableHeader } from "./TableHeader";
 import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
-import { Input } from "../../components/Input";
-import { Icon } from "../../components/Icon";
+
 const WordTable = ({
   cards,
   moveCard,
+  deleteCard,
 }: {
   cards: Card[];
   moveCard: (cardId: string, folderId?: string) => void;
+  deleteCard: (cardId: string) => void;
 }) => {
   const { activeFolder } = UseFolderContext();
   const [activeCard, setActiveCard] = useState<Card>();
-
-  //Toggle Search
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggle = () => setIsOpen(!isOpen);
 
   //Search
   const fuse = new Fuse(cards, {
@@ -34,11 +30,13 @@ const WordTable = ({
     ? cards
     : fuse.search(searchInput).map((result) => result.item);
 
-  //Language
-
   return (
     <div className={css.container}>
-      <TableHeader folderName={activeFolder.name} setSearchInput={setInput} />
+      <TableHeader
+        folderName={activeFolder.name}
+        setSearchInput={setInput}
+        cards={cards}
+      />
       <div className={css.tableContainer}>
         <table>
           <thead>
@@ -51,11 +49,9 @@ const WordTable = ({
                 <Text type="subheading">Translation</Text>
               </th>
             </tr>
-            {/* <Icon name="search" /> */}
           </thead>
           <tbody>
             {searchResults
-              .filter((card) => card.location === activeFolder.id)
               .map((card) => (
                 <tr
                   key={card.id}
@@ -81,7 +77,8 @@ const WordTable = ({
       {activeCard && (
         <WordPanel
           cardInfo={activeCard}
-          onSave={() => moveCard(activeCard.id)}
+          saveCard={() => moveCard(activeCard.id)}
+          deleteCard={() => deleteCard(activeCard.id)}
         />
       )}
     </div>
