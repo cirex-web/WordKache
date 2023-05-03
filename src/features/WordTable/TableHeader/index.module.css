@@ -1,13 +1,19 @@
-.header{
-    text-align: center;
-    background-color: var(--dark-2);
-    padding:5px 40px;
+.header {
+  text-align: left;
+  background-color: var(--dark-2);
+  padding: 10px 20px;
+  border-bottom: 2px solid var(--light-1);
 }
-.heading{
-    display: block;
+.heading {
+  display: block;
+  line-height: 1em;
+  overflow: visible;
 }
-.buttons{
-    position: absolute;
-    right: 10px;
-    top: 5px;
+.buttonsTray {
+  position: absolute;
+  right: 10px;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
 }

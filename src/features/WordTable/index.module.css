@@ -1,3 +1,9 @@
+
+.textBox{
+  position: sticky;
+  bottom: 0;
+}
+
 .container {
   position: relative;
   overflow: hidden;
@@ -9,6 +15,10 @@ tr.selected {
   font-weight: bold;
 }
 .table {
+  overflow: scroll;
+  flex-grow: 1;
+}
+.tableContainer{
   overflow: scroll;
   flex-grow: 1;
 }

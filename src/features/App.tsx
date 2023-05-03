@@ -12,6 +12,7 @@ import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
 
+
 export const FolderContext = createContext<{
   activeFolder: Folder | undefined;
   setActiveFolder: React.Dispatch<React.SetStateAction<Folder>> | undefined;
@@ -32,6 +33,7 @@ export const JustCollectedFolder: Folder = {
   id: "root",
 };
 const emptyArray: any[] = [];
+  
 function App() {
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
