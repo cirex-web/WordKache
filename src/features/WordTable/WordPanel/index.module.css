@@ -1,4 +1,6 @@
 .container{
     border-top: 3px solid var(--light-1);
     padding: 10px;
+    display: flex;
+    gap: 10px;
 }

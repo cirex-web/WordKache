@@ -2,14 +2,17 @@ import { Card } from "../../../storageTypes";
 import css from "./index.module.css";
 export const WordPanel = ({
   cardInfo,
-  onSave,
+  saveCard,
+  deleteCard,
 }: {
   cardInfo: Card;
-  onSave: () => void;
+  saveCard: () => void;
+  deleteCard: () => void;
 }) => {
   return (
     <div className={css.container}>
-      <button onClick={onSave}>Save</button>
+      <button onClick={saveCard}>Save</button>
+      <button onClick={deleteCard}>Delete</button>
     </div>
   );
 };

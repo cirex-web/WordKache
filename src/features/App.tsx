@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { Card, Folder } from "../storageTypes";
@@ -11,7 +6,6 @@ import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
-
 
 export const FolderContext = createContext<{
   activeFolder: Folder | undefined;
@@ -33,7 +27,7 @@ export const JustCollectedFolder: Folder = {
   id: "root",
 };
 const emptyArray: any[] = [];
-  
+
 function App() {
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
@@ -59,6 +53,17 @@ function App() {
     }
     ChromeStorage.setPair("cards", cardsClone);
   };
+  const deleteCard = (cardId: string) => {
+    if (!cards) return;
+    ChromeStorage.setPair(
+      "cards",
+      cards.filter((card) => card.id !== cardId)
+    );
+  };
+  const cardsUnderCurrentFolder = cards?.filter(
+    (card) => card.location === activeFolder.id
+  );
+
   return (
     <FolderContext.Provider value={{ activeFolder, setActiveFolder }}>
       <div
@@ -69,8 +74,13 @@ function App() {
         <img src={logo} className={css.logo} alt="logo" />
         {folders && <FolderNav folders={folders} />}
       </div>
-      {cards && (
-        <WordTable cards={cards} moveCard={moveCard} key={activeFolder.id} />
+      {cardsUnderCurrentFolder && (
+        <WordTable
+          cards={cardsUnderCurrentFolder}
+          moveCard={moveCard}
+          key={activeFolder.id}
+          deleteCard={deleteCard}
+        />
       )}
     </FolderContext.Provider>
   );
