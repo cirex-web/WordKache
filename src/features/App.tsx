@@ -12,6 +12,14 @@ import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
 
+
+import {
+  Container, Row, Col, Form, Input, Button, Navbar, Nav,
+  NavbarBrand, NavLink, NavItem, UncontrolledDropdown,
+  DropdownToggle, DropdownMenu, DropdownItem
+} from 'reactstrap';
+
+
 export const FolderContext = createContext<{
   activeFolder: Folder | undefined;
   setActiveFolder: React.Dispatch<React.SetStateAction<Folder>> | undefined;
@@ -32,6 +40,7 @@ export const JustCollectedFolder: Folder = {
   id: "root",
 };
 const emptyArray: any[] = [];
+  
 function App() {
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
