@@ -32,51 +32,56 @@ const WordTable = ({
 
   const searchResults = !searchInput.length
     ? cards
-    : fuse.search(searchInput).map((result) => result.item);
-
-  //Language
-
+    : fuse.search(searchInput).map((result) => result.item).reverse();
+  
+  
   return (
     <div className={css.container}>
       <TableHeader folderName={activeFolder.name} setSearchInput={setInput} />
       <div className={css.tableContainer}>
-        <table>
-          <thead>
-            <tr>
-              <th>
-                <Text type="subheading">Original</Text>
-              </th>
+          {
+            searchResults.length ?(
+            <table>
+            <thead>
+              <tr>
+                <th>
+                  <Text type="subheading">Original</Text>
+                </th>
 
-              <th>
-                <Text type="subheading">Translation</Text>
-              </th>
-            </tr>
-            {/* <Icon name="search" /> */}
-          </thead>
-          <tbody>
-            {searchResults
-              .filter((card) => card.location === activeFolder.id)
-              .map((card) => (
-                <tr
-                  key={card.id}
-                  onMouseDown={() => setActiveCard(card)}
-                  className={card.id === activeCard?.id ? css.selected : ""}
-                >
-                  <td>
-                    <Text type="paragraph" noWrap>
-                      {card.front.text}
-                    </Text>
-                  </td>
-                  <td>
-                    <Text type="paragraph" noWrap>
-                      {card.back.text}
-                    </Text>
-                  </td>
-                </tr>
-              ))
-              .reverse()}
-          </tbody>
-        </table>
+                <th>
+                  <Text type="subheading">Translation</Text>
+                </th>
+              </tr>
+              {/* <Icon name="search" /> */}
+            </thead>
+            <tbody>
+              {searchResults
+                .filter((card) => card.location === activeFolder.id)
+                .map((card) => (
+                  <tr
+                    key={card.id}
+                    onMouseDown={() => setActiveCard(card)}
+                    className={card.id === activeCard?.id ? css.selected : ""}
+                  >
+                    <td>
+                      <Text type="paragraph" noWrap>
+                        {card.front.text}
+                      </Text>
+                    </td>
+                    <td>
+                      <Text type="paragraph" noWrap>
+                        {card.back.text}
+                      </Text>
+                    </td>
+                  </tr>
+                ))
+                .reverse()}
+            </tbody>
+          </table>
+          )
+          :
+          <div className = {css.emptyState}><Text type="subheading" > Sorry, it seems you don't have any words </Text></div>
+        }
       </div>
       {activeCard && (
         <WordPanel
