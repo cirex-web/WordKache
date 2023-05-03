@@ -1,7 +1,7 @@
 import css from "./text.module.css";
 
 interface ITextProps extends React.HTMLProps<HTMLSpanElement> {
-  type?: "paragraph" | "heading";
+  type?: "paragraph" | "heading" | "subheading";
   noWrap?: boolean;
   bold?: boolean;
   dark?: boolean;

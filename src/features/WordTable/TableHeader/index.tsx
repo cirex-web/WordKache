@@ -6,11 +6,14 @@ export const TableHeader = ({ folderName }: { folderName: string }) => {
     <div className={css.header}>
       <Text type="heading" bold noWrap className={css.heading}>
         {folderName}
-        <div className={css.buttons}>
-          <Icon name="ios_share" />
-        </div>
-      </Text>
+        <span className={css.buttonsTray}>
+          <div className={css.buttons}>
+            <Icon name="search" />
 
+            <Icon name="ios_share" />
+          </div>
+        </span>
+      </Text>
     </div>
   );
 };

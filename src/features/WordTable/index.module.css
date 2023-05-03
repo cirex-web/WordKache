@@ -1,45 +1,8 @@
 
-ul,
-
-li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-
-td {
-  background-color: black;
-  transition: font-size 0.5s ease-in-out;
-}
-
-tr:hover {
-  background-color: rgba(128, 128, 128, 0.575);
-  height: 200%;
-  transition-timing-function: ease-in-out;
-}
-
-td:hover{
-  font-size: 200%;
-}
-
-td:nth-child(1){
-  width: 50%;
-}
-td:nth-child(2){
-  width: 50%;
-}
-
-.text_box{
+.textBox{
   position: sticky;
   bottom: 0;
 }
-
-table{
-  object-fit: contain;
-}
-
-/* master branch styles begin here */
 
 .container {
   position: relative;
@@ -55,4 +18,7 @@ tr.selected {
   overflow: scroll;
   flex-grow: 1;
 }
-
+.tableContainer{
+  overflow: scroll;
+  flex-grow: 1;
+}
