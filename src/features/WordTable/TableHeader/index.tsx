@@ -34,7 +34,7 @@ export const TableHeader = ({
             </div>
             <Icon name="search" onMouseDown={() => setInputOpen(!inputOpen)} />
             <Icon
-              name="ios_share"
+              name="download"
               onMouseDown={() => saveFlashcards(folderName, cards)}
             />
           </div>

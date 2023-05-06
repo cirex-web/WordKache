@@ -6,6 +6,24 @@ import { UseFolderContext } from "../App";
 import { TableHeader } from "./TableHeader";
 import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
+import searchEmpty from "../../assets/searchEmpty.svg";
+import folderEmpty from "../../assets/folderEmpty.svg";
+const Placeholder = ({
+  image,
+  text,
+  className,
+}: {
+  image: string;
+  text: string;
+  className?: string;
+}) => {
+  return (
+    <div className={css.placeholder + " " + className}>
+      <img src={image} alt="" height={100} />
+      <Text type="heading">{text}</Text>
+    </div>
+  );
+};
 
 const WordTable = ({
   cards,
@@ -26,11 +44,10 @@ const WordTable = ({
 
   const [searchInput, setInput] = useState("");
 
-  const searchResults = !searchInput.length
+  const filteredCards = !searchInput.length
     ? cards
-    : fuse.search(searchInput).map((result) => result.item).reverse();
-  
- 
+    : fuse.search(searchInput).map((result) => result.item);
+
   return (
     <div className={css.container}>
       <TableHeader
@@ -38,25 +55,21 @@ const WordTable = ({
         setSearchInput={setInput}
         cards={cards}
       />
-      <div className={css.tableContainer}>
-          {
-            searchResults.length ?(
-            <table>
+      {filteredCards.length ? (
+        <div className={css.tableContainer}>
+          <table>
             <thead>
               <tr>
                 <th>
                   <Text type="subheading">Original</Text>
                 </th>
-
-
-              <th>
-                <Text type="subheading">Translation</Text>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {searchResults
-              .map((card) => (
+                <th>
+                  <Text type="subheading">Translation</Text>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCards.map((card) => (
                 <tr
                   key={card.id}
                   onMouseDown={() => setActiveCard(card)}
@@ -73,13 +86,18 @@ const WordTable = ({
                     </Text>
                   </td>
                 </tr>
-              ))
-              .reverse()}
-          </tbody> 
-        </table>
-        ):
-          <div className = {css.emptyState}><Text type="subheading" > Sorry, it seems you don't have any words </Text></div>}
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : cards.length ? (
+        <Placeholder image={searchEmpty} text="No cards match your search" />
+      ) : (
+        <Placeholder
+          image={folderEmpty}
+          text="This folder is currently empty"
+        />
+      )}
       {activeCard && (
         <WordPanel
           cardInfo={activeCard}

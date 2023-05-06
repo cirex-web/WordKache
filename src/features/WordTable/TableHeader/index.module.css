@@ -24,18 +24,27 @@
   padding: 0 10px;
   box-sizing: border-box;
   justify-content: flex-end;
+  font-size: 2.2rem;
 }
 .inputContainer {
-  transition: 0.2s all;
+  transition: 0.5s all;
   width: 0;
   overflow: hidden;
   display: flex;
-
+  flex-direction: row-reverse; /* Basically start from the right */
 }
 .inputContainer input {
   margin: 10px 2px;
   flex-grow: 1;
+  width: 0;
 }
 .buttons span {
   cursor: pointer;
+  transition: 0.3s all;
+}
+.buttons span:hover {
+  transform: scale(1.2);
+}
+.buttons span:hover:active {
+  transform: scale(1);
 }
