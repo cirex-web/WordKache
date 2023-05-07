@@ -9,16 +9,15 @@ import css from "./index.module.css";
 
 const WordTable = ({
   cards,
-  moveCard,
-  deleteCard,
+  moveCards: moveCard,
+  deleteCards: deleteCard,
 }: {
   cards: Card[];
-  moveCard: (cardId: string, folderId?: string) => void;
-  deleteCard: (cardId: string) => void;
+  moveCards: (cardIds: string[], folderId?: string) => void;
+  deleteCards: (cardIds: string[]) => void;
 }) => {
-
   const { activeFolder } = UseFolderContext();
-  const [activeCards, setActiveCard] = useState<Card[]>([]);
+  const [activeCards, setActiveCards] = useState<Card[]>([]);
 
   //Search
   const fuse = new Fuse(cards, {
@@ -29,24 +28,22 @@ const WordTable = ({
 
   const searchResults = !searchInput.length
     ? cards
-    : fuse.search(searchInput).map((result) => result.item).reverse();
-  
+    : fuse
+        .search(searchInput)
+        .map((result) => result.item)
+        .reverse();
 
-  const handleMouseDown = (event, card) => {
+  const handleMouseDown = (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    card: Card
+  ) => {
     if (event.shiftKey) {
-      setActiveCard([...activeCards, card]);
-      return;
+      setActiveCards([...activeCards, card]);
+    } else {
+      setActiveCards([card]);
     }
-    setActiveCard([card]);
-    return;
   };
 
-  const cardLoop = (cards, func) => {
-        cards.map((card) => {
-          func(card!.id);
-        });
-  };
- 
   return (
     <div className={css.container}>
       <TableHeader
@@ -55,56 +52,59 @@ const WordTable = ({
         cards={cards}
       />
       <div className={css.tableContainer}>
-          {
-            searchResults.length ?(
-            <table>
+        {searchResults.length ? (
+          <table>
             <thead>
               <tr>
                 <th>
                   <Text type="subheading">Original</Text>
                 </th>
 
-
-              <th>
-                <Text type="subheading">Translation</Text>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {searchResults
-              .map((card) => (
-                <tr
-                  key={card.id}
-                  onMouseDown={(e) => handleMouseDown(e, card)}
-                  className={activeCards.some(aCard => (card.id === aCard.id)) ? css.selected : ""}
-                >
-                  <td>
-                    <Text type="paragraph" noWrap>
-                      {card.front.text}
-                    </Text>
-                  </td>
-                  <td>
-                    <Text type="paragraph" noWrap>
-                      {card.back.text}
-                    </Text>
-                  </td>
-                </tr>
-              ))
-              .reverse()}
-          </tbody> 
-        </table>
-        ):
-          <div className = {css.emptyState}><Text type="subheading" > Sorry, it seems you don't have any words </Text></div>}
+                <th>
+                  <Text type="subheading">Translation</Text>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {searchResults
+                .map((card) => (
+                  <tr
+                    key={card.id}
+                    onMouseDown={(e) => handleMouseDown(e, card)}
+                    className={activeCards.includes(card) ? css.selected : ""}
+                  >
+                    <td>
+                      <Text type="paragraph" noWrap>
+                        {card.front.text}
+                      </Text>
+                    </td>
+                    <td>
+                      <Text type="paragraph" noWrap>
+                        {card.back.text}
+                      </Text>
+                    </td>
+                  </tr>
+                ))
+                .reverse()}
+            </tbody>
+          </table>
+        ) : (
+          <div className={css.emptyState}>
+            <Text type="subheading">
+              {" "}
+              Sorry, it seems you don't have any words{" "}
+            </Text>
+          </div>
+        )}
       </div>
 
-      {
-        activeCards.length && (
+      {activeCards.length && (
         <WordPanel
-          cardInfo={activeCards[activeCards.length-1]}
-          saveCard={() => cardLoop(activeCards, moveCard)}
-          deleteCard={() => cardLoop(activeCards, deleteCard)}
-        /> )
-      }
+          cardInfo={activeCards[activeCards.length - 1]}
+          saveCard={() => moveCard(activeCards.map((card) => card.id))}
+          deleteCard={() => deleteCard(activeCards.map((card) => card.id))}
+        />
+      )}
     </div>
   );
 };
