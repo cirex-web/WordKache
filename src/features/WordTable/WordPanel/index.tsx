@@ -38,35 +38,39 @@ const TextArea = ({ className, language, title, ...rest }: ITextAreaProps) => {
   );
 };
 export const WordPanel = ({
-  cardInfo,
+  cards,
   saveCard,
   deleteCard,
 }: {
-  cardInfo: Card;
+  cards: Card[];
   saveCard: () => void;
   deleteCard: () => void;
 }) => {
+  const singleCard = cards[0];
   return (
     <div className={css.container}>
-      <div className={css.textBoxContainer}>
-        <TextArea
-          value={cardInfo.front.text}
-          language={cardInfo.front.lang}
-          readOnly
-          title="Front"
-          key={cardInfo.id + "1"}
-        />
-        <div style={{ background: "white" }}></div>
-        <TextArea
-          value={cardInfo.back.text}
-          language={cardInfo.back.lang}
-          readOnly
-          title="Back"
-          key={cardInfo.id + "2"}
-        />
-      </div>
+      {cards.length === 1 && (
+        <div
+          className={css.textBoxContainer}
+          key={singleCard.id} //For textarea height recalculation every time the card data changes
+        >
+          <TextArea
+            value={singleCard.front.text}
+            language={singleCard.front.lang}
+            readOnly
+            title="Front"
+          />
+          <div style={{ background: "white" }}></div>
+          <TextArea
+            value={singleCard.back.text}
+            language={singleCard.back.lang}
+            readOnly
+            title="Back"
+          />
+        </div>
+      )}
       <div className={css.buttonRow}>
-        {cardInfo.location === "root" && (
+        {singleCard.location === "root" && (
           <Button onClick={saveCard}>
             <Text type="subheading">Save</Text>
           </Button>
@@ -75,7 +79,9 @@ export const WordPanel = ({
           <Text type="subheading">Delete</Text>
         </Button>
         <Text type="paragraph" className={css.source}>
-          Source: {cardInfo.source}
+          {cards.length === 1
+            ? `Source: ${singleCard.source}`
+            : `Selected (${cards.length}) Cards`}
         </Text>
       </div>
     </div>

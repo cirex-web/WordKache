@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "../../storageTypes";
 import { Text } from "../../components/Text";
 import { UseFolderContext } from "../App";
@@ -28,39 +28,64 @@ const Placeholder = ({
 
 const WordTable = ({
   cards,
-  moveCards: moveCard,
-  deleteCards: deleteCard,
+  moveCards,
+  deleteCards,
 }: {
   cards: Card[];
   moveCards: (cardIds: string[], folderId?: string) => void;
   deleteCards: (cardIds: string[]) => void;
 }) => {
   const { activeFolder } = UseFolderContext();
-  const [activeCards, setActiveCards] = useState<Card[]>([]);
+  const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
+  const [searchInput, setInput] = useState("");
 
   //Search
   const fuse = new Fuse(cards, {
     keys: ["front.text", "back.text"],
   });
 
-  const [searchInput, setInput] = useState("");
-
   const filteredCards = !searchInput.length
     ? [...cards].reverse() //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
+  const activeCards = filteredCards.filter((card) =>
+    activeCardIds.includes(card.id)
+  );
 
-  const handleMouseDown = (
+  const handleRowSelect = (
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    card: Card
+    cardId: string
   ) => {
-    const activeCardsCopy =
-      event.shiftKey || event.metaKey ? [...activeCards] : [];
-    if (activeCardsCopy.includes(card)) {
-      setActiveCards(
-        activeCardsCopy.filter((activeCard) => activeCard !== card)
+    const activeCardIdsCopy =
+      event.shiftKey || event.metaKey ? [...activeCardIds] : [];
+    if (activeCardIdsCopy.includes(cardId)) {
+      setActiveCardsIds(
+        activeCardIdsCopy.filter((activeCardId) => activeCardId !== cardId)
       );
     } else {
-      setActiveCards([...activeCardsCopy, card]);
+      setActiveCardsIds([...activeCardIdsCopy, cardId]);
+    }
+  };
+
+  // Deselect any selected cards that go off into the abyss when a filter query is typed
+  useEffect(() => {
+    const newActiveCardsIds = activeCardIds.filter((cardId) =>
+      filteredCards.some((card) => card.id === cardId)
+    );
+    if (newActiveCardsIds.length < activeCardIds.length)
+      setActiveCardsIds(newActiveCardsIds); //we don't want an infinite loop - that's why this conditional check is here
+  }, [filteredCards, activeCardIds]);
+
+  /** Selects the next card in the table if only one card is currently selected */
+  const selectNewCard = () => {
+    const nextIndex =
+      activeCardIds.length === 1
+        ? filteredCards.findIndex((card) => card.id === activeCardIds[0]) + 1
+        : filteredCards.length;
+
+    if (nextIndex < filteredCards.length && nextIndex >= 0) {
+      setActiveCardsIds([filteredCards[nextIndex].id]);
+    } else {
+      setActiveCardsIds([]);
     }
   };
 
@@ -88,9 +113,9 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
-                  onMouseDown={(ev) => handleMouseDown(ev, card)}
+                  onMouseDown={(ev) => handleRowSelect(ev, card.id)}
                   className={classNames({
-                    [css.selected]: activeCards.includes(card),
+                    [css.selected]: activeCardIds.includes(card.id),
                   })}
                 >
                   <td>
@@ -98,7 +123,8 @@ const WordTable = ({
                       type="paragraph"
                       noWrap
                       dull={
-                        activeCards.length > 0 && !activeCards.includes(card)
+                        activeCardIds.length > 0 &&
+                        !activeCardIds.includes(card.id)
                       }
                     >
                       {card.front.text}
@@ -109,7 +135,8 @@ const WordTable = ({
                       type="paragraph"
                       noWrap
                       dull={
-                        activeCards.length > 0 && !activeCards.includes(card)
+                        activeCardIds.length > 0 &&
+                        !activeCardIds.includes(card.id)
                       }
                     >
                       {card.back.text}
@@ -131,8 +158,14 @@ const WordTable = ({
       {activeCards.length > 0 && (
         <WordPanel
           cards={activeCards}
-          saveCard={() => moveCard(activeCards.map((card) => card.id))}
-          deleteCard={() => deleteCard(activeCards.map((card) => card.id))}
+          saveCard={() => {
+            selectNewCard();
+            moveCards(activeCardIds);
+          }}
+          deleteCard={() => {
+            selectNewCard();
+            deleteCards(activeCardIds);
+          }}
         />
       )}
     </div>
