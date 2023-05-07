@@ -1,6 +1,54 @@
-.container{
-    border-top: 3px solid var(--light-1);
-    padding: 10px;
-    display: flex;
-    gap: 10px;
+.textBoxContainer {
+  display: grid;
+  grid-template-columns: 1fr 0 1fr;
+  border-top: 2px solid var(--light-1);
+  align-items: start;
+}
+
+.textAreaContainer {
+  position: relative;
+  padding: 10px 10px 20px 10px;
+  display: grid;
+  gap: 5px;
+}
+.textAreaContainer .language {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+}
+.textAreaContainer .title {
+  font-weight: bold;
+  border-bottom: 1px solid var(--light-1);
+  width: max-content;
+}
+/* .textAreaContainer:last-child {
+  background-color: var(--dark-2);
+} */
+.textarea {
+  font-family: inherit;
+  font-size: 1.5rem;
+  border: none;
+  resize: none;
+  color: var(--light-1);
+  background-color: transparent;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  padding: 0;
+}
+.buttonRow {
+  display: flex;
+  border-top: 1px solid var(--light-1);
+}
+
+.buttonRow button {
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid var(--light-1);
+}
+.source {
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 10px;
+  margin: auto;
 }

@@ -6,6 +6,8 @@ interface ITextProps extends React.HTMLProps<HTMLSpanElement> {
   bold?: boolean;
   dark?: boolean;
   noSelect?: boolean;
+  /** Light gray basically */
+  dull?: boolean;
 }
 
 export const Text = ({
@@ -14,6 +16,7 @@ export const Text = ({
   noWrap,
   bold,
   dark,
+  dull,
   style,
   className,
   noSelect,
@@ -31,7 +34,7 @@ export const Text = ({
             }
           : {}),
         fontWeight: bold ? "bold" : "",
-        color: dark ? "var(--dark-1)" : "",
+        color: dark ? "var(--dark-1)" : dull ? "var(--light-2)" : "",
         userSelect: noSelect ? "none" : "auto",
         ...style,
       }}

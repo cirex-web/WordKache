@@ -262,7 +262,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             },
             "front": {
                 "lang": "en",
-                "text": "one more"
+                "text": "loremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremlorem "
             },
             "id": "ABENDQFaMMkTsVCQnVJIi",
             "location": "root",

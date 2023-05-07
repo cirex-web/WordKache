@@ -76,12 +76,20 @@ const WordTable = ({
                   className={card.id === activeCard?.id ? css.selected : ""}
                 >
                   <td>
-                    <Text type="paragraph" noWrap>
+                    <Text
+                      type="paragraph"
+                      noWrap
+                      dull={activeCard && activeCard.id !== card.id}
+                    >
                       {card.front.text}
                     </Text>
                   </td>
                   <td>
-                    <Text type="paragraph" noWrap>
+                    <Text
+                      type="paragraph"
+                      noWrap
+                      dull={activeCard && activeCard.id !== card.id}
+                    >
                       {card.back.text}
                     </Text>
                   </td>

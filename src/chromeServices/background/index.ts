@@ -134,7 +134,7 @@ async function updateStorageVersion() {
             logger.info("Storage updated to version 2!");
             break;
         default:
-            console.assert(false, `Invalid storage version ${currentVersion}`);
+            throw new Error(`Invalid storage version ${currentVersion}`);
 
     }
     await ChromeStorage.setPair("storageVersion", 2);
