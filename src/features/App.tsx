@@ -43,21 +43,22 @@ function App() {
       ]);
     }
   }, [folders]); //This is just cuz there's no create folder feature yet... will implement soon
-  const moveCard = (cardId: string, folderId?: string) => {
+
+  const moveCards = (cardIds: string[], folderId?: string) => {
     if (!cards || !folders) return; //somehow useStorage failed to initialize this... odd
     const cardsClone = [...cards];
     for (const card of cardsClone) {
-      if (card.id === cardId) {
+      if (cardIds.includes(card.id)) {
         card.location = folderId ?? folders[0].id; //also temp
       }
     }
     ChromeStorage.setPair("cards", cardsClone);
   };
-  const deleteCard = (cardId: string) => {
+  const deleteCards = (cardIds: string[]) => {
     if (!cards) return;
     ChromeStorage.setPair(
       "cards",
-      cards.filter((card) => card.id !== cardId)
+      cards.filter((card) => !cardIds.includes(card.id))
     );
   };
   const cardsUnderCurrentFolder = cards?.filter(
@@ -77,9 +78,9 @@ function App() {
       {cardsUnderCurrentFolder && (
         <WordTable
           cards={cardsUnderCurrentFolder}
-          moveCard={moveCard}
+          moveCards={moveCards}
           key={activeFolder.id}
-          deleteCard={deleteCard}
+          deleteCards={deleteCards}
         />
       )}
     </FolderContext.Provider>
