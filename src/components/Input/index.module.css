@@ -6,6 +6,7 @@
   box-sizing: border-box;
   border: none;
   background-color: var(--light-1);
+  outline-offset: 2px;
 }
 .input:focus-visible:active {
   outline: 2px solid var(--accent-2);

@@ -45,7 +45,7 @@ const WordTable = ({
   const [searchInput, setInput] = useState("");
 
   const filteredCards = !searchInput.length
-    ? cards
+    ? [...cards].reverse() //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
 
   return (

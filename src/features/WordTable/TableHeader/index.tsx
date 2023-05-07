@@ -6,6 +6,7 @@ import css from "./index.module.css";
 import { saveFlashcards } from "../../../utils/file";
 import { Card } from "../../../storageTypes";
 import { Button } from "../../../components/Button";
+import { useFocus } from "../../../utils/useFocus";
 export const TableHeader = ({
   folderName,
   setSearchInput,
@@ -16,6 +17,7 @@ export const TableHeader = ({
   cards: Card[];
 }) => {
   const [inputOpen, setInputOpen] = useState(false);
+  const [inputRef, focusInput] = useFocus();
 
   return (
     <div className={css.header}>
@@ -31,11 +33,15 @@ export const TableHeader = ({
               <Input
                 placeholder="Search cards..."
                 onChange={(event) => setSearchInput(event.currentTarget.value)}
+                ref={inputRef}
               />
             </div>
             <Button
               noBorder
-              onMouseDown={() => setInputOpen(!inputOpen)}
+              onMouseDown={() => {
+                // if (!inputOpen) focusInput(); //focus input on open
+                setInputOpen(!inputOpen);
+              }}
               zoomOnHover
               disabled={!cards.length}
             >
