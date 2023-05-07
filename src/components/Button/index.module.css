@@ -5,7 +5,6 @@
   color: var(--light-1);
   font-size: inherit;
   cursor: pointer;
-  transition: 0.2s all;
   padding: 5px 10px;
   border-radius: 5px;
   transition: 0.15s all;

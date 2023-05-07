@@ -17,7 +17,7 @@ export const TableHeader = ({
   cards: Card[];
 }) => {
   const [inputOpen, setInputOpen] = useState(false);
-  const [inputRef, focusInput] = useFocus();
+  const [inputRef] = useFocus();
 
   return (
     <div className={css.header}>
