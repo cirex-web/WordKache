@@ -16,3 +16,7 @@ To get the full production build, run `npm run build` and load the folder into c
 - multiple output translations?
 - Make sure weird input (like new lines and blank trailing/leading spaces) behave correctly in request (and sanitize it if it doesn’t)
 - Add host permission to manifest.json (for capturing network requests) (if relevant)
+
+### Other notes
+Use the `classnames` package when you have multiple/conditional class names.
+Use logger.ts rather than console.log for debugging (So it doesn't appear in prod.)

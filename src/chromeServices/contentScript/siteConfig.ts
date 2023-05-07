@@ -3,7 +3,7 @@ import { ISiteConfig } from "../types";
 /** Note: All return statements from here should be sanitized (to match network requests) by default. Only languages will be converted in the backend into their two-letter counterparts. */
 export const siteConfigs: ISiteConfig[] = [
     {
-        name:"Google Translate",
+        name: "Google Translate",
         "urlChecks": {
             "urlParams": {
                 "op": "translate"
@@ -22,9 +22,8 @@ export const siteConfigs: ISiteConfig[] = [
                     (body) => {
                         const matches = body.querySelectorAll('[aria-selected="true"] [jsname="V67aGc"]');
                         console.assert(matches.length);
-                        return (matches[0].textContent ?? "").split(" ")[0];
+                        return (matches[0].textContent ?? "").split(" - ")[0];
                     }
-
             }
 
         },
@@ -41,7 +40,7 @@ export const siteConfigs: ISiteConfig[] = [
         }
     },
     {
-        name:"DeepL", 
+        name: "DeepL",
         urlChecks: {
             host: "www.deepl.com"
         },

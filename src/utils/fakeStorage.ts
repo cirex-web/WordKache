@@ -1,22 +1,22 @@
 import { Card, Folder } from "../storageTypes";
 
 // just for npm start
-export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
+export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
     "cards": [
-        {
-            "back": {
-                "lang": "es",
-                "text": "Vale, eso es un pequeño problema."
-            },
-            "front": {
-                "lang": "en",
-                "text": "ok that's a bit of a problem"
-            },
-            "id": "LjYGLSSy_7e0TItw_J83d",
-            "location": "tchYdlZkZyp76HO2CsL7o",
-            "source": "DeepL",
-            "timeCreated": 1682879242314
-        },
+        // {
+        //     "back": {
+        //         "lang": "es",
+        //         "text": "Vale, eso es un pequeño problema."
+        //     },
+        //     "front": {
+        //         "lang": "en",
+        //         "text": "ok that's a bit of a problem"
+        //     },
+        //     "id": "LjYGLSSy_7e0TItw_J83d",
+        //     "location": "tchYdlZkZyp76HO2CsL7o",
+        //     "source": "DeepL",
+        //     "timeCreated": 1682879242314
+        // },
         {
             "back": {
                 "lang": "es",
@@ -262,7 +262,7 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             },
             "front": {
                 "lang": "en",
-                "text": "one more"
+                "text": "loremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremlorem "
             },
             "id": "ABENDQFaMMkTsVCQnVJIi",
             "location": "root",

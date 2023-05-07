@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
 import css from "./index.module.css";
@@ -47,7 +42,7 @@ export const RecursiveFolder = ({
   return (
     <li className={css.folder}>
       <Text
-        type="paragraph"
+        type="subheading"
         className={selected ? css.selectedFolderName : css.folderName}
         style={{ paddingLeft: depth * 12 }} //12px looks pretty good
         noSelect
