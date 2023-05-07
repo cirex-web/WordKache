@@ -5,6 +5,7 @@ import { Text } from "../../../components/Text";
 import css from "./index.module.css";
 import { saveFlashcards } from "../../../utils/file";
 import { Card } from "../../../storageTypes";
+import { Button } from "../../../components/Button";
 export const TableHeader = ({
   folderName,
   setSearchInput,
@@ -32,11 +33,24 @@ export const TableHeader = ({
                 onChange={(event) => setSearchInput(event.currentTarget.value)}
               />
             </div>
-            <Icon name="search" onMouseDown={() => setInputOpen(!inputOpen)} />
-            <Icon
-              name="download"
+            <Button
+              noBorder
+              onMouseDown={() => setInputOpen(!inputOpen)}
+              zoomOnHover
+              disabled={!cards.length}
+            >
+              <Icon name="search" />
+            </Button>
+
+            <Button
               onMouseDown={() => saveFlashcards(folderName, cards)}
-            />
+              noBorder
+              zoomOnHover
+              style={{ marginLeft: "-5px" }}
+              disabled={!cards.length}
+            >
+              <Icon name="download" />
+            </Button>
           </div>
         </span>
       </Text>

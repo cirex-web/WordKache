@@ -17,7 +17,6 @@
 }
 .buttons {
   display: flex;
-  gap: 10px;
   height: 100%;
   width: 100%;
   align-items: center;
@@ -32,19 +31,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: row-reverse; /* Basically start from the right */
+  margin-right: 10px;
 }
 .inputContainer input {
   margin: 10px 2px;
   flex-grow: 1;
   width: 0;
-}
-.buttons span {
-  cursor: pointer;
-  transition: 0.3s all;
-}
-.buttons span:hover {
-  transform: scale(1.2);
-}
-.buttons span:hover:active {
-  transform: scale(1);
 }

@@ -1,3 +1,5 @@
+import { Button } from "../../../components/Button";
+import { Text } from "../../../components/Text";
 import { Card } from "../../../storageTypes";
 import css from "./index.module.css";
 export const WordPanel = ({
@@ -11,8 +13,12 @@ export const WordPanel = ({
 }) => {
   return (
     <div className={css.container}>
-      <button onClick={saveCard}>Save</button>
-      <button onClick={deleteCard}>Delete</button>
+      <Button onClick={saveCard}>
+        <Text type="subheading">Save</Text>
+      </Button>
+      <Button onClick={deleteCard}>
+        <Text type="subheading">Delete</Text>
+      </Button>
     </div>
   );
 };
