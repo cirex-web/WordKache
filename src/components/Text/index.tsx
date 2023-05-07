@@ -31,7 +31,7 @@ export const Text = ({
             }
           : {}),
         fontWeight: bold ? "bold" : "",
-        color: dark ? "var(--dark-1)" : "inherit",
+        color: dark ? "var(--dark-1)" : "",
         userSelect: noSelect ? "none" : "auto",
         ...style,
       }}

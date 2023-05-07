@@ -3,6 +3,7 @@
   --dark-1: #0d0a0b;
   --dark-2: #454955;
   --light-1: #f3eff5;
+  --light-2: #f3eff59c;
   --accent-1: #72b01d;
   --accent-2: #3f7d20;
 }
@@ -57,7 +58,7 @@ table {
 }
 
 tr {
-  transition: 0.2s all;
+  transition: 0.2s font-weight, 0.1s background-color;
 }
 thead {
   text-align: center;
