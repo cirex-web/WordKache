@@ -8,6 +8,7 @@ import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
 import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
+import classNames from "classnames";
 const Placeholder = ({
   image,
   text,
@@ -27,15 +28,15 @@ const Placeholder = ({
 
 const WordTable = ({
   cards,
-  moveCard,
-  deleteCard,
+  moveCards: moveCard,
+  deleteCards: deleteCard,
 }: {
   cards: Card[];
-  moveCard: (cardId: string, folderId?: string) => void;
-  deleteCard: (cardId: string) => void;
+  moveCards: (cardIds: string[], folderId?: string) => void;
+  deleteCards: (cardIds: string[]) => void;
 }) => {
   const { activeFolder } = UseFolderContext();
-  const [activeCard, setActiveCard] = useState<Card>();
+  const [activeCards, setActiveCards] = useState<Card[]>([]);
 
   //Search
   const fuse = new Fuse(cards, {
@@ -47,6 +48,21 @@ const WordTable = ({
   const filteredCards = !searchInput.length
     ? [...cards].reverse() //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
+
+  const handleMouseDown = (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    card: Card
+  ) => {
+    const activeCardsCopy =
+      event.shiftKey || event.metaKey ? [...activeCards] : [];
+    if (activeCardsCopy.includes(card)) {
+      setActiveCards(
+        activeCardsCopy.filter((activeCard) => activeCard !== card)
+      );
+    } else {
+      setActiveCards([...activeCardsCopy, card]);
+    }
+  };
 
   return (
     <div className={css.container}>
@@ -72,14 +88,18 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
-                  onMouseDown={() => setActiveCard(card)}
-                  className={card.id === activeCard?.id ? css.selected : ""}
+                  onMouseDown={(ev) => handleMouseDown(ev, card)}
+                  className={classNames({
+                    [css.selected]: activeCards.includes(card),
+                  })}
                 >
                   <td>
                     <Text
                       type="paragraph"
                       noWrap
-                      dull={activeCard && activeCard.id !== card.id}
+                      dull={
+                        activeCards.length > 0 && !activeCards.includes(card)
+                      }
                     >
                       {card.front.text}
                     </Text>
@@ -88,7 +108,9 @@ const WordTable = ({
                     <Text
                       type="paragraph"
                       noWrap
-                      dull={activeCard && activeCard.id !== card.id}
+                      dull={
+                        activeCards.length > 0 && !activeCards.includes(card)
+                      }
                     >
                       {card.back.text}
                     </Text>
@@ -106,11 +128,11 @@ const WordTable = ({
           text="This folder is currently empty"
         />
       )}
-      {activeCard && (
+      {activeCards.length > 0 && (
         <WordPanel
-          cardInfo={activeCard}
-          saveCard={() => moveCard(activeCard.id)}
-          deleteCard={() => deleteCard(activeCard.id)}
+          cards={activeCards}
+          saveCard={() => moveCard(activeCards.map((card) => card.id))}
+          deleteCard={() => deleteCard(activeCards.map((card) => card.id))}
         />
       )}
     </div>
