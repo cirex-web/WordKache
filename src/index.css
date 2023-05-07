@@ -78,7 +78,7 @@ td {
   text-overflow: ellipsis;
 }
 
-tr:hover:not(thead > tr) {
+tbody > tr:hover {
   background-color: var(--dark-2);
   cursor: pointer;
 }
