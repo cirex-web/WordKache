@@ -16,8 +16,9 @@ const WordTable = ({
   moveCard: (cardId: string, folderId?: string) => void;
   deleteCard: (cardId: string) => void;
 }) => {
+
   const { activeFolder } = UseFolderContext();
-  const [activeCard, setActiveCard] = useState<Card>();
+  const [activeCards, setActiveCard] = useState<Card[]>([]);
 
   //Search
   const fuse = new Fuse(cards, {
@@ -30,6 +31,21 @@ const WordTable = ({
     ? cards
     : fuse.search(searchInput).map((result) => result.item).reverse();
   
+
+  const handleMouseDown = (event, card) => {
+    if (event.shiftKey) {
+      setActiveCard([...activeCards, card]);
+      return;
+    }
+    setActiveCard([card]);
+    return;
+  };
+
+  const cardLoop = (cards, func) => {
+        cards.map((card) => {
+          func(card!.id);
+        });
+  };
  
   return (
     <div className={css.container}>
@@ -59,8 +75,8 @@ const WordTable = ({
               .map((card) => (
                 <tr
                   key={card.id}
-                  onMouseDown={() => setActiveCard(card)}
-                  className={card.id === activeCard?.id ? css.selected : ""}
+                  onMouseDown={(e) => handleMouseDown(e, card)}
+                  className={activeCards.some(aCard => (card.id === aCard.id)) ? css.selected : ""}
                 >
                   <td>
                     <Text type="paragraph" noWrap>
@@ -80,13 +96,15 @@ const WordTable = ({
         ):
           <div className = {css.emptyState}><Text type="subheading" > Sorry, it seems you don't have any words </Text></div>}
       </div>
-      {activeCard && (
+
+      {
+        activeCards.length && (
         <WordPanel
-          cardInfo={activeCard}
-          saveCard={() => moveCard(activeCard.id)}
-          deleteCard={() => deleteCard(activeCard.id)}
-        />
-      )}
+          cardInfo={activeCards[activeCards.length-1]}
+          saveCard={() => cardLoop(activeCards, moveCard)}
+          deleteCard={() => cardLoop(activeCards, deleteCard)}
+        /> )
+      }
     </div>
   );
 };

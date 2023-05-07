@@ -43,6 +43,7 @@ function App() {
       ]);
     }
   }, [folders]); //This is just cuz there's no create folder feature yet... will implement soon
+
   const moveCard = (cardId: string, folderId?: string) => {
     if (!cards || !folders) return; //somehow useStorage failed to initialize this... odd
     const cardsClone = [...cards];
