@@ -43,6 +43,7 @@ export interface ITranslationSnapshot {
     validated?: boolean;
     inputTime: number;
     source: string;
+    hidden: boolean;
 }
 
 /** For background script request capturing */

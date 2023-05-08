@@ -10,6 +10,7 @@ logger.info("Kache background script init!")
 
 ChromeStorage.setPair("storageVersion", 1);
 
+
 //keys are all lowercase
 const languageMap = {
     "english": "en",
@@ -72,7 +73,8 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
         id: nanoid(),
         location: "root", //The Just Collected folder
         timeCreated: snapshot.inputTime,
-        source: snapshot.source
+        source: snapshot.source,
+        view: snapshot.hidden
     });
 
     await ChromeStorage.setPair("cards", cards);
@@ -99,7 +101,6 @@ chrome.runtime.onConnect.addListener(
                     // logger.debug(`input to output time: ${timeAfterInput - timeAfterOutput}`); //TODO: Do some more filtering here; also if this is negative it means that the web request legit does not match the current one (the user just retyped the thing for no apparent reason)
                     // logger.debug(`output time to now ${timeAfterOutput}`);
                     // logger.debug(timeAfterInput);
-
                     logger.info("Adding snapshot", translationSnapshot);
                     addFlashcard(translationSnapshot);
                     port.postMessage(true);

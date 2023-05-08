@@ -35,6 +35,7 @@ export const JustCollectedFolder: Folder = {
 const emptyArray: any[] = [];
   
 function App() {
+
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);

@@ -15,7 +15,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "LjYGLSSy_7e0TItw_J83d",
             "location": "tchYdlZkZyp76HO2CsL7o",
             "source": "DeepL",
-            "timeCreated": 1682879242314
+            "timeCreated": 1682879242314,
+            "view": true
         },
         {
             "back": {
@@ -29,7 +30,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "TAyoBlNg319ZPqvpiF62R",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682879242314
+            "timeCreated": 1682879242314,
+            "view": true
         },
         {
             "back": {
@@ -43,7 +45,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "dysWYkD58Zvk9VdiDIgkz",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880024661
+            "timeCreated": 1682880024661,
+            "view": true
         },
         {
             "back": {
@@ -57,7 +60,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "g0u9MLr61zqKOydPwth-u",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880033144
+            "timeCreated": 1682880033144,
+            "view": true
         },
         {
             "back": {
@@ -71,7 +75,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "t2zeHb1AQnsBI9iaRL2fK",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880041231
+            "timeCreated": 1682880041231,
+            "view": true
         },
         {
             "back": {
@@ -85,7 +90,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "Tnl448xwXh8xjFavsWhjM",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880051203
+            "timeCreated": 1682880051203,
+            "view": true
         },
         {
             "back": {
@@ -99,7 +105,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "G2EIoNxW-H3VP8-m-CLK9",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880054244
+            "timeCreated": 1682880054244,
+            "view": true
         },
         {
             "back": {
@@ -113,7 +120,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "qwdtr6TDsy0Vjrezj0cnp",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880056616
+            "timeCreated": 1682880056616,
+            "view": true
         },
         {
             "back": {
@@ -127,7 +135,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "TNhV_YUAwmJKtIP6YWIrO",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880061215
+            "timeCreated": 1682880061215,
+            "view": true
         },
         {
             "back": {
@@ -141,7 +150,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "He0JxlVgO67b6me70f0G6",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880063076
+            "timeCreated": 1682880063076,
+            "view": true
         },
         {
             "back": {
@@ -155,7 +165,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "yS9CC9iA0hHMsH8u9F8lN",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880065556
+            "timeCreated": 1682880065556,
+            "view": true
         },
         {
             "back": {
@@ -169,7 +180,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "uZvWfeKE1ro_9zENFkREi",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880068528
+            "timeCreated": 1682880068528,
+            "view": true
         },
         {
             "back": {
@@ -183,7 +195,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "s3ncbg58Ka1TyaiEPXBUK",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880072142
+            "timeCreated": 1682880072142,
+            "view": true
         },
         {
             "back": {
@@ -197,7 +210,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "Xv_28JZ2EHjG72z8o9IvE",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880073417
+            "timeCreated": 1682880073417,
+            "view": true
         },
         {
             "back": {
@@ -211,7 +225,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "zgs5lk6UJ18fYflpC8e7S",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880082038
+            "timeCreated": 1682880082038,
+            "view": true
         },
         {
             "back": {
@@ -225,7 +240,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "qSe0fi5vgVkhg09Fh_zhA",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880091738
+            "timeCreated": 1682880091738,
+            "view": true
         },
         {
             "back": {
@@ -239,7 +255,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "cvIYivjyHEkfJeDUP-4LW",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880096426
+            "timeCreated": 1682880096426,
+            "view": true
         },
         {
             "back": {
@@ -253,7 +270,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "IOqRBefu1cqOqTwruBHl1",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880102828
+            "timeCreated": 1682880102828,
+            "view": true
         },
         {
             "back": {
@@ -267,7 +285,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "ABENDQFaMMkTsVCQnVJIi",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880114230
+            "timeCreated": 1682880114230,
+            "view": false
         },
         {
             "back": {
@@ -281,7 +300,8 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             "id": "GmKk1_I9z0RBgkVHWPYZN",
             "location": "root",
             "source": "DeepL",
-            "timeCreated": 1682880127342
+            "timeCreated": 1682880127342,
+            "view": false
         }
     ],
     "folders": [

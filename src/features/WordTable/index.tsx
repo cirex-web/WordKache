@@ -57,7 +57,7 @@ const WordTable = ({
           </thead>
           <tbody>
             {searchResults
-              .filter((card) => card.location === activeFolder.id)
+              .filter((card) => card.location === activeFolder.id && card.view === true)
               .map((card) => (
                 <tr
                   key={card.id}
