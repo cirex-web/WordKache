@@ -38,3 +38,10 @@
   flex-grow: 1;
   width: 0;
 }
+
+.inputContainer select {
+  padding: 5px;
+  margin: 10px 0px;
+  flex-grow: 1;
+  width: 0;
+}

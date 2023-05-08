@@ -38,18 +38,27 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
+  const [filter, setFilter] = useState("rec");
 
   //Search
   const fuse = new Fuse(cards, {
     keys: ["front.text", "back.text"],
   });
 
-  const filteredCards = !searchInput.length
+  var filteredCards = !searchInput.length
     ? [...cards].reverse() //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
   const activeCards = filteredCards.filter((card) =>
     activeCardIds.includes(card.id)
   );
+
+  //filters
+  if (filter === "rec"){}
+  else if (filter === "lexo")
+    filteredCards.sort((a, b) => a.front.text.localeCompare(b.front.text));
+  else{
+    filteredCards = filteredCards.filter((card) => card.back.lang === filter);
+  }
 
   const handleRowSelect = (
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
@@ -94,6 +103,7 @@ const WordTable = ({
       <TableHeader
         folderName={activeFolder.name}
         setSearchInput={setInput}
+        setFilter={setFilter}
         cards={cards}
       />
       {filteredCards.length ? (
