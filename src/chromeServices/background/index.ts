@@ -11,14 +11,6 @@ logger.info("Kache background script init!")
 
 
 
-//keys are all lowercase
-const languageMap = {
-    "english": "en",
-    "spanish": "es",
-} as const //If not in this map just ignore (trash value)
-const SUPPORTED_LANGUAGES = ['en', 'es'];
-
-
 let currentWebRequest: {
     id: string,
     input: string,
