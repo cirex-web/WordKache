@@ -69,7 +69,7 @@ const WordTable = ({
   const handleEscKey = (
     event: React.KeyboardEvent<HTMLTableRowElement>,
   ) => {
-    if(event.key === 'Escape'){
+    if(event.key === 'q'){
       setActiveCardsIds([]);}
     if(event.key === 'a'){
       setActiveCardsIds(filteredCards.map(card => card.id));
