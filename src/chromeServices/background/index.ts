@@ -6,19 +6,8 @@ import { Card } from "../../storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
-import { isVisible } from "@testing-library/user-event/dist/utils";
 
 logger.info("Kache background script init!")
-
-
-
-//keys are all lowercase
-const languageMap = {
-    "english": "en",
-    "spanish": "es",
-} as const //If not in this map just ignore (trash value)
-const SUPPORTED_LANGUAGES = ['en', 'es'];
-
 
 let currentWebRequest: {
     id: string,
