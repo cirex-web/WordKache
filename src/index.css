@@ -59,8 +59,8 @@ table {
 }
 
 tr {
-  transition: 0.2s font-weight, 0.1s background-color;
-  border-top: 1px solid var(--dark-2);
+  transition: 0.2s font-weight, 0.2s color, 0.1s background-color;
+  border-top: 0.5px solid var(--light-2);
 }
 thead {
   text-align: center;

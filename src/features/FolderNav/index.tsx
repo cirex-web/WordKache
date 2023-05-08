@@ -39,7 +39,7 @@ export const FolderNav = ({ folders }: { folders: Folder[] }) => {
         <Icon name="folder" />
         Folders
       </Text>
-      {fileTree.map((folders, i) => (
+      {fileTree.map((folders) => (
         <RecursiveFolder folders={folders} key={folders.id} />
       ))}
     </div>

@@ -13,7 +13,7 @@
 }
 .selectedFolderName {
   composes: folderName;
-  color: var(--accent-1);
+  color: var(--light-1);
   font-weight: bold;
 }
 .children {
