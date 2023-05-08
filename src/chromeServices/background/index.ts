@@ -6,9 +6,18 @@ import { Card } from "../../storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
+import { isVisible } from "@testing-library/user-event/dist/utils";
 
 logger.info("Kache background script init!")
 
+
+
+//keys are all lowercase
+const languageMap = {
+    "english": "en",
+    "spanish": "es",
+} as const //If not in this map just ignore (trash value)
+const SUPPORTED_LANGUAGES = ['en', 'es'];
 
 
 let currentWebRequest: {
@@ -44,17 +53,20 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
 
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
+    let isVisible : boolean = true;
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;
         const oldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
         //exact match? definitely don't need it
         if (cards[i].front.text === snapshot.inputText || (!oldCard && similar(cards[i].front.text, snapshot.inputText))) {
+            isVisible = cards[i].visible;
             cards.splice(i, 1);
         } else {
+            isVisible = Math.random() < 0.5 ? true : false;
             break;
         }
     }
-    cards.push({
+        cards.push({
         front: {
             text: snapshot.inputText,
             lang: snapshot.inputLang
@@ -66,7 +78,7 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
         location: "root", //The Just Collected folder
         timeCreated: snapshot.inputTime,
         source: snapshot.source,
-        view: snapshot.hidden
+        visible: isVisible
     });
     logger.info("Adding snapshot", snapshot);
 

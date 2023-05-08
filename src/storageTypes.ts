@@ -13,7 +13,7 @@ export interface Card {
     id: string;
     timeCreated: number;
     source: string;
-    view: boolean;
+    visible: boolean;
 }
 
 /** Official Storage Type */

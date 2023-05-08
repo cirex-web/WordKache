@@ -42,7 +42,6 @@ export class Site {
         const inputLang = Site.scrapeText(this.#siteConfig.input.lang);
         const outputLang = Site.scrapeText(this.#siteConfig.output.lang);
         const outputText = Site.scrapeText(this.#siteConfig.output.text);
-        var bool = Math.random() < 0.5 ? true : false;
         const snapshot: ITranslationSnapshot = {
             inputText,
             inputLang,
@@ -52,7 +51,6 @@ export class Site {
             newInputText: newInputText ?? this.#previousInput, //null check for newInputText
             inputTime: this.#inputTime,
             source: this.#siteConfig.name,
-            hidden: bool
         };
         if (newInputText !== null) { //an actual update (not some courtesy ping)
             this.#inputTime = + new Date(); //it's for the next input

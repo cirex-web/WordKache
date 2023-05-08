@@ -63,7 +63,7 @@ function App() {
     );
   };
   const cardsUnderCurrentFolder = cards?.filter(
-    (card) => card.location === activeFolder.id
+    (card) => card.location === activeFolder.id && card.visible
   );
 
   return (
