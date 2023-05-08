@@ -42,7 +42,7 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
     const hiddenCount = cards.reduce((sum, card) => sum + (card.hidden ? 1 : 0), 0)
-    let hidden = hiddenCount <= 30 ? Math.random() < 0.5 : false; //set cutoff at 30
+    let hidden = hiddenCount < 30 ? Math.random() < 0.5 : false; //set cutoff at 30
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;
         const isOldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
