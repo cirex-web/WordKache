@@ -30,10 +30,12 @@ const WordTable = ({
   cards,
   moveCards,
   deleteCards,
+  flipCards,
 }: {
   cards: Card[];
   moveCards: (cardIds: string[], folderId?: string) => void;
   deleteCards: (cardIds: string[]) => void;
+  flipCards: (cardIds: string[]) => void;
 }) => {
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
@@ -175,6 +177,10 @@ const WordTable = ({
           deleteCard={() => {
             selectNewCard();
             deleteCards(activeCardIds);
+          }}
+          flipCards={() => {
+            selectNewCard();
+            flipCards(activeCardIds);
           }}
         />
       )}

@@ -61,6 +61,17 @@ function App() {
       cards.filter((card) => !cardIds.includes(card.id))
     );
   };
+
+  const flipCards = (cardIds: string[]) => {
+    if (!cards) return;
+    const cardsClone = [...cards];
+    for (const card of cardsClone) {
+      if (cardIds.includes(card.id))
+        [card.front, card.back] = [card.back, card.front];
+    }
+    ChromeStorage.setPair("cards", cardsClone);
+  }
+
   const cardsUnderCurrentFolder = cards?.filter(
     (card) => card.location === activeFolder.id
   );
@@ -81,6 +92,7 @@ function App() {
           moveCards={moveCards}
           key={activeFolder.id}
           deleteCards={deleteCards}
+          flipCards={flipCards}
         />
       )}
     </FolderContext.Provider>

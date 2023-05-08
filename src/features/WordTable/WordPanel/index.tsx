@@ -41,10 +41,12 @@ export const WordPanel = ({
   cards,
   saveCard,
   deleteCard,
+  flipCards,
 }: {
   cards: Card[];
   saveCard: () => void;
   deleteCard: () => void;
+  flipCards: () => void;
 }) => {
   const singleCard = cards[0];
   return (
@@ -77,6 +79,9 @@ export const WordPanel = ({
         )}
         <Button onClick={deleteCard}>
           <Text type="subheading">Delete</Text>
+        </Button>
+        <Button onClick={flipCards}>
+          <Text type="subheading">Flip</Text>
         </Button>
         <Text type="paragraph" className={css.source}>
           {cards.length === 1
