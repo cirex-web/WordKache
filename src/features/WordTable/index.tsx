@@ -69,8 +69,11 @@ const WordTable = ({
   const handleEscKey = (
     event: React.KeyboardEvent<HTMLTableRowElement>,
   ) => {
-    if(event.key === 'Escape')
-      setActiveCardsIds([]);
+    if(event.key === 'Escape'){
+      setActiveCardsIds([]);}
+    if(event.key === 'a'){
+      setActiveCardsIds(filteredCards.map(card => card.id));
+    }
   };
 
   // Deselect any selected cards that go off into the abyss when a filter query is typed
