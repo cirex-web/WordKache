@@ -16,7 +16,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "tchYdlZkZyp76HO2CsL7o",
             "source": "DeepL",
             "timeCreated": 1682879242314,
-            "visible": true
+            hidden: true
         },
         {
             "back": {
@@ -31,7 +31,8 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682879242314,
-            "visible": true
+            hidden: true
+
         },
         {
             "back": {
@@ -46,7 +47,8 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880024661,
-            "visible": true
+            hidden: false
+
         },
         {
             "back": {
@@ -61,7 +63,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880033144,
-            "visible": true
+
         },
         {
             "back": {
@@ -76,7 +78,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880041231,
-            "visible": true
+
         },
         {
             "back": {
@@ -91,7 +93,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880051203,
-            "visible": true
+
         },
         {
             "back": {
@@ -106,7 +108,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880054244,
-            "visible": true
+
         },
         {
             "back": {
@@ -121,7 +123,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880056616,
-            "visible": true
+
         },
         {
             "back": {
@@ -136,7 +138,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880061215,
-            "visible": true
+
         },
         {
             "back": {
@@ -151,7 +153,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880063076,
-            "visible": true
+
         },
         {
             "back": {
@@ -166,7 +168,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880065556,
-            "visible": true
+
         },
         {
             "back": {
@@ -181,7 +183,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880068528,
-            "visible": true
+
         },
         {
             "back": {
@@ -196,7 +198,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880072142,
-            "visible": true
+
         },
         {
             "back": {
@@ -211,7 +213,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880073417,
-            "visible": true
+
         },
         {
             "back": {
@@ -226,7 +228,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880082038,
-            "visible": true
+
         },
         {
             "back": {
@@ -241,7 +243,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880091738,
-            "visible": true
+
         },
         {
             "back": {
@@ -256,7 +258,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880096426,
-            "visible": true
+
         },
         {
             "back": {
@@ -271,7 +273,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880102828,
-            "visible": true
+
         },
         {
             "back": {
@@ -286,7 +288,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880114230,
-            "visible": false
+
         },
         {
             "back": {
@@ -301,7 +303,6 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880127342,
-            "visible": false
         }
     ],
     "folders": [

@@ -50,7 +50,7 @@ export class Site {
             validated: this.#siteConfig.validate?.call(this),
             newInputText: newInputText ?? this.#previousInput, //null check for newInputText
             inputTime: this.#inputTime,
-            source: this.#siteConfig.name,
+            source: this.#siteConfig.name
         };
         if (newInputText !== null) { //an actual update (not some courtesy ping)
             this.#inputTime = + new Date(); //it's for the next input

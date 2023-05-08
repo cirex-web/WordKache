@@ -29,7 +29,6 @@ export const JustCollectedFolder: Folder = {
 const emptyArray: any[] = [];
 
 function App() {
-
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);
@@ -63,7 +62,7 @@ function App() {
     );
   };
   const cardsUnderCurrentFolder = cards?.filter(
-    (card) => card.location === activeFolder.id && card.visible
+    (card) => card.location === activeFolder.id && !card.hidden
   );
 
   return (

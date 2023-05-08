@@ -13,7 +13,8 @@ export interface Card {
     id: string;
     timeCreated: number;
     source: string;
-    visible: boolean;
+    /** Property for beta testing only. If unset (aka undefined), it is visible */
+    hidden?: boolean;
 }
 
 /** Official Storage Type */

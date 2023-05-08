@@ -42,20 +42,20 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
 
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
-    let isVisible : boolean = true;
+    let hidden = Math.random() < 0.5;
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;
-        const oldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
+        const isOldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
+
         //exact match? definitely don't need it
-        if (cards[i].front.text === snapshot.inputText || (!oldCard && similar(cards[i].front.text, snapshot.inputText))) {
-            isVisible = cards[i].visible;
+        if (cards[i].front.text === snapshot.inputText || (!isOldCard && similar(cards[i].front.text, snapshot.inputText))) {
+            hidden = !!cards[i].hidden; //if visible property is undefined, it's also visible (!! converts undefined to false)
             cards.splice(i, 1);
-        } else {
-            isVisible = Math.random() < 0.5 ? true : false;
-            break;
+            break; //why would you want to overwrite anything extra?
         }
     }
-        cards.push({
+    cards.push({
+        hidden,
         front: {
             text: snapshot.inputText,
             lang: snapshot.inputLang
@@ -67,7 +67,7 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
         location: "root", //The Just Collected folder
         timeCreated: snapshot.inputTime,
         source: snapshot.source,
-        visible: isVisible
+
     });
     logger.info("Adding snapshot", snapshot);
 
