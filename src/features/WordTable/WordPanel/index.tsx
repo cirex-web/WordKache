@@ -1,15 +1,89 @@
+import classNames from "classnames";
+import { Button } from "../../../components/Button";
+import { Text } from "../../../components/Text";
 import { Card } from "../../../storageTypes";
 import css from "./index.module.css";
+import React, { useLayoutEffect, useRef, useState } from "react";
+
+interface ITextAreaProps extends React.HTMLProps<HTMLTextAreaElement> {
+  language: string;
+  title: string;
+}
+
+const TextArea = ({ className, language, title, ...rest }: ITextAreaProps) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [textboxHeight, setTextboxHeight] = useState(0);
+  const updateHeight = () => {
+    if (textAreaRef.current) {
+      setTextboxHeight(Math.min(40, textAreaRef.current.scrollHeight));
+    }
+  };
+  useLayoutEffect(updateHeight);
+  return (
+    <div className={css.textAreaContainer}>
+      <Text type="subheading" className={css.title}>
+        {title} ({language})
+      </Text>
+      <textarea
+        ref={textAreaRef}
+        style={{ height: textboxHeight }}
+        onInput={updateHeight}
+        {...rest}
+        className={classNames(css.textarea, className)}
+      ></textarea>
+      {/* <Text type="paragraph" className={css.language}>
+        {language}
+      </Text> */}
+    </div>
+  );
+};
 export const WordPanel = ({
-  cardInfo,
-  onSave,
+  cards,
+  saveCard,
+  deleteCard,
 }: {
-  cardInfo: Card;
-  onSave: () => void;
+  cards: Card[];
+  saveCard: () => void;
+  deleteCard: () => void;
 }) => {
+  const singleCard = cards[0];
   return (
     <div className={css.container}>
-      <button onClick={onSave}>Save</button>
+      {cards.length === 1 && (
+        <div
+          className={css.textBoxContainer}
+          key={singleCard.id} //For textarea height recalculation every time the card data changes
+        >
+          <TextArea
+            value={singleCard.front.text}
+            language={singleCard.front.lang}
+            readOnly
+            title="Front"
+          />
+          <div style={{ background: "white" }}></div>
+          <TextArea
+            value={singleCard.back.text}
+            language={singleCard.back.lang}
+            readOnly
+            title="Back"
+          />
+        </div>
+      )}
+      <div className={css.buttonRow}>
+        {singleCard.location === "root" && (
+          <Button onClick={saveCard}>
+            <Text type="subheading">Save</Text>
+          </Button>
+        )}
+        <Button onClick={deleteCard}>
+          <Text type="subheading">Delete</Text>
+        </Button>
+        <Text type="paragraph" className={css.source}>
+          {cards.length === 1
+            ? `Source: ${singleCard.source}`
+            : `Selected (${cards.length}) Cards`}
+        </Text>
+      </div>
     </div>
   );
 };

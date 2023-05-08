@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { Card, Folder } from "../storageTypes";
@@ -11,7 +6,6 @@ import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
-
 
 export const FolderContext = createContext<{
   activeFolder: Folder | undefined;
@@ -33,7 +27,7 @@ export const JustCollectedFolder: Folder = {
   id: "root",
 };
 const emptyArray: any[] = [];
-  
+
 function App() {
 
   const cards = useStorage<Card[]>("cards", emptyArray);
@@ -50,16 +44,28 @@ function App() {
       ]);
     }
   }, [folders]); //This is just cuz there's no create folder feature yet... will implement soon
-  const moveCard = (cardId: string, folderId?: string) => {
+
+  const moveCards = (cardIds: string[], folderId?: string) => {
     if (!cards || !folders) return; //somehow useStorage failed to initialize this... odd
     const cardsClone = [...cards];
     for (const card of cardsClone) {
-      if (card.id === cardId) {
+      if (cardIds.includes(card.id)) {
         card.location = folderId ?? folders[0].id; //also temp
       }
     }
     ChromeStorage.setPair("cards", cardsClone);
   };
+  const deleteCards = (cardIds: string[]) => {
+    if (!cards) return;
+    ChromeStorage.setPair(
+      "cards",
+      cards.filter((card) => !cardIds.includes(card.id))
+    );
+  };
+  const cardsUnderCurrentFolder = cards?.filter(
+    (card) => card.location === activeFolder.id
+  );
+
   return (
     <FolderContext.Provider value={{ activeFolder, setActiveFolder }}>
       <div
@@ -70,8 +76,13 @@ function App() {
         <img src={logo} className={css.logo} alt="logo" />
         {folders && <FolderNav folders={folders} />}
       </div>
-      {cards && (
-        <WordTable cards={cards} moveCard={moveCard} key={activeFolder.id} />
+      {cardsUnderCurrentFolder && (
+        <WordTable
+          cards={cardsUnderCurrentFolder}
+          moveCards={moveCards}
+          key={activeFolder.id}
+          deleteCards={deleteCards}
+        />
       )}
     </FolderContext.Provider>
   );

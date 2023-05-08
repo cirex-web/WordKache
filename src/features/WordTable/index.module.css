@@ -1,5 +1,4 @@
-
-.textBox{
+.textBox {
   position: sticky;
   bottom: 0;
 }
@@ -18,7 +17,16 @@ tr.selected {
   overflow: scroll;
   flex-grow: 1;
 }
-.tableContainer{
+.tableContainer {
   overflow: scroll;
   flex-grow: 1;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 20px;
 }

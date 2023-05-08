@@ -5,10 +5,10 @@ import { requestParsers } from "./requestParser";
 import { Card } from "../../storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
+import ISO6391 from 'iso-639-1';
 
 logger.info("Kache background script init!")
 
-ChromeStorage.setPair("storageVersion", 1);
 
 
 //keys are all lowercase
@@ -76,23 +76,26 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
         source: snapshot.source,
         view: snapshot.hidden
     });
+    logger.info("Adding snapshot", snapshot);
 
     await ChromeStorage.setPair("cards", cards);
 }
-const normalizeLanguage = (lang: string) => {
+const getLangCode = (lang: string) => {
     lang = lang.toLowerCase();
-    if (lang in languageMap) lang = languageMap[lang as keyof typeof languageMap];
-    if (!(SUPPORTED_LANGUAGES.includes(lang))) {
+    const langCode: string = ISO6391.validate(lang) ? lang : ISO6391.getCode(lang); //if it's already the code you don't have to do anything
+    if (langCode === "") {
         logger.warn(`Unsupported language ${lang}`);
+        return lang; //we'll just preserve this value for now... 
     }
-    return lang;
+    return langCode;
 }
+
 chrome.runtime.onConnect.addListener(
     function (port) {
         if (port.name === "snapshot") {
             port.onMessage.addListener(function (translationSnapshot: ITranslationSnapshot) {
-                translationSnapshot.inputLang = normalizeLanguage(translationSnapshot.inputLang);
-                translationSnapshot.outputLang = normalizeLanguage(translationSnapshot.outputLang);
+                translationSnapshot.inputLang = getLangCode(translationSnapshot.inputLang);
+                translationSnapshot.outputLang = getLangCode(translationSnapshot.outputLang);
 
                 if (translationSnapshot.validated || (currentWebRequest.input === translationSnapshot.inputText && currentWebRequest.timeCompleted && +new Date() - currentWebRequest.timeCompleted >= 200)) {
                     //if there was no network request (cuz the translation app cached the data somewhere or if the request is complete)
@@ -112,6 +115,38 @@ chrome.runtime.onConnect.addListener(
 
         }
     }
-)
+);
 
-export { }
+/** 
+ * Storage Versioning
+ * 1 - Beta (First release)
+ * 2 - Saved Languages are now normalized to the ISO-639-1 standard
+ */
+async function updateStorageVersion() {
+    const currentVersion = await ChromeStorage.get("storageVersion") as number | undefined;
+    logger.debug(`Current storage version: ${currentVersion}`);
+    // Fallthrough is intended as you want to update whatever storage version you have to the latest.
+    switch (currentVersion) {
+        case undefined:
+        /*@ts-ignore*/
+        // eslint-disable-next-line no-fallthrough
+        case 1:
+            const cards = ((await ChromeStorage.get("cards")) ?? []) as Card[];
+            for (const card of cards) {
+                card.front.lang = getLangCode(card.front.lang);
+                card.back.lang = getLangCode(card.back.lang);
+            }
+            ChromeStorage.setPair("cards", cards);
+        // eslint-disable-next-line no-fallthrough
+        case 2:
+            logger.info("Storage updated to version 2!");
+            break;
+        default:
+            throw new Error(`Invalid storage version ${currentVersion}`);
+
+    }
+    await ChromeStorage.setPair("storageVersion", 2);
+
+};
+chrome.runtime.onInstalled.addListener(updateStorageVersion); //run this only on first load 
+

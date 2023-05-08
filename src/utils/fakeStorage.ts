@@ -1,7 +1,7 @@
 import { Card, Folder } from "../storageTypes";
 
 // just for npm start
-export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
+export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
     "cards": [
         {
             "back": {
@@ -280,7 +280,7 @@ export const fakeData :{ "cards"?: Card[], "folders"?: Folder[] }= {
             },
             "front": {
                 "lang": "en",
-                "text": "one more"
+                "text": "loremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremlorem "
             },
             "id": "ABENDQFaMMkTsVCQnVJIi",
             "location": "root",
