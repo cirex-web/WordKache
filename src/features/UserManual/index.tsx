@@ -1,8 +1,7 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Icon } from "../../components/Icon";
 import css from "./index.module.css";
 import { Button } from "../../components/Button";
-import { FileDirectory } from "../FolderNav/types";
 import { Text } from "../../components/Text";
 import { UseFolderContext } from "../App";
 
