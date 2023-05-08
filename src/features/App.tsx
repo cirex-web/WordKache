@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
+import { UserManual } from "./UserManual";
 import { Card, Folder } from "../storageTypes";
 import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
@@ -70,10 +71,13 @@ function App() {
       <div
         style={{
           borderRight: "3px solid var(--light-1)",
+          position: "relative",
+          zIndex: "2",
         }}
       >
         <img src={logo} className={css.logo} alt="logo" />
         {folders && <FolderNav folders={folders} />}
+        <UserManual/>
       </div>
       {cardsUnderCurrentFolder && (
         <WordTable
