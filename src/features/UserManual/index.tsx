@@ -3,7 +3,6 @@ import { Icon } from "../../components/Icon";
 import css from "./index.module.css";
 import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
-import { UseFolderContext } from "../App";
 
 export const UserManual = () => {
     
