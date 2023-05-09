@@ -56,13 +56,14 @@ function App() {
   };
   const deleteCards = (cardIds: string[]) => {
     if (!cards) return;
-    ChromeStorage.setPair(
-      "cards",
-      cards.filter((card) => !cardIds.includes(card.id))
-    );
+    const cardsClone = [...cards];
+    for (const card of cards) {
+      if (cardIds.includes(card.id)) card.deleted = true; //fake deletion
+    }
+    ChromeStorage.setPair("cards", cardsClone);
   };
   const cardsUnderCurrentFolder = cards?.filter(
-    (card) => card.location === activeFolder.id
+    (card) => card.location === activeFolder.id && !card.hidden && !card.deleted //top-level filtering
   );
 
   return (
