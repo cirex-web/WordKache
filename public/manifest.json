@@ -1,6 +1,6 @@
 {
   "name": "WordKache - Save your translations",
-  "description": "Turn your online translations into studyable flashcards!",
+  "description": "Save and export your online translations!",
   "version": "0.2",
   "manifest_version": 3,
   "action": {
