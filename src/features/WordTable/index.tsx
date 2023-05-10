@@ -9,6 +9,7 @@ import css from "./index.module.css";
 import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import classNames from "classnames";
+import { act } from "react-dom/test-utils";
 const Placeholder = ({
   image,
   text,
@@ -38,6 +39,8 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
+  let nonShiftClickIndex = React.useRef(0);
+  let lastSelected = React.useRef("");
 
   //Search
   const fuse = new Fuse(cards, {
@@ -55,14 +58,30 @@ const WordTable = ({
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     cardId: string
   ) => {
-    const activeCardIdsCopy =
-      event.shiftKey || event.metaKey ? [...activeCardIds] : [];
-    if (activeCardIdsCopy.includes(cardId)) {
-      setActiveCardsIds(
-        activeCardIdsCopy.filter((activeCardId) => activeCardId !== cardId)
-      );
-    } else {
-      setActiveCardsIds([...activeCardIdsCopy, cardId]);
+
+    if (event.shiftKey) {
+      const cardIds = filteredCards.map((card) => card.id);
+      const cardInd = cardIds.indexOf(cardId);
+      const lastSelectedInd = cardIds.indexOf(lastSelected.current);
+      setActiveCardsIds(cardIds.filter((cardId, i) =>
+        (activeCardIds.includes(cardId)
+        && ((i - nonShiftClickIndex.current) * (i - lastSelectedInd) > 0))
+        || ((i - cardInd) * (i - nonShiftClickIndex.current)) <= 0));
+      lastSelected.current = cardId;
+    }
+    else {
+      const activeCardIdsCopy =
+        event.ctrlKey ? [...activeCardIds] : [];
+
+      if (activeCardIdsCopy.includes(cardId)) {
+        setActiveCardsIds(
+          activeCardIdsCopy.filter((activeCardId) => activeCardId !== cardId)
+        );
+      } else {
+        setActiveCardsIds([...activeCardIdsCopy, cardId]);
+      }
+      nonShiftClickIndex.current = filteredCards.map((card) => card.id).indexOf(cardId);
+      lastSelected.current = cardId;
     }
   };
 
