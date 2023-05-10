@@ -9,7 +9,7 @@ import css from "./index.module.css";
 import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import classNames from "classnames";
-import { act } from "react-dom/test-utils";
+
 const Placeholder = ({
   image,
   text,
@@ -39,8 +39,7 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
-  let nonShiftClickIndex = React.useRef(0);
-  let lastSelected = React.useRef("");
+  const pivotIndexRef = React.useRef(0);
 
   //Search
   const fuse = new Fuse(cards, {
@@ -50,6 +49,7 @@ const WordTable = ({
   const filteredCards = !searchInput.length
     ? [...cards].reverse() //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
+
   const activeCards = filteredCards.filter((card) =>
     activeCardIds.includes(card.id)
   );
@@ -58,20 +58,48 @@ const WordTable = ({
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     cardId: string
   ) => {
-
+    const inRange = (i: number, start: number, end: number) =>
+      Math.sign(i - start) * Math.sign(i - end) <= 0;
     if (event.shiftKey) {
       const cardIds = filteredCards.map((card) => card.id);
-      const cardInd = cardIds.indexOf(cardId);
-      const lastSelectedInd = cardIds.indexOf(lastSelected.current);
-      setActiveCardsIds(cardIds.filter((cardId, i) =>
-        (activeCardIds.includes(cardId)
-        && ((i - nonShiftClickIndex.current) * (i - lastSelectedInd) > 0))
-        || ((i - cardInd) * (i - nonShiftClickIndex.current)) <= 0));
-      lastSelected.current = cardId;
-    }
-    else {
-      const activeCardIdsCopy =
-        event.ctrlKey ? [...activeCardIds] : [];
+      const pivotIndex = pivotIndexRef.current;
+      const targetIndex = cardIds.indexOf(cardId);
+
+      const targetDirection = Math.sign(targetIndex - pivotIndex);
+      if (pivotIndex === targetIndex)return;
+      let leftIndex: number, rightIndex: number; //not really left or right, but bear with me (non-inclusive filled segment)
+      for (let i = pivotIndex; ; i += targetDirection) {
+        console.log(i);
+        if (
+          i < 0 ||
+          i >= cardIds.length ||
+          !activeCardIds.includes(cardIds[i])
+        ) {
+          leftIndex = i;
+          break;
+        }
+      }
+      for (let i = pivotIndex - targetDirection; ; i -= targetDirection) {
+        if (
+          i < 0 ||
+          i >= cardIds.length ||
+          !activeCardIds.includes(cardIds[i])
+        ) {
+          rightIndex = i;
+          break;
+        }
+      }
+      console.log(rightIndex,leftIndex);
+      setActiveCardsIds(
+        cardIds.filter(
+          (cardId, i) =>
+            (activeCardIds.includes(cardId) &&
+              !inRange(i, rightIndex, leftIndex)) ||
+            inRange(i, pivotIndex, targetIndex)
+        )
+      );
+    } else {
+      const activeCardIdsCopy = event.ctrlKey ? [...activeCardIds] : [];
 
       if (activeCardIdsCopy.includes(cardId)) {
         setActiveCardsIds(
@@ -80,10 +108,13 @@ const WordTable = ({
       } else {
         setActiveCardsIds([...activeCardIdsCopy, cardId]);
       }
-      nonShiftClickIndex.current = filteredCards.map((card) => card.id).indexOf(cardId);
-      lastSelected.current = cardId;
+      pivotIndexRef.current = filteredCards.findIndex(
+        (card) => card.id === cardId
+      );
     }
   };
+
+  //what do you do about filtering??
 
   // Deselect any selected cards that go off into the abyss when a filter query is typed
   useEffect(() => {
