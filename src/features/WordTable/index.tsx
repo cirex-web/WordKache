@@ -54,42 +54,34 @@ const WordTable = ({
     activeCardIds.includes(card.id)
   );
 
+  const getRangeEndpoint = (startIndex: number, direction: number) => {
+    if(direction===0)return startIndex;
+    const cardIds = filteredCards.map((card) => card.id);
+    let returnI = -1;
+    for (let i = startIndex; i < cardIds.length && i >= 0; i += direction) {
+      if (activeCardIds.includes(cardIds[i])) {
+        returnI = i;
+      } else {
+        break;
+      }
+    }
+    return returnI;
+  };
+  const inRange = (i: number, start: number, end: number) =>
+    Math.sign(i - start) * Math.sign(i - end) <= 0;
   const handleRowSelect = (
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     cardId: string
   ) => {
-    const inRange = (i: number, start: number, end: number) =>
-      Math.sign(i - start) * Math.sign(i - end) <= 0;
     if (event.shiftKey) {
       const cardIds = filteredCards.map((card) => card.id);
       const pivotIndex = pivotIndexRef.current;
       const targetIndex = cardIds.indexOf(cardId);
 
-      const targetDirection = Math.sign(targetIndex - pivotIndex);
-      if (pivotIndex === targetIndex)return;
-      let leftIndex: number, rightIndex: number; //not really left or right, but bear with me (non-inclusive filled segment)
-      for (let i = pivotIndex; ; i += targetDirection) {
-        console.log(i);
-        if (
-          i < 0 ||
-          i >= cardIds.length ||
-          !activeCardIds.includes(cardIds[i])
-        ) {
-          leftIndex = i;
-          break;
-        }
-      }
-      for (let i = pivotIndex - targetDirection; ; i -= targetDirection) {
-        if (
-          i < 0 ||
-          i >= cardIds.length ||
-          !activeCardIds.includes(cardIds[i])
-        ) {
-          rightIndex = i;
-          break;
-        }
-      }
-      console.log(rightIndex,leftIndex);
+      const leftIndex = getRangeEndpoint(pivotIndex, 1);
+      const rightIndex = getRangeEndpoint(pivotIndex, -1); //not really left or right, but bear with me (non-inclusive filled segment)
+      //TODO:  minus targetDirection?
+
       setActiveCardsIds(
         cardIds.filter(
           (cardId, i) =>
@@ -98,7 +90,20 @@ const WordTable = ({
             inRange(i, pivotIndex, targetIndex)
         )
       );
-    } else {
+    }
+    // else {
+    //   const activeCardIdsCopy = event.ctrlKey ? [...activeCardIds] : [];
+    //   const cardInd = cardIds.indexOf(cardId);
+    //   const lastSelectedInd = cardIds.indexOf(lastSelected.current);
+    //   const activeCardIdsCopy = (cardIds.filter((cardId, i) =>
+    //     (activeCardIds.includes(cardId)
+    //     && ((i - pivotIndexRef.current) * (i - lastSelectedInd) > 0))
+    //     || ((i - cardInd) * (i - pivotIndexRef.current)) <= 0));
+    //   lastSelected.current = cardId;
+    //   setActiveCardsIds(activeCardIdsCopy);
+    //   updateContiguousSelection(activeCardIdsCopy, cardInd > pivotIndexRef.current);
+    // }
+    else {
       const activeCardIdsCopy = event.ctrlKey ? [...activeCardIds] : [];
 
       if (activeCardIdsCopy.includes(cardId)) {
