@@ -39,7 +39,7 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
-  let nonShiftClickIndex = React.useRef(0);
+  let pivotIndexRef = React.useRef(0);
   let lastSelected = React.useRef("");
 
   //Search
@@ -54,6 +54,18 @@ const WordTable = ({
     activeCardIds.includes(card.id)
   );
 
+  const updateContiguousSelection = (activeCardIds: string[], goingUp: boolean) => {
+    const cardIds = filteredCards.map((card) => card.id);
+    const lastSelectedInd = cardIds.indexOf(lastSelected.current);
+    for (let i = lastSelectedInd; goingUp ? (i < cardIds.length) : i >= 0; i += goingUp ? 1:-1) {
+      if (activeCardIds.includes(cardIds[i])) {
+        lastSelected.current = cardIds[i];
+        continue;
+      }
+      break;
+    }
+  }
+
   const handleRowSelect = (
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     cardId: string
@@ -63,11 +75,13 @@ const WordTable = ({
       const cardIds = filteredCards.map((card) => card.id);
       const cardInd = cardIds.indexOf(cardId);
       const lastSelectedInd = cardIds.indexOf(lastSelected.current);
-      setActiveCardsIds(cardIds.filter((cardId, i) =>
+      const activeCardIdsCopy = (cardIds.filter((cardId, i) =>
         (activeCardIds.includes(cardId)
-        && ((i - nonShiftClickIndex.current) * (i - lastSelectedInd) > 0))
-        || ((i - cardInd) * (i - nonShiftClickIndex.current)) <= 0));
+        && ((i - pivotIndexRef.current) * (i - lastSelectedInd) > 0))
+        || ((i - cardInd) * (i - pivotIndexRef.current)) <= 0));
       lastSelected.current = cardId;
+      setActiveCardsIds(activeCardIdsCopy);
+      updateContiguousSelection(activeCardIdsCopy, cardInd > pivotIndexRef.current);
     }
     else {
       const activeCardIdsCopy =
@@ -80,8 +94,8 @@ const WordTable = ({
       } else {
         setActiveCardsIds([...activeCardIdsCopy, cardId]);
       }
-      nonShiftClickIndex.current = filteredCards.map((card) => card.id).indexOf(cardId);
       lastSelected.current = cardId;
+      pivotIndexRef.current = filteredCards.findIndex((card) => card.id==cardId);
     }
   };
 
