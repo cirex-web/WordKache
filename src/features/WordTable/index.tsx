@@ -55,7 +55,7 @@ const WordTable = ({
   );
 
   const getRangeEndpoint = (startIndex: number, direction: number) => {
-    if(direction===0)return startIndex;
+    if (direction === 0) return startIndex;
     const cardIds = filteredCards.map((card) => card.id);
     let returnI = -1;
     for (let i = startIndex; i < cardIds.length && i >= 0; i += direction) {
@@ -80,7 +80,6 @@ const WordTable = ({
 
       const leftIndex = getRangeEndpoint(pivotIndex, 1);
       const rightIndex = getRangeEndpoint(pivotIndex, -1); //not really left or right, but bear with me (non-inclusive filled segment)
-      //TODO:  minus targetDirection?
 
       setActiveCardsIds(
         cardIds.filter(
@@ -90,21 +89,9 @@ const WordTable = ({
             inRange(i, pivotIndex, targetIndex)
         )
       );
-    }
-    // else {
-    //   const activeCardIdsCopy = event.ctrlKey ? [...activeCardIds] : [];
-    //   const cardInd = cardIds.indexOf(cardId);
-    //   const lastSelectedInd = cardIds.indexOf(lastSelected.current);
-    //   const activeCardIdsCopy = (cardIds.filter((cardId, i) =>
-    //     (activeCardIds.includes(cardId)
-    //     && ((i - pivotIndexRef.current) * (i - lastSelectedInd) > 0))
-    //     || ((i - cardInd) * (i - pivotIndexRef.current)) <= 0));
-    //   lastSelected.current = cardId;
-    //   setActiveCardsIds(activeCardIdsCopy);
-    //   updateContiguousSelection(activeCardIdsCopy, cardInd > pivotIndexRef.current);
-    // }
-    else {
-      const activeCardIdsCopy = event.ctrlKey ? [...activeCardIds] : [];
+    } else {
+      const activeCardIdsCopy =
+        event.ctrlKey || event.metaKey ? [...activeCardIds] : [];
 
       if (activeCardIdsCopy.includes(cardId)) {
         setActiveCardsIds(
