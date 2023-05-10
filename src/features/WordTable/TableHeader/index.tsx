@@ -64,7 +64,6 @@ export const TableHeader = ({
                 setDropOpen(false);
               }}
               zoomOnHover
-              disabled={!cards.length}
             >
               <Icon name="search" />
             </Button>

@@ -55,10 +55,10 @@ const WordTable = ({
   );
 
   //filters
-  if (filter === "rec"){}
-  else if (filter === "lexo")
+  if (filter === "rec") {
+  } else if (filter === "lexo")
     filteredCards.sort((a, b) => a.front.text.localeCompare(b.front.text));
-  else{
+  else {
     filteredCards = filteredCards.filter((card) => card.back.lang === filter);
   }
 
@@ -106,7 +106,7 @@ const WordTable = ({
         folderName={activeFolder.name}
         setSearchInput={setInput}
         setFilter={setFilter}
-        cards={cards}
+        cards={filteredCards}
       />
       {filteredCards.length ? (
         <div className={css.tableContainer}>
@@ -179,7 +179,6 @@ const WordTable = ({
             deleteCards(activeCardIds);
           }}
           flipCards={() => {
-            selectNewCard();
             flipCards(activeCardIds);
           }}
         />
