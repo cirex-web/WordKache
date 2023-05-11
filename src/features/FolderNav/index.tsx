@@ -40,13 +40,25 @@ export const FolderNav = ({ folders, addFolder }: { folders: Folder[], addFolder
         <Icon name="folder" />
         Folders
         <Button
-              onMouseDown={() => addFolder("New Folder")}
-              noBorder
-              zoomOnHover
-              style={{ marginLeft: "-5px" }}
-            >
+            onMouseDown={() => addFolder("New Folder")}
+            noBorder
+            zoomOnHover
+            style={{display: "flex", alignItems: "center",
+              background: "black", height: "10px"}} //For some reason I can't make it the same using class and css file
+          >
               <Icon name="Add"/>
-          </Button>
+        </Button>
+
+        <Button
+            onMouseDown={() => addFolder("New Folder")}
+            noBorder
+            zoomOnHover
+            style={{display: "flex", alignItems: "center",
+              background: "black", height: "10px"}}
+          >
+              <Icon name="Remove"/>
+        </Button>
+
       </Text>
       {fileTree.map((folders) => (
         <RecursiveFolder folders={folders} key={folders.id} />

@@ -9,6 +9,7 @@ import css from "./index.module.css";
 import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import classNames from "classnames";
+import { handleRowSelect } from "../../utils/search";
 
 const Placeholder = ({
   image,
@@ -39,7 +40,7 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
-  const pivotIndexRef = React.useRef(0);
+  const pivotIndexRef = React.useRef(0); //I know this should be ideally in the search util
 
   //Search
   const fuse = new Fuse(cards, {
@@ -53,58 +54,6 @@ const WordTable = ({
   const activeCards = filteredCards.filter((card) =>
     activeCardIds.includes(card.id)
   );
-
-  const getRangeEndpoint = (startIndex: number, direction: number) => {
-    if (direction === 0) return startIndex;
-    const cardIds = filteredCards.map((card) => card.id);
-    let returnI = -1;
-    for (let i = startIndex; i < cardIds.length && i >= 0; i += direction) {
-      if (activeCardIds.includes(cardIds[i])) {
-        returnI = i;
-      } else {
-        break;
-      }
-    }
-    return returnI;
-  };
-  const inRange = (i: number, start: number, end: number) =>
-    Math.sign(i - start) * Math.sign(i - end) <= 0;
-  const handleRowSelect = (
-    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    cardId: string
-  ) => {
-    if (event.shiftKey) {
-      const cardIds = filteredCards.map((card) => card.id);
-      const pivotIndex = pivotIndexRef.current;
-      const targetIndex = cardIds.indexOf(cardId);
-
-      const leftIndex = getRangeEndpoint(pivotIndex, 1);
-      const rightIndex = getRangeEndpoint(pivotIndex, -1); //not really left or right, but bear with me (non-inclusive filled segment)
-
-      setActiveCardsIds(
-        cardIds.filter(
-          (cardId, i) =>
-            (activeCardIds.includes(cardId) &&
-              !inRange(i, rightIndex, leftIndex)) ||
-            inRange(i, pivotIndex, targetIndex)
-        )
-      );
-    } else {
-      const activeCardIdsCopy =
-        event.ctrlKey || event.metaKey ? [...activeCardIds] : [];
-
-      if (activeCardIdsCopy.includes(cardId)) {
-        setActiveCardsIds(
-          activeCardIdsCopy.filter((activeCardId) => activeCardId !== cardId)
-        );
-      } else {
-        setActiveCardsIds([...activeCardIdsCopy, cardId]);
-      }
-      pivotIndexRef.current = filteredCards.findIndex(
-        (card) => card.id === cardId
-      );
-    }
-  };
 
   //what do you do about filtering??
 
@@ -155,7 +104,7 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
-                  onMouseDown={(ev) => handleRowSelect(ev, card.id)}
+                  onMouseDown={(ev) => setActiveCardsIds(handleRowSelect(ev, card.id, filteredCards.map((card)=> card.id), activeCardIds, pivotIndexRef.current))}
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),
                   })}
