@@ -310,5 +310,4 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "id": "tchYdlZkZyp76HO2CsL7o",
             "name": "Saved"
         },]
-    ]
 }
