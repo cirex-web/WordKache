@@ -22,28 +22,28 @@ export const handleRowSelect = (
     cardId: string,
     cardIds: string[],
     activeCardIds: string[],
-    pivotIndexRef: number
+    pivotIndexRef: React.MutableRefObject<number>
   ) => {
 
     if (event.shiftKey) {
       //const cardIds = filteredCards.map((card) => card.id);
       const targetIndex = cardIds.indexOf(cardId);
 
-      const leftIndex = getRangeEndpoint(pivotIndexRef, 1, cardIds, activeCardIds);
-      const rightIndex = getRangeEndpoint(pivotIndexRef, -1, cardIds, activeCardIds); //not really left or right, but bear with me (non-inclusive filled segment)
+      const leftIndex = getRangeEndpoint(pivotIndexRef.current, 1, cardIds, activeCardIds);
+      const rightIndex = getRangeEndpoint(pivotIndexRef.current, -1, cardIds, activeCardIds); //not really left or right, but bear with me (non-inclusive filled segment)
 
       return (
         cardIds.filter(
           (cardId, i) =>
             (activeCardIds.includes(cardId) &&
               !inRange(i, rightIndex, leftIndex)) ||
-            inRange(i, pivotIndexRef, targetIndex)
+            inRange(i, pivotIndexRef.current, targetIndex)
         )
       );
     } else {
       const activeCardIdsCopy =
         event.ctrlKey || event.metaKey ? [...activeCardIds] : [];
-      pivotIndexRef = cardIds.indexOf(cardId);
+      pivotIndexRef.current = cardIds.indexOf(cardId);
       
         if (activeCardIdsCopy.includes(cardId)) {
         return(

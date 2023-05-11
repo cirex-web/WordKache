@@ -104,7 +104,7 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
-                  onMouseDown={(ev) => setActiveCardsIds(handleRowSelect(ev, card.id, filteredCards.map((card)=> card.id), activeCardIds, pivotIndexRef.current))}
+                  onMouseDown={(ev) => setActiveCardsIds(handleRowSelect(ev, card.id, filteredCards.map((card)=> card.id), activeCardIds, pivotIndexRef))}
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),
                   })}
