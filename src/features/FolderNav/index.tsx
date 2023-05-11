@@ -5,6 +5,7 @@ import { RecursiveFolder } from "./RecursiveFolder";
 import css from "./folderNav.module.css";
 import { AllFiles, FileDirectory } from "./types";
 import { JustCollectedFolder } from "../App";
+import { Button } from "../../components/Button";
 
 const generateTreeStructure = (folders: Folder[]) => {
   const g = new Map<string, Folder[]>();
@@ -28,7 +29,7 @@ const generateTreeStructure = (folders: Folder[]) => {
   return res.map((fileDir) => dfs(fileDir));
 };
 
-export const FolderNav = ({ folders }: { folders: Folder[] }) => {
+export const FolderNav = ({ folders, addFolder }: { folders: Folder[], addFolder: (fileName:string) => void }) => {
   const fileTree: FileDirectory[] = [
     JustCollectedFolder, //the un-deletable folder >:D
     ...generateTreeStructure(folders),
@@ -38,6 +39,14 @@ export const FolderNav = ({ folders }: { folders: Folder[] }) => {
       <Text type="heading" bold className={css.title}>
         <Icon name="folder" />
         Folders
+        <Button
+              onMouseDown={() => addFolder("New Folder")}
+              noBorder
+              zoomOnHover
+              style={{ marginLeft: "-5px" }}
+            >
+              <Icon name="Add"/>
+          </Button>
       </Text>
       {fileTree.map((folders) => (
         <RecursiveFolder folders={folders} key={folders.id} />

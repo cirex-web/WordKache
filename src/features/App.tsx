@@ -14,6 +14,7 @@ export const FolderContext = createContext<{
   activeFolder: undefined,
   setActiveFolder: undefined,
 });
+
 export const UseFolderContext = () => {
   const { activeFolder, setActiveFolder } = useContext(FolderContext);
   if (!activeFolder || !setActiveFolder)
@@ -32,6 +33,7 @@ function App() {
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);
+
   useEffect(() => {
     if (folders && folders.length === 0) {
       //loaded without any folders
@@ -43,6 +45,16 @@ function App() {
       ]);
     }
   }, [folders]); //This is just cuz there's no create folder feature yet... will implement soon
+
+  const addFolder = (folderName: string) => {
+    ChromeStorage.setPair("folders", [
+      ...folders ?? [],
+      {
+        name: folderName,
+        id: nanoid(),
+      },
+    ])
+  }
 
   const moveCards = (cardIds: string[], folderId?: string) => {
     if (!cards || !folders) return; //somehow useStorage failed to initialize this... odd
@@ -74,7 +86,7 @@ function App() {
         }}
       >
         <img src={logo} className={css.logo} alt="logo" />
-        {folders && <FolderNav folders={folders} />}
+        {folders && <FolderNav folders={folders} addFolder={addFolder}/>}
       </div>
       {cardsUnderCurrentFolder && (
         <WordTable
