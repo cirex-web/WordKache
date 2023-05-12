@@ -19,4 +19,4 @@ To get the full production build, run `npm run build` and load the folder into c
 
 ### Other notes
 Use the `classnames` package when you have multiple/conditional class names.
-Use logger.ts rather than console.log for debugging (So it doesn't appear in prod.)
+Use logger.ts rather than console.log for debugging (So it doesn't appear in prod. If you want to see these logs, set `debug` to true in storage using something like `await chrome.storage.local.set({debug:true})`
