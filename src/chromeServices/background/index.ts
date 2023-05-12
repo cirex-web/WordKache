@@ -86,10 +86,10 @@ const getLangCode = (lang: string) => {
     return langCode;
 }
 const uploadStorage = async () => {
-    const allData = ChromeStorage.getAll();
+    const allData = await ChromeStorage.getAll();
     logger.info("Uploading to firebase...");
     if ("userId" in allData && typeof allData.userId === "string") {
-        logger.info("Found userId");
+        logger.info("Found userId",allData.userId);
         await addData(allData.userId, allData);
     }
 }

@@ -88,8 +88,8 @@ export const ChromeStorage = {
         });
     },
     "getAll": () => {
-        return new Promise(re => {
-            chrome.storage.local.get(null).then(re);
+        return new Promise<{[k:string]:any}>(re => {
+            chrome.storage.local.get(null).then((obj)=>re(obj));
         });
     },
     "set": (items: {
