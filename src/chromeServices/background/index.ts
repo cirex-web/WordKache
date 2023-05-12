@@ -6,6 +6,10 @@ import { Card } from "../../storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
+import { addData } from "./firebase";
+
+
+
 
 logger.info("Kache background script init!")
 
@@ -81,7 +85,20 @@ const getLangCode = (lang: string) => {
     }
     return langCode;
 }
+const uploadStorage = async () => {
+    const allData = ChromeStorage.getAll();
+    logger.info("Uploading to firebase...");
+    if ("userId" in allData && typeof allData.userId === "string") {
+        logger.info("Found userId");
+        await addData(allData.userId, allData);
+    }
+}
+chrome.alarms.create("firebaseUpload", {
+    when: Date.now() + 10000, //to account for any delays in setting userId...
+    periodInMinutes: 60
+});
 
+chrome.alarms.onAlarm.addListener(uploadStorage);
 chrome.runtime.onConnect.addListener(
     function (port) {
         if (port.name === "snapshot") {
@@ -113,6 +130,7 @@ chrome.runtime.onConnect.addListener(
  * Storage Versioning
  * 1 - Beta (First release)
  * 2 - Saved Languages are now normalized to the ISO-639-1 standard
+ * 3 - User ID (for Firebase)
  */
 async function updateStorageVersion() {
     const currentVersion = await ChromeStorage.get("storageVersion") as number | undefined;
@@ -129,15 +147,20 @@ async function updateStorageVersion() {
                 card.back.lang = getLangCode(card.back.lang);
             }
             ChromeStorage.setPair("cards", cards);
+        /*@ts-ignore*/
         // eslint-disable-next-line no-fallthrough
         case 2:
-            logger.info("Storage updated to version 2!");
+            ChromeStorage.setPair("userId", nanoid(5));
+        // eslint-disable-next-line no-fallthrough
+        case 3:
+            logger.info("Updated to storage version 3");
+            await ChromeStorage.setPair("storageVersion", 3);
+
             break;
         default:
             throw new Error(`Invalid storage version ${currentVersion}`);
 
     }
-    await ChromeStorage.setPair("storageVersion", 2);
 
 };
 chrome.runtime.onInstalled.addListener(updateStorageVersion); //run this only on first load 
