@@ -34,4 +34,5 @@
   font-size: 1.75rem;
   display: inline-block;
   width: 175px; /*this is a bit bad implementation*/
+  color: var(--light-1);
 }
