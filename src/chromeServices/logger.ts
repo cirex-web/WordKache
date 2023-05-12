@@ -8,7 +8,9 @@ let existingLogs: any[] = []
 ChromeStorage.get("logs").then((logs) => {
     if (logs) existingLogs = logs as any[];
 });
-const shouldLog: boolean = !!ChromeStorage.get("debug");
+let shouldLog: boolean;
+ChromeStorage.get("debug").then((data)=>shouldLog = !!data);
+
 export const logger = {
     print: (type: "DEBUG" | "INFO" | "WARN", ...args: any[]) => {
         if (shouldLog) console.log(`%c[WordKache]%c[${type}][${+new Date()}]`, 'color:"rgb(24 100 205)";font-weight:bold', `color:${COLORS[type]}`, ...args);
