@@ -29,6 +29,7 @@ export const RecursiveFolder = ({
   const active = activeFolder.id === folder.id;
   const selected = selectedFolder?.some((f) => f.id === folder.id);
   const nameChangeRef = React.useRef(false);
+  folder.open = subfolderOpen;
 
   const updateHeight = useCallback(
     (delta: number) => {

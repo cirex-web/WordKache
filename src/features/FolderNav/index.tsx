@@ -32,6 +32,18 @@ const generateTreeStructure = (folders: Folder[]) => {
   return res.map((fileDir) => dfs(fileDir));
 };
 
+const unpackFolders = (folders: FileDirectory[]): Folder[] => {
+  //Cool if you could use flatmap alternative
+  const foldersCopy = [];
+  for (const folder of folders) {
+    foldersCopy.push({ id: folder.id, name: folder.name });
+    if (folder.subFolders && folder.open) {
+      foldersCopy.push(...unpackFolders(folder.subFolders));
+    }
+  }
+  return foldersCopy;
+};
+
 export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }: 
   { folders: Folder[], addFolder: (fileName:string) => void, deleteFolder: () => void, renameFolder: (fileName:string, fileId: string) => void}) => {
 
@@ -43,10 +55,11 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
   const pivotPointRef = React.useRef(0);
 
   const handleFolderSelect = (ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, folders: FileDirectory[], folder: FileDirectory) => {
-    const folderIds = folders.map((folder) => folder.id);
+    const unpackedFolders = unpackFolders(folders);
+    const folderIds = unpackedFolders.map((folder) => folder.id);
     const activeFolderIds = selectedFolder!.map((folder) => folder.id);
     const selectedIds = handleRowSelect(ev, folder.id, folderIds, activeFolderIds, pivotPointRef);
-    return folders.filter((cfolder) => selectedIds.includes(cfolder.id))
+    return unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id))
   }
 
   return (
@@ -78,7 +91,8 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
       {fileTree.map((folders) => (
         <RecursiveFolder folders={folders} 
           setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>) => setSelectedFolder(handleFolderSelect(ev, fileTree, folders))} 
-          changeFolderName={renameFolder} key={folders.id} />
+          changeFolderName={renameFolder} 
+          key={folders.id} />
       ))}
     </div>
   );

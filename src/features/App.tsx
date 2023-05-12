@@ -71,7 +71,7 @@ function App() {
       {
         name: folderName,
         id: nanoid(),
-        parentId: activeFolder.id === "root" ? undefined : activeFolder.id,
+        parentId: activeFolder.id === "root" ? undefined : activeFolder.id, //If added on Just collected, make surface level folder
       },
     ])
   }
