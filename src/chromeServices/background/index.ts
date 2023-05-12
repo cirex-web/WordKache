@@ -13,9 +13,6 @@ import { addData } from "./firebase";
 
 logger.info("Kache background script init!")
 
-
-
-
 let currentWebRequest: {
     id: string,
     input: string,
@@ -46,20 +43,23 @@ chrome.webRequest.onCompleted.addListener((request) => {
 });
 
 const addFlashcard = async (snapshot: ITranslationSnapshot) => {
-    const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
-
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
+    const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
+    const hiddenCount = cards.reduce((sum, card) => sum + (card.hidden ? 1 : 0), 0)
+    let hidden = hiddenCount < 30 ? Math.random() < 0.5 : false; //set cutoff at 30
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;
-        const oldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
+        const isOldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
+
         //exact match? definitely don't need it
-        if (cards[i].front.text === snapshot.inputText || (!oldCard && similar(cards[i].front.text, snapshot.inputText))) {
+        if (cards[i].front.text === snapshot.inputText || (!isOldCard && similar(cards[i].front.text, snapshot.inputText))) {
+            hidden = !!cards[i].hidden; //if visible property is undefined, it's also visible (!! converts undefined to false)
             cards.splice(i, 1);
-        } else {
-            break;
+            break; //why would you want to overwrite anything extra?
         }
     }
     cards.push({
+        hidden,
         front: {
             text: snapshot.inputText,
             lang: snapshot.inputLang
@@ -70,7 +70,8 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
         id: nanoid(),
         location: "root", //The Just Collected folder
         timeCreated: snapshot.inputTime,
-        source: snapshot.source
+        source: snapshot.source,
+
     });
     logger.info("Adding snapshot", snapshot);
 
@@ -113,7 +114,7 @@ chrome.runtime.onConnect.addListener(
                     // logger.debug(`input to output time: ${timeAfterInput - timeAfterOutput}`); //TODO: Do some more filtering here; also if this is negative it means that the web request legit does not match the current one (the user just retyped the thing for no apparent reason)
                     // logger.debug(`output time to now ${timeAfterOutput}`);
                     // logger.debug(timeAfterInput);
-
+                    logger.info("Adding snapshot", translationSnapshot);
                     addFlashcard(translationSnapshot);
                     port.postMessage(true);
                 } else {
