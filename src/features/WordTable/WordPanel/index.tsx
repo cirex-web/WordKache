@@ -70,11 +70,9 @@ export const WordPanel = ({
         </div>
       )}
       <div className={css.buttonRow}>
-        {singleCard.location === "root" && (
-          <Button onClick={saveCard}>
-            <Text type="subheading">Save</Text>
-          </Button>
-        )}
+        <Button onClick={saveCard}>
+          <Text type="subheading">Save</Text>
+        </Button>
         <Button onClick={deleteCard}>
           <Text type="subheading">Delete</Text>
         </Button>

@@ -34,6 +34,7 @@ export const TableHeader = ({
                 placeholder="Search cards..."
                 onChange={(event) => setSearchInput(event.currentTarget.value)}
                 ref={inputRef}
+                
               />
             </div>
             <Button

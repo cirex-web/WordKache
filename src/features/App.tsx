@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { cloneElement, createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { Card, Folder } from "../storageTypes";
@@ -49,7 +49,7 @@ function App() {
   const folders = useStorage<Folder[]>("folders", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);
   const [selectedFolder, setSelectedFolder] = useState<Folder[]>([JustCollectedFolder]);
-  const saveId = "HopefullyNoOneCanGuessThisID";
+  const saveId = "defaultFolder";
 
   useEffect(() => {
     if (folders && folders.length === 0) {
@@ -62,7 +62,6 @@ function App() {
       ]);
     }
   }, [folders]); //This is just cuz there's no create folder feature yet... will implement soon -- Did it(Jonathan)
-  
 
   const addFolder = (folderName: string) => {
     ChromeStorage.setPair("folders", [
@@ -83,15 +82,45 @@ function App() {
     )
   }
 
-  const moveCards = (cardIds: string[], folderId?: string) => {
+  const renameFolder = (folderName: string, folderId: string) => {
+    ChromeStorage.setPair("folders", 
+      folders?.map((folder) => {
+        if(folder.id === folderId)
+          folder.name = folderName;
+        return folder;
+        
+      })
+    )
+  }
+
+  const last = (arr: any[]) => arr[arr.length - 1];
+
+  const moveCards = (cardIds: string[]) => {
     if (!cards || !folders) return; //somehow useStorage failed to initialize this... odd
-    const cardsClone = [...cards];
-    for (const card of cardsClone) {
-      if (cardIds.includes(card.id)) {
-        card.location = folderId ?? folders[0].id; //also temp
+    let newCards:Card[] = [];
+    for (const card of cards) {
+
+      if (cardIds.includes(card.id)){
+        if(selectedFolder.length > 1) {
+          selectedFolder.map((folder) => {
+            if(folder.id === activeFolder.id) return; //don't move to the same folder
+            const cardCopy = {...card};
+            cardCopy.id = nanoid();
+
+            newCards.push(cardCopy);//copy card
+            last(newCards).location = folder.id;
+          })
+        }
+        else{ 
+          newCards.push(card);
+          last(newCards).location = folders[0].id; //also temp, will always be a defaultFolder
+        }
       }
+      else 
+        newCards.push(card);
+
     }
-    ChromeStorage.setPair("cards", cardsClone);
+    ChromeStorage.setPair("cards", newCards);
   };
 
   const deleteCards = (cardIds: string[]) => {
@@ -115,7 +144,7 @@ function App() {
         }}
       >
         <img src={logo} className={css.logo} alt="logo" />
-        {folders && <FolderNav folders={folders} addFolder={addFolder} deleteFolder = {deleteFolder}/>}
+        {folders && <FolderNav folders={folders} addFolder={addFolder} deleteFolder = {deleteFolder} renameFolder={renameFolder}/>}
       </div>
       {cardsUnderCurrentFolder && (
         <WordTable

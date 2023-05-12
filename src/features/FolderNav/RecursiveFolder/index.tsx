@@ -11,11 +11,13 @@ import { isDisabled } from "@testing-library/user-event/dist/utils";
 export const RecursiveFolder = ({
   folders: folder,
   setSelectedFolders: selectFolders,
+  changeFolderName: changeName,
   depth = 0,
   onHeightChange,
 }: {
   folders: FileDirectory;
   setSelectedFolders: Function;
+  changeFolderName: Function;
   depth?: number;
   onHeightChange?: (delta: number) => void;
 }) => {
@@ -58,7 +60,7 @@ export const RecursiveFolder = ({
         onMouseDown={(ev) => {
           setActiveFolder(folder);
           selectFolders(ev);
-          nameChangeRef.current = (ev.detail >= 2) ? true: nameChangeRef.current;
+          nameChangeRef.current = (ev.detail >= 2 && folder.id != "root" && folder.id != "defaultFolder") ? true: nameChangeRef.current;
         }}
         onMouseLeave={() => {nameChangeRef.current = false}}
         disabled = {nameChangeRef.current}
@@ -79,7 +81,7 @@ export const RecursiveFolder = ({
             ev.stopPropagation();
           }}
         />
-        {nameChangeRef.current ? <Input placeholder={folder.name} className={css.input}/> : <Text noWrap>{folder.name}</Text>}
+        {nameChangeRef.current ? <Input placeholder={folder.name} className={css.input} onChange={(ev)=> changeName(ev.currentTarget.value, folder.id)}/> : <Text noWrap>{folder.name}</Text>}
       </Text>
 
       {folder.subFolders && (
@@ -98,6 +100,7 @@ export const RecursiveFolder = ({
             <RecursiveFolder
               folders={folder}
               setSelectedFolders={selectFolders}
+              changeFolderName={changeName}
               key={folder.id}
               depth={depth + 1}
               onHeightChange={updateHeight}

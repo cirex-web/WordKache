@@ -32,7 +32,9 @@ const generateTreeStructure = (folders: Folder[]) => {
   return res.map((fileDir) => dfs(fileDir));
 };
 
-export const FolderNav = ({ folders, addFolder, deleteFolder }: { folders: Folder[], addFolder: (fileName:string) => void, deleteFolder: () => void}) => {
+export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }: 
+  { folders: Folder[], addFolder: (fileName:string) => void, deleteFolder: () => void, renameFolder: (fileName:string, fileId: string) => void}) => {
+
   const fileTree: FileDirectory[] = [
     JustCollectedFolder, //the un-deletable folder >:D
     ...generateTreeStructure(folders),
@@ -74,7 +76,9 @@ export const FolderNav = ({ folders, addFolder, deleteFolder }: { folders: Folde
 
       </Text>
       {fileTree.map((folders) => (
-        <RecursiveFolder folders={folders} setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>) => setSelectedFolder(handleFolderSelect(ev, fileTree, folders))} key={folders.id} />
+        <RecursiveFolder folders={folders} 
+          setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>) => setSelectedFolder(handleFolderSelect(ev, fileTree, folders))} 
+          changeFolderName={renameFolder} key={folders.id} />
       ))}
     </div>
   );

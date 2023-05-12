@@ -32,5 +32,6 @@
   background: transparent;
   padding: 0px;
   font-size: 1.75rem;
-  display: flex;
+  display: inline-block;
+  width: 175px; /*this is a bit bad implementation*/
 }
