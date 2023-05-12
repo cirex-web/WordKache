@@ -78,11 +78,15 @@ function App() {
 
   const deleteFolder = () => {
     console.log(selectedFolder, folders);
-    ChromeStorage.setPair("folders", 
-      folders?.filter((folder, i) => 
-        (!selectedFolder.map((f) => f.id).includes(folder.id) || folder.id === activeFolder.id) || folder.id === saveId //O(2n) = O(n), don't delete the root folders
-      )
-    )
+    const newFolders = [];
+    for(let i = 0; i < folders!.length; i++) {
+      const folder = folders![i];
+      if((selectedFolder.map((f) => f.id).includes(folder.id) && folder.id !== activeFolder.id) && folder.id !== saveId)
+        folders!.map((subFolder) => subFolder.parentId = (subFolder.parentId === folder.id) ? folder.parentId : subFolder.parentId);
+      else
+        newFolders.push(folder);
+    }
+    ChromeStorage.setPair("folders", newFolders)
   }
 
   const renameFolder = (folderName: string, folderId: string) => {

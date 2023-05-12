@@ -36,7 +36,7 @@ const unpackFolders = (folders: FileDirectory[]): Folder[] => {
   //Cool if you could use flatmap alternative
   const foldersCopy = [];
   for (const folder of folders) {
-    foldersCopy.push({ id: folder.id, name: folder.name });
+    foldersCopy.push(folder);
     if (folder.subFolders && folder.open) {
       foldersCopy.push(...unpackFolders(folder.subFolders));
     }
@@ -57,8 +57,9 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
   const handleFolderSelect = (ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, folders: FileDirectory[], folder: FileDirectory) => {
     const unpackedFolders = unpackFolders(folders);
     const folderIds = unpackedFolders.map((folder) => folder.id);
-    const activeFolderIds = selectedFolder!.map((folder) => folder.id);
+    const activeFolderIds = selectedFolder.map((folder) => folder.id);
     const selectedIds = handleRowSelect(ev, folder.id, folderIds, activeFolderIds, pivotPointRef);
+    console.log(unpackedFolders, unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id)));
     return unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id))
   }
 
@@ -90,7 +91,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
       </Text>
       {fileTree.map((folders) => (
         <RecursiveFolder folders={folders} 
-          setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>) => setSelectedFolder(handleFolderSelect(ev, fileTree, folders))} 
+          setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, sFolder: Folder) => setSelectedFolder(handleFolderSelect(ev, fileTree, sFolder))} //folders does not include nestedFolders 
           changeFolderName={renameFolder} 
           key={folders.id} />
       ))}

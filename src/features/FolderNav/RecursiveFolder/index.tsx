@@ -60,7 +60,7 @@ export const RecursiveFolder = ({
         noSelect
         onMouseDown={(ev) => {
           setActiveFolder(folder);
-          selectFolders(ev);
+          selectFolders(ev, folder);
           nameChangeRef.current = (ev.detail >= 2 && folder.id != "root" && folder.id != "defaultFolder") ? true: nameChangeRef.current;
         }}
         onMouseLeave={() => {nameChangeRef.current = false}}
