@@ -6,6 +6,7 @@ import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
+import { PassThrough } from "stream";
 //import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export const FolderContext = createContext<{
@@ -81,8 +82,12 @@ function App() {
     const newFolders = [];
     for(let i = 0; i < folders!.length; i++) {
       const folder = folders![i];
-      if((selectedFolder.map((f) => f.id).includes(folder.id) && folder.id !== activeFolder.id) && folder.id !== saveId)
-        folders!.map((subFolder) => subFolder.parentId = (subFolder.parentId === folder.id) ? folder.parentId : subFolder.parentId);
+      if((selectedFolder.map((f) => f.id).includes(folder.id) && folder.id !== activeFolder.id) && folder.id !== saveId){
+        if(cards?.some((card) => card.location === folder.id) && !window.confirm("Are you sure you want to delete" + folder.name + "? This will delete all cards in this folder."))
+          newFolders.push(folder);
+        else
+          folders!.map((subFolder) => subFolder.parentId = (subFolder.parentId === folder.id) ? folder.parentId : subFolder.parentId);
+      }
       else
         newFolders.push(folder);
     }
