@@ -49,7 +49,7 @@ function App() {
   const folders = useStorage<Folder[]>("folders", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);
   const [selectedFolder, setSelectedFolder] = useState<Folder[]>([JustCollectedFolder]);
-  const saveId = React.useRef(nanoid());
+  const saveId = "HopefullyNoOneCanGuessThisID";
 
   useEffect(() => {
     if (folders && folders.length === 0) {
@@ -57,7 +57,7 @@ function App() {
       ChromeStorage.setPair("folders", [
         {
           name: "Saved",
-          id: saveId.current,
+          id: saveId,
         },
       ]);
     }
@@ -78,7 +78,7 @@ function App() {
     console.log(selectedFolder, folders);
     ChromeStorage.setPair("folders", 
       folders?.filter((folder, i) => 
-        (!selectedFolder.map((f) => f.id).includes(folder.id) || folder.id === activeFolder.id) || folder.id === saveId.current //O(2n) = O(n), don't delete the root folders
+        (!selectedFolder.map((f) => f.id).includes(folder.id) || folder.id === activeFolder.id) || folder.id === saveId //O(2n) = O(n), don't delete the root folders
       )
     )
   }

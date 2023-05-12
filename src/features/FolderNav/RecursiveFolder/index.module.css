@@ -7,6 +7,7 @@
   transition: 0.2s color, 0.2s font-weight, 0.1s background-color;
 }
 
+
 .folderName:hover {
   background-color: var(--dark-2);
   cursor: pointer;
@@ -18,11 +19,18 @@
 }
 
 .selectedFolderName {
-  composes: folderName;
+  composes: folderName; /*what does this do?*/
   color: var(--light-1);
   font-weight: bold;
 }
 .children {
   overflow: hidden;
   transition: 0.2s height;
+}
+
+.input{
+  background: transparent;
+  padding: 0px;
+  font-size: 1.75rem;
+  display: flex;
 }

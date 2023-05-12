@@ -4,6 +4,9 @@ import { Text } from "../../../components/Text";
 import css from "./index.module.css";
 import { FileDirectory } from "../types";
 import { UseActiveFolderContext, UseSelectedFolderContext } from "../../App";
+import { Input } from "../../../components/Input";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
+
 
 export const RecursiveFolder = ({
   folders: folder,
@@ -23,6 +26,7 @@ export const RecursiveFolder = ({
   const [subfolderOpen, setSubfolderOpen] = useState(!!folder.open);
   const active = activeFolder.id === folder.id;
   const selected = selectedFolder?.some((f) => f.id === folder.id);
+  const nameChangeRef = React.useRef(false);
 
   const updateHeight = useCallback(
     (delta: number) => {
@@ -32,6 +36,7 @@ export const RecursiveFolder = ({
     },
     [onHeightChange]
   );
+
 
   useLayoutEffect(() => {
     setTimeout(() => {
@@ -53,7 +58,10 @@ export const RecursiveFolder = ({
         onMouseDown={(ev) => {
           setActiveFolder(folder);
           selectFolders(ev);
+          nameChangeRef.current = (ev.detail >= 2) ? true: nameChangeRef.current;
         }}
+        onMouseLeave={() => {nameChangeRef.current = false}}
+        disabled = {nameChangeRef.current}
       >
         <Icon
           name="expand_more"
@@ -71,7 +79,7 @@ export const RecursiveFolder = ({
             ev.stopPropagation();
           }}
         />
-        <Text noWrap>{folder.name}</Text>
+        {nameChangeRef.current ? <Input placeholder={folder.name} className={css.input}/> : <Text noWrap>{folder.name}</Text>}
       </Text>
 
       {folder.subFolders && (
