@@ -6,6 +6,7 @@ import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export const FolderContext = createContext<{
   activeFolder: Folder | undefined;
@@ -64,11 +65,13 @@ function App() {
   }, [folders]); //This is just cuz there's no create folder feature yet... will implement soon -- Did it(Jonathan)
 
   const addFolder = (folderName: string) => {
+    
     ChromeStorage.setPair("folders", [
       ...folders ?? [],
       {
         name: folderName,
         id: nanoid(),
+        parentId: activeFolder.id === "root" ? undefined : activeFolder.id,
       },
     ])
   }
