@@ -1,4 +1,4 @@
-import React, { cloneElement, createContext, useContext, useEffect, useState } from "react";
+import React, { /*cloneElement,*/ createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { Card, Folder } from "../storageTypes";
@@ -6,7 +6,7 @@ import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
+//import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export const FolderContext = createContext<{
   activeFolder: Folder | undefined;
@@ -110,12 +110,13 @@ function App() {
       if (cardIds.includes(card.id)){
         if(selectedFolder.length > 1) {
           selectedFolder.map((folder) => {
-            if(folder.id === activeFolder.id) return; //don't move to the same folder
-            const cardCopy = {...card};
-            cardCopy.id = nanoid();
+            if(folder.id !== activeFolder.id){  //don't move to the same folder
+              const cardCopy = {...card};
+              cardCopy.id = nanoid();
 
-            newCards.push(cardCopy);//copy card
-            last(newCards).location = folder.id;
+              newCards.push(cardCopy);//copy card
+              last(newCards).location = folder.id;
+            }
           })
         }
         else{ 

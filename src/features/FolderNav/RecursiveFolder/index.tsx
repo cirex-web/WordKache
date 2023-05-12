@@ -5,7 +5,6 @@ import css from "./index.module.css";
 import { FileDirectory } from "../types";
 import { UseActiveFolderContext, UseSelectedFolderContext } from "../../App";
 import { Input } from "../../../components/Input";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 
 export const RecursiveFolder = ({
@@ -61,7 +60,7 @@ export const RecursiveFolder = ({
         onMouseDown={(ev) => {
           setActiveFolder(folder);
           selectFolders(ev, folder);
-          nameChangeRef.current = (ev.detail >= 2 && folder.id != "root" && folder.id != "defaultFolder") ? true: nameChangeRef.current;
+          nameChangeRef.current = (ev.detail >= 2 && folder.id !== "root" && folder.id !== "defaultFolder") ? true: nameChangeRef.current;
         }}
         onMouseLeave={() => {nameChangeRef.current = false}}
         disabled = {nameChangeRef.current}

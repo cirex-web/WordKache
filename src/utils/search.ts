@@ -1,5 +1,4 @@
 import React from "react";
-import { act } from "react-dom/test-utils";
 
 const getRangeEndpoint = (startIndex: number, direction: number, selectionIds: string[], activeSelectionIds: string[]) => {
     if (direction === 0) return startIndex;
