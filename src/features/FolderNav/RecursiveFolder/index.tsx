@@ -1,24 +1,28 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
 import css from "./index.module.css";
 import { FileDirectory } from "../types";
-import { UseFolderContext } from "../../App";
+import { UseActiveFolderContext, UseSelectedFolderContext } from "../../App";
 
 export const RecursiveFolder = ({
   folders: folder,
+  setSelectedFolders: selectFolders,
   depth = 0,
   onHeightChange,
 }: {
   folders: FileDirectory;
+  setSelectedFolders: Function;
   depth?: number;
   onHeightChange?: (delta: number) => void;
 }) => {
   const subfolderRef = useRef<HTMLUListElement>(null);
-  const { activeFolder, setActiveFolder } = UseFolderContext();
+  const { activeFolder, setActiveFolder } = UseActiveFolderContext();
+  const { selectedFolder } = UseSelectedFolderContext();
   const [subfolderHeight, setSubFolderHeight] = useState(0);
   const [subfolderOpen, setSubfolderOpen] = useState(!!folder.open);
-  const selected = activeFolder.id === folder.id;
+  const active = activeFolder.id === folder.id;
+  const selected = selectedFolder?.some((f) => f.id === folder.id);
 
   const updateHeight = useCallback(
     (delta: number) => {
@@ -43,11 +47,12 @@ export const RecursiveFolder = ({
     <li className={css.folder}>
       <Text
         type="subheading"
-        className={selected ? css.selectedFolderName : css.folderName}
+        className={active ? css.activeFolderName : selected? css.selectedFolderName: css.folderName}
         style={{ paddingLeft: depth * 12 }} //12px looks pretty good
         noSelect
-        onMouseDown={() => {
+        onMouseDown={(ev) => {
           setActiveFolder(folder);
+          selectFolders(ev);
         }}
       >
         <Icon
@@ -84,6 +89,7 @@ export const RecursiveFolder = ({
           {folder.subFolders.map((folder, i) => (
             <RecursiveFolder
               folders={folder}
+              setSelectedFolders={selectFolders}
               key={folder.id}
               depth={depth + 1}
               onHeightChange={updateHeight}

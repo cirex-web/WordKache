@@ -11,6 +11,12 @@
   background-color: var(--dark-2);
   cursor: pointer;
 }
+.activeFolderName {
+  composes: folderName;
+  color: var(--accent-2);
+  font-weight: bold;
+}
+
 .selectedFolderName {
   composes: folderName;
   color: var(--light-1);

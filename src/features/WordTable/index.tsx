@@ -2,7 +2,7 @@ import Fuse from "fuse.js";
 import React, { useEffect, useState } from "react";
 import { Card } from "../../storageTypes";
 import { Text } from "../../components/Text";
-import { UseFolderContext } from "../App";
+import { UseActiveFolderContext } from "../App";
 import { TableHeader } from "./TableHeader";
 import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
@@ -37,7 +37,7 @@ const WordTable = ({
   moveCards: (cardIds: string[], folderId?: string) => void;
   deleteCards: (cardIds: string[]) => void;
 }) => {
-  const { activeFolder } = UseFolderContext();
+  const { activeFolder } = UseActiveFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
   const pivotIndexRef = React.useRef(0); //I know this should be ideally in the search util
