@@ -32,13 +32,22 @@ const generateTreeStructure = (folders: Folder[]) => {
   return res.map((fileDir) => dfs(fileDir));
 };
 
-const unpackFolders = (folders: FileDirectory[], ignoreVisibility: boolean = false): Folder[] => {
+const dirToFolder = (dir: FileDirectory, parentId: string | undefined): Folder => {
+  const folder: Folder = {
+    parentId: parentId,
+    name: dir.name,
+    id: dir.id,
+  };
+  return folder;
+};
+
+const unpackFolders = (dirs: FileDirectory[], ignoreVisibility: boolean = false, parentId: string | undefined = undefined): Folder[] => {
   //Cool if you could use flatmap alternative
   const foldersCopy = [];
-  for (const folder of folders) {
-    foldersCopy.push(folder);
-    if (folder.subFolders && (folder.open || ignoreVisibility)) {
-      foldersCopy.push(...unpackFolders(folder.subFolders));
+  for (const dir of dirs) {
+    foldersCopy.push(dirToFolder(dir, parentId));
+    if (dir.subFolders && (dir.open || ignoreVisibility)) {
+      foldersCopy.push(...unpackFolders(dir.subFolders, ignoreVisibility, dir.id));
     }
   }
   return foldersCopy;
@@ -56,7 +65,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
   const pivotPointRef = React.useRef(0);
 
   const handleFolderSelect = (ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, folders: FileDirectory[], folder: FileDirectory) => {
-    const unpackedFolders = unpackFolders(folders);
+    const unpackedFolders = unpackFolders(fileTree);
     const folderIds = unpackedFolders.map((folder) => folder.id);
     const activeFolderIds = selectedFolder.map((folder) => folder.id);
     const selectedIds = handleRowSelect(ev, folder.id, folderIds, activeFolderIds, pivotPointRef);
@@ -65,7 +74,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
 
   const moveFolder = (source: string, target: string) => {
 
-    const unpackedFolders = unpackFolders(folders, true);
+    const unpackedFolders = unpackFolders(fileTree, true);
     if(target === source) return unpackedFolders;
     const sourceFolder = unpackedFolders.find((folder) => folder.id === source);
     if (sourceFolder === undefined) return unpackedFolders;
@@ -74,7 +83,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
     let folderCopy:Folder[] = [];
 
     for(const folder of unpackedFolders){
-      if(folder.id === source)
+      if(folder.id === source || folder.id === "root" )//dependencies.some((dependency) => dependency.id === folder.id) || )
         continue;
       if(folder.id === target){
         sourceFolder.parentId = folder.parentId;
@@ -83,8 +92,10 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
       else
         folderCopy.push(folder);
     }
+    console.log(folderCopy);
     return folderCopy;
   }
+  console.log(fileTree);
 
   return (
     <div className={css.container}>
