@@ -31,6 +31,7 @@ export const RecursiveFolder = ({
   const active = activeFolder.id === folder.id;
   const selected = selectedFolder?.some((f) => f.id === folder.id);
   const nameChangeRef = React.useRef(false);
+  let dragCounter = 0;
   folder.open = subfolderOpen;
 
   const updateHeight = useCallback(
@@ -56,10 +57,9 @@ export const RecursiveFolder = ({
   return (
     <div className="droppable"
       onDrop={(ev) => { ev.stopPropagation(); ev.preventDefault(); setBottomBorder(false); moveFolder(ev.dataTransfer.getData("source"), folder.id) }}
-      onDragOver={(ev) => { ev.stopPropagation(); ev.preventDefault() }}
+      onDragOver={(ev) => { ev.stopPropagation(); ev.preventDefault(); setBottomBorder(true) }}
       style={{ borderBottom: bottomBorder ? "2px solid #ffffff" : "none" }}
-      onDragEnter={(ev) => { ev.stopPropagation(); ev.preventDefault(); setBottomBorder(true) }}
-      onDragLeave={(ev) => { ev.stopPropagation(); ev.preventDefault(); setBottomBorder(false) }}
+      onDragLeave={(ev) => { ev.stopPropagation(); ev.preventDefault(); if(!dragCounter) setBottomBorder(false)}}
     >
 
       <li className={css.folder}>

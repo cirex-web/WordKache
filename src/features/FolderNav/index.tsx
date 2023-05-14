@@ -74,7 +74,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
 
   const moveFolder = (source: string, target: string) => {
 
-    const unpackedFolders = unpackFolders(fileTree, true);
+    const unpackedFolders = unpackFolders(fileTree.filter((dir) => (dir.id !== "root")), true);
     if(target === source) return unpackedFolders;
     const sourceFolder = unpackedFolders.find((folder) => folder.id === source);
     if (sourceFolder === undefined) return unpackedFolders;
@@ -83,7 +83,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
     let folderCopy:Folder[] = [];
 
     for(const folder of unpackedFolders){
-      if(folder.id === source || folder.id === "root" )//dependencies.some((dependency) => dependency.id === folder.id) || )
+      if(folder.id === source )//dependencies.some((dependency) => dependency.id === folder.id) || )
         continue;
       if(folder.id === target){
         sourceFolder.parentId = folder.parentId;
