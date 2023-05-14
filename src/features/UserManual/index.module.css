@@ -1,24 +1,26 @@
-.containerHelp{
-    height: 10px;
-    width: 10px;
-    padding: 15px 5px;
-    font-size: 2.2rem;
-    position: absolute;
-    bottom: 15px;
+.container {
+  position: relative;
 }
 
-.textBox{
-    left: 45px;
-    bottom: 45px;
-    position: absolute;
-    background-color: var(--light-1);
-    color: var(--dark-1);
-    transition: 0.5s all;
-    transform: scale(0,0);
-    transform-origin: bottom left;
-    padding: 10px 10px;
-    display: block;
-    width: 100%;
-    overflow-wrap: normal;
-    border-radius: 5%;
+.textBox {
+  position: absolute;
+  left: 40px;
+  bottom: 100%;
+  background-color: var(--light-1);
+  color: var(--dark-1);
+  transition: 0.5s all;
+  transform-origin: bottom left;
+  padding: 15px;
+  display: block;
+  width: 250px;
+  overflow-wrap: normal;
+  border-radius: 10px;
+  z-index: 42;
+}
+.hotKey {
+  border: 1px solid var(--dark-1);
+  border-radius: 5px;
+  width: fit-content;
+  padding: 2px 5px;
+  display: inline;
 }

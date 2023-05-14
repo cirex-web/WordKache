@@ -58,7 +58,7 @@ table {
   user-select: none;
 }
 
-tr {
+tbody > tr {
   transition: 0.2s font-weight, 0.1s background-color;
   border-top: 1px solid var(--dark-2);
 }

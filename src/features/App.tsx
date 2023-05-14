@@ -68,16 +68,10 @@ function App() {
 
   return (
     <FolderContext.Provider value={{ activeFolder, setActiveFolder }}>
-      <div
-        style={{
-          borderRight: "3px solid var(--light-1)",
-          position: "relative",
-          zIndex: "2",
-        }}
-      >
+      <div className={css.menu}>
         <img src={logo} className={css.logo} alt="logo" />
         {folders && <FolderNav folders={folders} />}
-        <UserManual/>
+        <UserManual />
       </div>
       {cardsUnderCurrentFolder && (
         <WordTable

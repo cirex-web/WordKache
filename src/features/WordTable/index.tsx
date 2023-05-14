@@ -66,13 +66,16 @@ const WordTable = ({
     }
   };
 
-  const handleEscKey = (
-    event: React.KeyboardEvent<HTMLTableRowElement>,
+  const handleKeyboardShortcuts = (
+    event: React.KeyboardEvent<HTMLTableRowElement>
   ) => {
-    if(event.key === 'q'){
-      setActiveCardsIds([]);}
-    if(event.key === 'a'){
-      setActiveCardsIds(filteredCards.map(card => card.id));
+    if (event.key === "Escape") {
+      setActiveCardsIds([]);
+      event.preventDefault();
+    }
+    if (event.key === "a" && (event.metaKey || event.ctrlKey)) {
+      setActiveCardsIds(filteredCards.map((card) => card.id));
+      event.preventDefault();
     }
   };
 
@@ -107,7 +110,7 @@ const WordTable = ({
         cards={cards}
       />
       {filteredCards.length ? (
-        <div className={css.tableContainer}>
+        <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>
           <table>
             <thead>
               <tr>
@@ -124,7 +127,6 @@ const WordTable = ({
                 <tr
                   key={card.id}
                   tabIndex={0}
-                  onKeyDown={(ev) => handleEscKey(ev)}
                   onMouseDown={(ev) => handleRowSelect(ev, card.id)}
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),

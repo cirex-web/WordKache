@@ -28,6 +28,9 @@
 .button:active:hover {
   background-color: var(--dark-1);
 }
+.zoomButton {
+  background-color: transparent !important;
+}
 .zoomButton:hover {
   transform: scale(1.2);
 }

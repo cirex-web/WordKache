@@ -2,6 +2,7 @@
   position: relative;
   overflow: scroll;
   padding-left: 10px;
+  flex-grow: 1;
 }
 
 .title {
