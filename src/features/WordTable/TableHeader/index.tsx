@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Icon } from "../../../components/Icon";
 import { Input } from "../../../components/Input";
 import { Text } from "../../../components/Text";
@@ -10,14 +10,25 @@ import { useFocus } from "../../../utils/useFocus";
 export const TableHeader = ({
   folderName,
   setSearchInput,
+  activeCards,
   cards,
 }: {
   folderName: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   cards: Card[];
+  activeCards: Card[];
 }) => {
   const [inputOpen, setInputOpen] = useState(false);
   const [inputRef] = useFocus();
+
+  useEffect (() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if(event.key === "c" && (event.metaKey || event.ctrlKey)) copyFlashcards(folderName, activeCards.reverse());
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
+
 
   return (
     <div className={css.header}>

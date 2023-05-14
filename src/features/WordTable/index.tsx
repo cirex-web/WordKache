@@ -94,6 +94,7 @@ const WordTable = ({
       <TableHeader
         folderName={activeFolder.name}
         setSearchInput={setInput}
+        activeCards={cards.filter((card) => activeCardIds.includes(card.id))}
         cards={cards}
       />
       {filteredCards.length ? (
