@@ -32,20 +32,21 @@ const generateTreeStructure = (folders: Folder[]) => {
   return res.map((fileDir) => dfs(fileDir));
 };
 
-const unpackFolders = (folders: FileDirectory[]): Folder[] => {
+const unpackFolders = (folders: FileDirectory[], ignoreVisibility: boolean = false): Folder[] => {
   //Cool if you could use flatmap alternative
   const foldersCopy = [];
   for (const folder of folders) {
     foldersCopy.push(folder);
-    if (folder.subFolders && folder.open) {
+    if (folder.subFolders && (folder.open || ignoreVisibility)) {
       foldersCopy.push(...unpackFolders(folder.subFolders));
     }
   }
   return foldersCopy;
 };
 
-export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }: 
-  { folders: Folder[], addFolder: (fileName:string) => void, deleteFolder: () => void, renameFolder: (fileName:string, fileId: string) => void}) => {
+
+export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, changeOrder }: 
+  { folders: Folder[], addFolder: (fileName:string) => void, deleteFolder: () => void, renameFolder: (fileName:string, fileId: string) => void, changeOrder: (fileOrder: Folder[]) => void}) => {
 
   const fileTree: FileDirectory[] = [
     JustCollectedFolder, //the un-deletable folder >:D
@@ -59,8 +60,30 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
     const folderIds = unpackedFolders.map((folder) => folder.id);
     const activeFolderIds = selectedFolder.map((folder) => folder.id);
     const selectedIds = handleRowSelect(ev, folder.id, folderIds, activeFolderIds, pivotPointRef);
-    console.log(unpackedFolders, unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id)));
     return unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id))
+  }
+
+  const moveFolder = (source: string, target: string) => {
+
+    const unpackedFolders = unpackFolders(folders, true);
+    if(target === source) return unpackedFolders;
+    const sourceFolder = unpackedFolders.find((folder) => folder.id === source);
+    if (sourceFolder === undefined) return unpackedFolders;
+    if (target === 'root') return unpackedFolders; //root is not a folder
+
+    let folderCopy:Folder[] = [];
+
+    for(const folder of unpackedFolders){
+      if(folder.id === source)
+        continue;
+      if(folder.id === target){
+        sourceFolder.parentId = folder.parentId;
+        folderCopy.push(folder, sourceFolder);
+      }
+      else
+        folderCopy.push(folder);
+    }
+    return folderCopy;
   }
 
   return (
@@ -93,6 +116,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
         <RecursiveFolder folders={folders} 
           setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, sFolder: Folder) => setSelectedFolder(handleFolderSelect(ev, fileTree, sFolder))} //folders does not include nestedFolders 
           changeFolderName={renameFolder} 
+          moveFolder={(src: string, dest: string) => changeOrder(moveFolder(src, dest))}
           key={folders.id} />
       ))}
     </div>

@@ -56,6 +56,7 @@ function App() {
   useEffect(() => {
     if (folders && folders.length === 0) {
       //loaded without any folders
+      console.log(folders);
       ChromeStorage.setPair("folders", [
         {
           name: "Saved",
@@ -105,6 +106,10 @@ function App() {
     )
   }
 
+  const reOrderFolders = (folderIds: Folder[]) => {
+    ChromeStorage.setPair("folders", folderIds);
+  }
+
   const last = (arr: any[]) => arr[arr.length - 1];
 
   const moveCards = (cardIds: string[]) => {
@@ -126,7 +131,7 @@ function App() {
         }
         else{ 
           newCards.push(card);
-          last(newCards).location = folders[0].id; //also temp, will always be a defaultFolder
+          last(newCards).location = folders.find((folder) => folder.id === saveId)?.id; //also temp, will always be a defaultFolder
         }
       }
       else 
@@ -157,7 +162,7 @@ function App() {
         }}
       >
         <img src={logo} className={css.logo} alt="logo" />
-        {folders && <FolderNav folders={folders} addFolder={addFolder} deleteFolder = {deleteFolder} renameFolder={renameFolder}/>}
+        {folders && <FolderNav folders={folders} addFolder={addFolder} deleteFolder = {deleteFolder} renameFolder={renameFolder} changeOrder={reOrderFolders}/>}
       </div>
       {cardsUnderCurrentFolder && (
         <WordTable
