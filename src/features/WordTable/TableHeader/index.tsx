@@ -50,8 +50,8 @@ export const TableHeader = ({
 
             <Button
               onMouseDown={(event) => event.shiftKey || event.metaKey 
-                ? copyFlashcards(folderName, cards) 
-                : saveFlashcards(folderName, cards)}
+                ? copyFlashcards(folderName, cards.reverse()) 
+                : saveFlashcards(folderName, cards.reverse())}
               noBorder
               zoomOnHover
               style={{ marginLeft: "-5px" }}
