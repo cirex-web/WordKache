@@ -14,10 +14,14 @@ export const Button = ({
   return (
     <button
       {...rest}
-      className={classNames.bind(css)("button", {
-        noBorder: noBorder,
-        zoomButton: zoomOnHover,
-      })}
+      className={classNames.bind(css)(
+        "button",
+        {
+          noBorder: noBorder,
+          zoomButton: zoomOnHover,
+        },
+        className
+      )}
     ></button>
   );
 };

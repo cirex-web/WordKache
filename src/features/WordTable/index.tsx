@@ -9,7 +9,7 @@ import css from "./index.module.css";
 import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import classNames from "classnames";
-import { handleRowSelect } from "../../utils/search";
+import { handleRowSelect } from "../../utils/rangeSelect";
 
 const Placeholder = ({
   image,
@@ -104,7 +104,17 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
-                  onMouseDown={(ev) => setActiveCardsIds(handleRowSelect(ev, card.id, filteredCards.map((card)=> card.id), activeCardIds, pivotIndexRef))}
+                  onMouseDown={(ev) =>
+                    setActiveCardsIds(
+                      handleRowSelect(
+                        ev,
+                        card.id,
+                        filteredCards.map((card) => card.id),
+                        activeCardIds,
+                        pivotIndexRef
+                      )
+                    )
+                  }
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),
                   })}

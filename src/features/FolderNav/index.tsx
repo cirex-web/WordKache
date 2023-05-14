@@ -6,7 +6,7 @@ import css from "./folderNav.module.css";
 import { AllFiles, FileDirectory } from "./types";
 import { JustCollectedFolder } from "../App";
 import { Button } from "../../components/Button";
-import { handleRowSelect } from "../../utils/search";
+import { handleRowSelect } from "../../utils/rangeSelect";
 import { UseSelectedFolderContext } from "../App";
 import React from "react";
 
@@ -44,9 +44,17 @@ const unpackFolders = (folders: FileDirectory[]): Folder[] => {
   return foldersCopy;
 };
 
-export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }: 
-  { folders: Folder[], addFolder: (fileName:string) => void, deleteFolder: () => void, renameFolder: (fileName:string, fileId: string) => void}) => {
-
+export const FolderNav = ({
+  folders,
+  addFolder,
+  deleteFolder,
+  renameFolder,
+}: {
+  folders: Folder[];
+  addFolder: (fileName: string) => void;
+  deleteFolder: () => void;
+  renameFolder: (fileName: string, fileId: string) => void;
+}) => {
   const fileTree: FileDirectory[] = [
     JustCollectedFolder, //the un-deletable folder >:D
     ...generateTreeStructure(folders),
@@ -54,14 +62,29 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
   const { selectedFolder, setSelectedFolder } = UseSelectedFolderContext();
   const pivotPointRef = React.useRef(0);
 
-  const handleFolderSelect = (ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, folders: FileDirectory[], folder: FileDirectory) => {
+  const handleFolderSelect = (
+    ev: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    folders: FileDirectory[],
+    folder: FileDirectory
+  ) => {
     const unpackedFolders = unpackFolders(folders);
     const folderIds = unpackedFolders.map((folder) => folder.id);
     const activeFolderIds = selectedFolder.map((folder) => folder.id);
-    const selectedIds = handleRowSelect(ev, folder.id, folderIds, activeFolderIds, pivotPointRef);
-    console.log(unpackedFolders, unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id)));
-    return unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id))
-  }
+    const selectedIds = handleRowSelect(
+      ev,
+      folder.id,
+      folderIds,
+      activeFolderIds,
+      pivotPointRef
+    );
+    console.log(
+      unpackedFolders,
+      unpackedFolders.filter((cfolder) => selectedIds.includes(cfolder.id))
+    );
+    return unpackedFolders.filter((cfolder) =>
+      selectedIds.includes(cfolder.id)
+    );
+  };
 
   return (
     <div className={css.container}>
@@ -69,31 +92,42 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder }:
         <Icon name="folder" />
         Folders
         <Button
-            onMouseDown={() => addFolder("New Folder")}
-            noBorder
-            zoomOnHover
-            style={{display: "flex", alignItems: "center",
-              background: "black", height: "10px"}} //For some reason I can't make it the same using class and css file
-          >
-              <Icon name="Add"/>
+          onMouseDown={() => addFolder("New Folder")}
+          noBorder
+          zoomOnHover
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: "black",
+            height: "10px",
+          }} //For some reason I can't make it the same using class and css file
+        >
+          <Icon name="Add" />
         </Button>
-
         <Button
-            onMouseDown={() => deleteFolder()}
-            noBorder
-            zoomOnHover
-            style={{display: "flex", alignItems: "center",
-              background: "black", height: "10px"}}
-          >
-              <Icon name="Remove"/>
+          onMouseDown={() => deleteFolder()}
+          noBorder
+          zoomOnHover
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: "black",
+            height: "10px",
+          }}
+        >
+          <Icon name="Remove" />
         </Button>
-
       </Text>
       {fileTree.map((folders) => (
-        <RecursiveFolder folders={folders} 
-          setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, sFolder: Folder) => setSelectedFolder(handleFolderSelect(ev, fileTree, sFolder))} //folders does not include nestedFolders 
-          changeFolderName={renameFolder} 
-          key={folders.id} />
+        <RecursiveFolder
+          folders={folders}
+          setSelectedFolders={(
+            ev: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+            sFolder: Folder
+          ) => setSelectedFolder(handleFolderSelect(ev, fileTree, sFolder))} //folders does not include nestedFolders
+          changeFolderName={renameFolder}
+          key={folders.id}
+        />
       ))}
     </div>
   );
