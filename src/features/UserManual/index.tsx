@@ -5,7 +5,7 @@ import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
 
 const HotKey = ({ children }: { children: string }) => {
-  return <div className={css.hotKey}>{children}</div>;
+  return <div className={css.hotKeyContainer}>{children}</div>;
 };
 
 export const UserManual = () => {
@@ -47,28 +47,32 @@ export const UserManual = () => {
           beta testing is over!
         </Text>
 
-        <Text
-          type="heading"
-          lineHeight={1.5}
-          style={{ marginTop: "20px" }}
-          bold
-        >
+        <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Hotkeys
         </Text>
-        <Text type="paragraph" lineHeight={2.4}>
-          <HotKey>Shift</HotKey> + <HotKey>Click</HotKey> Range Selection
-        </Text>
-        <Text type="paragraph" lineHeight={2.4}>
-          <HotKey>^|⌘</HotKey> + <HotKey>Click</HotKey> Select Card
-        </Text>
-        <Text type="paragraph" lineHeight={2.4}>
-          <HotKey>^|⌘</HotKey> + <HotKey>A</HotKey> Select All
-        </Text>
-        <Text type="paragraph" lineHeight={2.4}>
-          <HotKey>^|⌘</HotKey> + <HotKey>C</HotKey> Copy Selected Cards
-        </Text>
-        <Text type="paragraph" lineHeight={2.4}>
-          <HotKey>esc</HotKey> Cancel Selection
+        <Text type="paragraph">
+          <div className={css.shortcutTable}>
+            <div>
+              <HotKey>Shift</HotKey> + <HotKey>Click</HotKey>
+            </div>
+            <div>Range Selection</div>
+            <div>
+              <HotKey>^|⌘</HotKey> + <HotKey>Click</HotKey>
+            </div>
+            <div>Select Card</div>
+            <div>
+              <HotKey>^|⌘</HotKey> + <HotKey>A</HotKey>
+            </div>
+            <div>Select All</div>
+            <div>
+              <HotKey>^|⌘</HotKey> + <HotKey>C</HotKey>
+            </div>
+            <div>Copy Selected Cards</div>
+            <div>
+              <HotKey>esc</HotKey>
+            </div>
+            <div>Cancel Selection</div>
+          </div>
         </Text>
       </div>
     </Text>

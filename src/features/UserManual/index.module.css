@@ -17,10 +17,16 @@
   border-radius: 10px;
   z-index: 42;
 }
-.hotKey {
+.hotKeyContainer {
   border: 1px solid var(--dark-1);
   border-radius: 5px;
   width: fit-content;
   padding: 2px 5px;
-  display: inline;
+  display: inline-block;
+}
+
+.shortcutTable {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  row-gap: 5px;
 }
