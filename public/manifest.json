@@ -1,7 +1,7 @@
 {
   "name": "WordKache - Save your translations",
-  "description": "Turn your online translations into studyable flashcards!",
-  "version": "0.1",
+  "description": "Save and export your online translations!",
+  "version": "0.3",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
@@ -14,7 +14,8 @@
   },
   "permissions": [
     "storage",
-    "webRequest"
+    "webRequest",
+    "alarms"
   ],
   "host_permissions": [
     "*://translate.google.com/*"

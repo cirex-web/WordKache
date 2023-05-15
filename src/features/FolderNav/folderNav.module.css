@@ -1,7 +1,6 @@
 .container {
   position: relative;
   overflow: scroll;
-  padding-left: 10px;
   flex-grow: 1;
 }
 
@@ -11,4 +10,5 @@
   gap: 5px;
   border-bottom: 2px solid var(--light-1);
   margin-bottom: 5px;
+  margin-left: 10px;
 }

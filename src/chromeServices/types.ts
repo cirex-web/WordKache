@@ -38,7 +38,8 @@ export interface ITranslationSnapshot {
     inputLang: string;
     outputText: string;
     outputLang: string;
-    newInputText: string; //what the input will be right after the snapshot
+    /** What the input will be right after the snapshot */
+    newInputText: string;
     /** If output has been validated on the frontend */
     validated?: boolean;
     inputTime: number;
