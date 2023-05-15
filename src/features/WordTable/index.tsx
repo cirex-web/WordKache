@@ -106,7 +106,18 @@ const WordTable = ({
     }
   };
 
-  //what do you do about filtering??
+  const handleKeyboardShortcuts = (
+    event: React.KeyboardEvent<HTMLTableRowElement>
+  ) => {
+    if (event.key === "Escape") {
+      setActiveCardsIds([]);
+      event.preventDefault();
+    }
+    if (event.key === "a" && (event.metaKey || event.ctrlKey)) {
+      setActiveCardsIds(filteredCards.map((card) => card.id));
+      event.preventDefault();
+    }
+  };
 
   // Deselect any selected cards that go off into the abyss when a filter query is typed
   useEffect(() => {
@@ -139,7 +150,7 @@ const WordTable = ({
         cards={cards}
       />
       {filteredCards.length ? (
-        <div className={css.tableContainer}>
+        <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>
           <table>
             <thead>
               <tr>
@@ -155,6 +166,7 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
+                  tabIndex={0}
                   onMouseDown={(ev) => handleRowSelect(ev, card.id)}
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),

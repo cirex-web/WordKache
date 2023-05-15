@@ -1,6 +1,7 @@
 .container {
   position: relative;
   overflow: scroll;
+  flex-grow: 1;
 }
 
 .title {
