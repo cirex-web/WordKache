@@ -45,3 +45,32 @@
   flex-grow: 1;
   width: 0;
 }
+
+.container {
+  position: relative;
+}
+
+.dropDown {
+  position: absolute;
+  left: 10px;
+  bottom: 100%;
+  background-color: var(--light-1);
+  color: var(--dark-1);
+  transform-origin: top right;
+  padding: 15px;
+  display: block;
+  width: 250px;
+  overflow-wrap: normal;
+  border-radius: 10px;
+  z-index: 42;
+  transition: 0.3s all;
+}
+.open {
+  transform: translate(0);
+  opacity: 1;
+}
+.closed {
+  transform: translate(0, -10px);
+  opacity: 0;
+  visibility: hidden;
+}

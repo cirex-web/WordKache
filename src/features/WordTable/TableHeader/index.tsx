@@ -48,8 +48,7 @@ export const TableHeader = ({
             >
               
               <select onChange = {(ev) => setFilter(ev.target.value)}>
-                <option value="rec">Recent</option>
-                <option value="lexo">Alphabetical</option>
+                <option key = "null" value = "null" >None</option>
                 {uniqueLans.map((lan) => (
                   <option key={lan} value={lan}>{lan}</option>
                 ))}
