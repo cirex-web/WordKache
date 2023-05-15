@@ -24,7 +24,7 @@ export const UserManual = () => {
   }, [boxOpen]);
 
   return (
-    <Text type="xLargeHeading" className={css.container}>
+    <Text type="heading" className={css.container}>
       <Button
         noBorder
         zoomOnHover
@@ -33,7 +33,7 @@ export const UserManual = () => {
           ev.stopPropagation();
         }}
       >
-        <Icon name="Help" />
+        <Icon name="info" />
       </Button>
       <div
         className={classNames(css.textBox, boxOpen ? css.open : css.closed)}
