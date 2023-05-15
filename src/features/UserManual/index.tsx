@@ -3,6 +3,7 @@ import { Icon } from "../../components/Icon";
 import css from "./index.module.css";
 import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
+import classNames from "classnames";
 
 const HotKey = ({ children }: { children: string }) => {
   return <div className={css.hotKeyContainer}>{children}</div>;
@@ -35,8 +36,7 @@ export const UserManual = () => {
         <Icon name="Help" />
       </Button>
       <div
-        className={css.textBox}
-        style={{ transform: boxOpen ? "scale(1)" : "scale(0)" }}
+        className={classNames(css.textBox, boxOpen ? css.open : css.closed)}
         ref={popupRef}
       >
         <Text type="heading" lineHeight={1.5} bold>

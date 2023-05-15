@@ -4,11 +4,10 @@
 
 .textBox {
   position: absolute;
-  left: 40px;
+  left: 10px;
   bottom: 100%;
   background-color: var(--light-1);
   color: var(--dark-1);
-  transition: 0.5s all;
   transform-origin: bottom left;
   padding: 15px;
   display: block;
@@ -16,7 +15,18 @@
   overflow-wrap: normal;
   border-radius: 10px;
   z-index: 42;
+  transition: 0.3s all;
 }
+.open {
+  transform: translate(0);
+  opacity: 1;
+}
+.closed {
+  transform: translate(0, -10px);
+  opacity: 0;
+  visibility: hidden;
+}
+
 .hotKeyContainer {
   border: 1px solid var(--dark-1);
   border-radius: 5px;

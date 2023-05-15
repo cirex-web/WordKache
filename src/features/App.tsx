@@ -70,7 +70,7 @@ function App() {
     <FolderContext.Provider value={{ activeFolder, setActiveFolder }}>
       <div className={css.menu}>
         <img src={logo} className={css.logo} alt="logo" />
-        {folders && <FolderNav folders={folders} />}
+        <FolderNav folders={folders || []} />
         <UserManual />
       </div>
       {cardsUnderCurrentFolder && (
