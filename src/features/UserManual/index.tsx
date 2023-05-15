@@ -32,6 +32,7 @@ export const UserManual = () => {
           setBoxOpen(!boxOpen);
           ev.stopPropagation();
         }}
+        style={{ padding: "10px" }}
       >
         <Icon name="info" />
       </Button>
