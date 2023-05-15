@@ -11,12 +11,14 @@ import { useFocus } from "../../../utils/useFocus";
 export const TableHeader = ({
   folderName,
   setSearchInput,
-  setFilter,
+  addFilter,
+  deleteFilter,
   cards,
 }: {
   folderName: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
-  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  addFilter: Function;
+  deleteFilter: Function; //This is giving me an error that it should be unique, someone please fix this
   cards: Card[];
 }) => {
   const [inputOpen, setInputOpen] = useState(false);
@@ -43,17 +45,17 @@ export const TableHeader = ({
               />
             </div>
             <div
-              className={css.inputContainer}
+              className={css.dropDown}
               style={{ flexGrow: dropOpen ? 1 : 0 }}
             >
-              
-              <select onChange = {(ev) => setFilter(ev.target.value)}>
-                <option key = "null" value = "null" >None</option>
-                {uniqueLans.map((lan) => (
-                  <option key={lan} value={lan}>{lan}</option>
-                ))}
-              </select>
-            
+              <input type = "checkbox" value = "null" onChange = {(event) => {event.target.checked ? addFilter(event.target.value): deleteFilter(event.target.value)}} /> 
+              <label>None </label>
+              {uniqueLans.map((lan) => (
+                <label>
+                <input type = "checkbox" value = {lan} onChange = {(event) => {event.target.checked ? addFilter(event.target.value): deleteFilter(event.target.value)}} /> 
+                None
+                </label>
+              ))}
             </div>
             <Button
               noBorder

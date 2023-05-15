@@ -44,7 +44,7 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
-  const [filter, setFilter] = useState("null");
+  const [filter, setFilter] = useState<string[]>([]);
   const [sortFront, setSortFront] = useState("recent");
   const [sortBack, setSortBack] = useState("recent");
   const [sort, setSort] = useState("null");
@@ -88,8 +88,8 @@ const WordTable = ({
   else
     backSort();
   
-  if(filter !== "null")
-    filteredCards = filteredCards.filter((card) => card.back.lang === filter);
+  if(filter.length)
+    filteredCards = filteredCards.filter((card) => filter.includes(card.back.lang));
 
 
   const handleRowSelect = (
@@ -135,7 +135,8 @@ const WordTable = ({
       <TableHeader
         folderName={activeFolder.name}
         setSearchInput={setInput}
-        setFilter={setFilter}
+        addFilter={(fil:string) => setFilter([...filter, fil])}
+        deleteFilter={(fil:string) => setFilter(filter.filter((f) => f !== fil))}
         cards={filteredCards}
       />
       {filteredCards.length ? (
