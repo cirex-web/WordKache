@@ -60,12 +60,11 @@
   transform-origin: top right;
   padding: 15px;
   display:block;
-  width: 250px;
+  width: 150px;
   overflow-wrap: normal;
   border-radius: 10px;
   z-index: 42;
   transition: 0.3s all;
-  line-height: 2rem;
 }
 
 .filterBody tr:hover{
