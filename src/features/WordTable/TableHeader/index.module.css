@@ -68,6 +68,9 @@
   line-height: 2rem;
 }
 
+.filterBody tr:hover{
+  background-color: transparent !important; /* bad convention lol*/
+}
 
 .open {
   transform: translate(0);

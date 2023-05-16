@@ -83,7 +83,7 @@ export const TableHeader = ({
               <div
                 className={classNames(css.dropDown, dropOpen? css.open: css.closed)}
               >
-                <table><tbody>
+                <table className = {css.filterBody}><tbody>
                   {languageTable()}  
                 </tbody></table>
               </div>
