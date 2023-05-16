@@ -54,8 +54,13 @@ const unpackFolders = (dirs: FileDirectory[], ignoreVisibility: boolean = false,
 };
 
 
-export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, changeOrder }: 
-  { folders: Folder[], addFolder: (fileName:string) => void, deleteFolder: () => void, renameFolder: (fileName:string, fileId: string) => void, changeOrder: (fileOrder: Folder[]) => void}) => {
+export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, changeOrder}: 
+  { 
+    folders: Folder[], 
+    addFolder: (fileName:string) => void, 
+    deleteFolder: () => void, 
+    renameFolder: (fileName:string, fileId: string) => void, 
+    changeOrder: (fileOrder: Folder[]) => void}) => {
 
   const fileTree: FileDirectory[] = [
     JustCollectedFolder, //the un-deletable folder >:D
@@ -133,7 +138,8 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
         <RecursiveFolder folders={folders} 
           setSelectedFolders={(ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, sFolder: Folder) => setSelectedFolder(handleFolderSelect(ev, fileTree, sFolder))} //folders does not include nestedFolders 
           changeFolderName={renameFolder} 
-          moveFolder={(src: string, dest: string) => changeOrder(moveFolder(src, dest))}
+          moveFolder={(src: string, dest: string) => changeOrder(moveFolder(src, dest))
+          }
           key={folders.id} />
       ))}
     </div>

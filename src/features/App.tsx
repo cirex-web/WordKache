@@ -3,6 +3,7 @@ import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { Card, Folder } from "../storageTypes";
 import { FolderNav } from "./FolderNav";
+import { ForwardingPage } from "./ForwardPage";
 import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
@@ -17,6 +18,14 @@ export const FolderContext = createContext<{
   setActiveFolder: undefined,
   selectedFolder: undefined,
   setSelectedFolder: undefined,
+});
+
+export const ForwardContext = createContext<{
+  forwarding: boolean;
+  setForwarding: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+  forwarding: false,
+  setForwarding: () => {}, //avoid undefined error
 });
 
 export const UseActiveFolderContext = () => {
@@ -47,9 +56,9 @@ function App() {
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);
-  const [selectedFolder, setSelectedFolder] = useState<Folder[]>([
-    JustCollectedFolder,
-  ]);
+
+  const [selectedFolder, setSelectedFolder] = useState<Folder[]>([JustCollectedFolder]);
+  const [forwarding, setForwarding] = useState<boolean>(false);
   const saveId = "defaultFolder";
 
   useEffect(() => {
@@ -165,38 +174,39 @@ function App() {
   );
 
   return (
-    <FolderContext.Provider
-      value={{
-        activeFolder,
-        setActiveFolder,
-        selectedFolder,
-        setSelectedFolder,
-      }}
-    >
+
+    <FolderContext.Provider value={{ activeFolder, setActiveFolder, selectedFolder, setSelectedFolder }}>
+      <ForwardContext.Provider value={{ forwarding, setForwarding }}>
       <div
         style={{
           borderRight: "3px solid var(--light-1)",
         }}
       >
         <img src={logo} className={css.logo} alt="logo" />
-        {folders && (
-          <FolderNav
-            folders={folders}
-            addFolder={addFolder}
-            deleteFolder={deleteFolder}
-            renameFolder={renameFolder}
+
+        {folders && 
+          <FolderNav 
+            folders={folders} 
+            addFolder={addFolder} 
+            deleteFolder = {deleteFolder} 
+            renameFolder={renameFolder} 
             changeOrder={reOrderFolders}
           />
-        )}
+        }
       </div>
-      {cardsUnderCurrentFolder && (
+      {forwarding?
+        <ForwardingPage folderName={activeFolder.name}/>
+      : 
+      cardsUnderCurrentFolder && (
         <WordTable
           cards={cardsUnderCurrentFolder}
           moveCards={moveCards}
           key={activeFolder.id}
           deleteCards={deleteCards}
         />
-      )}
+      )
+      }
+      </ForwardContext.Provider>
     </FolderContext.Provider>
   );
 }

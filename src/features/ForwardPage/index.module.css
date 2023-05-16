@@ -1,0 +1,23 @@
+.header {
+    text-align: left;
+    background-color: var(--dark-2);
+    padding: 10px 20px;
+    border-bottom: 2px solid var(--light-1);
+    position: relative;
+  }
+
+  .container{ /*copied from wordPanel*/
+    position: relative; 
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .options{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 20px;
+  }
