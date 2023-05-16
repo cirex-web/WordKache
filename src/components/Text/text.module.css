@@ -1,9 +1,12 @@
-.paragraph{
-    font-size: 1.4rem;
+.paragraph {
+  font-size: 1.4rem;
 }
-.heading{
-    font-size: 1.8rem;
+.heading {
+  font-size: 1.8rem;
 }
-.subheading{
-    font-size: 1.6rem;
+.subheading {
+  font-size: 1.6rem;
+}
+.xLargeHeading {
+  font-size: 3rem;
 }
