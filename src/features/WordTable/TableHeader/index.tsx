@@ -41,7 +41,7 @@ export const TableHeader = ({
         { i < frontLans.length ?
         <td>
           <label>
-          <input type = "checkbox" value = {frontLans[i]} onChange = {(event) => {event.target.checked ? handleFilters(event.target.value, "frontAdd"): handleFilters(event.target.value, "frontDelete")}} /> 
+          <input type = "checkbox" value = {frontLans[i]} onChange = {(event) => {event.target.checked ? handleFilters(event.target.value, "frontAdd"): handleFilters(event.target.value, "frontDelete")}}/> 
           <Text type = "paragraph">{frontLans[i]}</Text>
           </label>
         </td>
@@ -50,7 +50,7 @@ export const TableHeader = ({
         { i < backLans.length ? 
         <td>
           <label>
-          <input type = "checkbox" value = {backLans[i]} onChange = {(event) => {event.target.checked ? handleFilters(event.target.value, "backAdd"): handleFilters(event.target.value, "backDelete")}} /> 
+          <input type = "checkbox" value = {backLans[i]} onChange = {(event) => {event.target.checked ? handleFilters(event.target.value, "backAdd"): handleFilters(event.target.value, "backDelete")}}/> 
           <Text type = "paragraph">{backLans[i]}</Text>
           </label>
         </td>
