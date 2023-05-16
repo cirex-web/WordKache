@@ -29,6 +29,7 @@ const Placeholder = ({
   );
 };
 
+
 const WordTable = ({
   cards,
   moveCards,
@@ -44,7 +45,8 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
-  const [filter, setFilter] = useState<string[]>([]);
+  const [filterFront, setFrontFilter] = useState<string[]>([]);
+  const [filterBack, setBackFilter] = useState<string[]>([]);
   const [sortFront, setSortFront] = useState("recent");
   const [sortBack, setSortBack] = useState("recent");
   const [sort, setSort] = useState("null");
@@ -61,6 +63,26 @@ const WordTable = ({
   const activeCards = filteredCards.filter((card) =>
     activeCardIds.includes(card.id)
   );
+
+  const handleFilters = (newFilter: string, type: string) => {
+    switch(type){
+      case "frontAdd":
+        setFrontFilter([...filterFront, newFilter]);
+        break;
+      case "frontDelete":
+        setFrontFilter(filterFront.filter((f) => f !== newFilter));
+        break;
+      case "backAdd":
+        setBackFilter([...filterBack, newFilter]);
+        break;
+      case "backDelete":
+        setBackFilter(filterBack.filter((f) => f !== newFilter));
+        break;
+      default:
+        console.log("Error: Invalid filter type");
+        break;
+    }
+  }
 
 
   const frontSort = (main: boolean = true) => {
@@ -88,8 +110,7 @@ const WordTable = ({
   else
     backSort();
   
-  if(filter.length)
-    filteredCards = filteredCards.filter((card) => filter.includes(card.back.lang));
+  filteredCards = filteredCards.filter((card) => (!filterFront.length || filterFront.includes(card.front.lang)) && (!filterBack.length || filterBack.includes(card.back.lang)));
 
 
   const handleRowSelect = (
@@ -135,9 +156,9 @@ const WordTable = ({
       <TableHeader
         folderName={activeFolder.name}
         setSearchInput={setInput}
-        addFilter={(fil:string) => setFilter([...filter, fil])}
-        deleteFilter={(fil:string) => setFilter(filter.filter((f) => f !== fil))}
-        cards={filteredCards}
+        handleFilters={handleFilters}
+        filteredCards={filteredCards}
+        rawCards={cards}
       />
       {filteredCards.length ? (
         <div className={css.tableContainer}>

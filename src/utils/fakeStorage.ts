@@ -33,7 +33,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
         },
         {
             "back": {
-                "lang": "es",
+                "lang": "fr",
                 "text": "ok algunas palabras más"
             },
             "front": {
@@ -47,7 +47,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
         },
         {
             "back": {
-                "lang": "es",
+                "lang": "zh",
                 "text": "Hola Jonathan"
             },
             "front": {

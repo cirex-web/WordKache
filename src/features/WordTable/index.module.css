@@ -31,6 +31,10 @@
     gap: 20px;
   }
 
+  tr:hover{
+    background-color: transparent !important; /* bad convention lol*/
+  }
+
 
   .headerContainer{
     overflow: hidden; /* Hide any overflowing content */
