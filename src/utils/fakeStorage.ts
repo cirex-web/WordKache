@@ -47,7 +47,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880024661,
-            hidden: false
+            hidden: true
 
         },
         {
@@ -123,6 +123,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
             "location": "root",
             "source": "DeepL",
             "timeCreated": 1682880056616,
+            hidden: true
 
         },
         {
