@@ -12,11 +12,13 @@ export const TableHeader = ({
   setSearchInput,
   activeCards,
   cards,
+  filteredCards,
 }: {
   folderName: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   cards: Card[];
   activeCards: Card[];
+  filteredCards: Card[]; //NOTE: awful lot of prop drilling (maybe use a context?)
 }) => {
   const [inputOpen, setInputOpen] = useState(false);
   const [inputRef] = useFocus();
@@ -34,7 +36,6 @@ export const TableHeader = ({
     <div className={css.header}>
       <Text type="heading" bold noWrap className={css.heading}>
         {folderName}
-
         <span className={css.buttonsTray}>
           <div className={css.buttons}>
             <div
@@ -48,25 +49,24 @@ export const TableHeader = ({
               />
             </div>
             <Button
-              noBorder
               onMouseDown={() => {
                 // if (!inputOpen) focusInput(); //focus input on open
                 setInputOpen(!inputOpen);
               }}
               zoomOnHover
               disabled={!cards.length}
+              className={css.icon}
             >
               <Icon name="search" />
             </Button>
 
             <Button
               onMouseDown={(event) => event.shiftKey || event.metaKey 
-                ? copyFlashcards(folderName, cards.reverse()) 
-                : saveFlashcards(folderName, cards.reverse())}
-              noBorder
+                ? copyFlashcards(folderName, filteredCards) 
+                : saveFlashcards(folderName, cards)}
               zoomOnHover
-              style={{ marginLeft: "-5px" }}
-              disabled={!cards.length}
+              disabled={!filteredCards.length}
+              className={css.icon}
             >
               <Icon name="download" />
             </Button>

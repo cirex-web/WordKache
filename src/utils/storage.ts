@@ -83,9 +83,13 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
 }
 export const ChromeStorage = {
     "get": (key: string) => {
-        return new Promise(async (re) => {
-            const obj = await chrome.storage.local.get(key);
-            re(obj[key]);
+        return new Promise((re) => {
+            chrome.storage.local.get(key).then(res => re(res[key]));
+        });
+    },
+    "getAll": () => {
+        return new Promise<{[k:string]:any}>(re => {
+            chrome.storage.local.get(null).then((obj)=>re(obj));
         });
     },
     "set": (items: {

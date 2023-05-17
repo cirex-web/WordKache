@@ -38,3 +38,6 @@
   flex-grow: 1;
   width: 0;
 }
+.icon {
+  padding: 5px 7px;
+}
