@@ -33,7 +33,7 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
         style={{ padding: "10px", width: "100%" }}
       >
         <Icon name="help" />{" "}
-        {numCardsHidden > 0 ? `${numCardsHidden} Cards Hidden` : "Info"}
+        {numCardsHidden > 0 ? `${numCardsHidden} Card${numCardsHidden !== 1? 's' : ''} Hidden` : "Info"}
       </Button>
       <div
         className={classNames(css.textBox, boxOpen ? css.open : css.closed)}
