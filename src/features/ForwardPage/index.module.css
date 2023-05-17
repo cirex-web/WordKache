@@ -13,11 +13,45 @@
     flex-direction: column;
   }
 
-  .options{
+  .content{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: flex-start;
     flex-direction: column;
+    padding: 20px;
     flex-grow: 1;
     gap: 20px;
+  }
+
+  .smallGrid{
+    display: grid;
+    grid-template-columns: 0.05fr 0.3fr 0.65fr;
+    margin-left: 10px;
+    row-gap: 7px;
+  }
+
+  .bigGrid{
+    display: grid;
+    grid-template-columns: 0.1fr 0.3fr 0.6fr;
+    margin-left: 10px;
+    margin-top: 7px;
+    row-gap: 7px;
+  }
+
+  .filterInput{
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid var(--light-1);
+    margin-left: 10px;
+    color: var(--light-1);
+  }
+
+  .required{
+    color: red;
+  }
+  
+  .submit{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
   }

@@ -97,10 +97,8 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
       else
         folderCopy.push(folder);
     }
-    console.log(folderCopy);
     return folderCopy;
   }
-  console.log(fileTree);
 
   return (
     <div className={css.container}>

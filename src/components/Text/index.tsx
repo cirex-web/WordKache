@@ -8,6 +8,7 @@ interface ITextProps extends React.HTMLProps<HTMLSpanElement> {
   noSelect?: boolean;
   /** Light gray basically */
   dull?: boolean;
+  lineHeight?: number; //Copied from master
 }
 
 export const Text = ({
@@ -19,6 +20,7 @@ export const Text = ({
   dull,
   style,
   className,
+  lineHeight,
   noSelect,
   ...rest
 }: ITextProps) => {
@@ -36,6 +38,7 @@ export const Text = ({
         fontWeight: bold ? "bold" : "",
         color: dark ? "var(--dark-1)" : dull ? "var(--light-2)" : "",
         userSelect: noSelect ? "none" : "auto",
+        lineHeight, 
         ...style,
       }}
       {...rest}

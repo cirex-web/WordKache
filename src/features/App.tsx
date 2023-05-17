@@ -195,7 +195,7 @@ function App() {
         }
       </div>
       {forwarding?
-        <ForwardingPage folderName={activeFolder.name}/>
+        <ForwardingPage curFolder={activeFolder.id} folders={folders === undefined ? []: folders}/>
       : 
       cardsUnderCurrentFolder && (
         <WordTable
