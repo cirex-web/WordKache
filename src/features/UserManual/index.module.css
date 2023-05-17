@@ -1,5 +1,6 @@
 .container {
   position: relative;
+  border-top: 2px solid var(--light-1);
 }
 
 .textBox {

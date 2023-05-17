@@ -26,15 +26,14 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
   return (
     <Text type="subheading" className={css.container}>
       <Button
-        noBorder
         onClick={(ev) => {
           setBoxOpen(!boxOpen);
           ev.stopPropagation();
         }}
         style={{ padding: "10px", width: "100%" }}
       >
-        <Icon name="info" />
-        {numCardsHidden > 0 && ` ${numCardsHidden} Cards Hidden`}
+        <Icon name="help" />{" "}
+        {numCardsHidden > 0 ? `${numCardsHidden} Cards Hidden` : "Info"}
       </Button>
       <div
         className={classNames(css.textBox, boxOpen ? css.open : css.closed)}
@@ -69,8 +68,8 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
         </Text>
         <Text type="paragraph">
           We currently only support Google Translate and DeepL. Make sure that
-          if you're using Google Translate, you're using the
-          translate.google.com site and not the embedded Google Search one.
+          if you're using Google Translate, you're on
+          translate.google.com and not the embedded Google Search one. If it's still not working, leave a comment in our feedback form.
         </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           I have feedback/questions!

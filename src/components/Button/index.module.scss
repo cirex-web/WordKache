@@ -1,16 +1,11 @@
 .button {
   background-color: transparent;
   outline: none;
-  border: 1px solid var(--light-1);
   color: var(--light-1);
   font-size: inherit;
   cursor: pointer;
   transition: 0.15s all;
-  background-color: black;
-
-  &.noBorder {
-    border: none;
-  }
+  border: 0;
   &:hover {
     background-color: var(--dark-2);
     &:active {

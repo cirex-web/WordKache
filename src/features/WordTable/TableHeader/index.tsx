@@ -38,7 +38,6 @@ export const TableHeader = ({
               />
             </div>
             <Button
-              noBorder
               onMouseDown={() => {
                 // if (!inputOpen) focusInput(); //focus input on open
                 setInputOpen(!inputOpen);
@@ -52,9 +51,7 @@ export const TableHeader = ({
 
             <Button
               onMouseDown={() => saveFlashcards(folderName, cards)}
-              noBorder
               zoomOnHover
-              style={{ marginLeft: "-5px" }}
               disabled={!filteredCards.length}
               className={css.icon}
             >
