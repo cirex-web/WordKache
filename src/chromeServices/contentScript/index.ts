@@ -21,7 +21,7 @@ const takeSnapshot = (event: Event) => {
     }
     const target = event.target;
     const newInputText = (target instanceof HTMLTextAreaElement) ? target.value : (target instanceof HTMLElement ? target.textContent : null);
-
+    console.log(existingMatchedSite, newInputText);
 
     processCurrentSnapshot(existingMatchedSite.getTranslationSnapshot(newInputText)); //snapshot right before UI components (like the textbox) change
 }
