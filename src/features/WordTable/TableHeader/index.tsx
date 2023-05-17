@@ -3,7 +3,7 @@ import { Icon } from "../../../components/Icon";
 import { Input } from "../../../components/Input";
 import { Text } from "../../../components/Text";
 import css from "./index.module.css";
-import { saveFlashcards } from "../../../utils/file";
+import { saveFlashcards, copyFlashcards } from "../../../utils/file";
 import { Card } from "../../../storageTypes";
 import { Button } from "../../../components/Button";
 import { useFocus } from "../../../utils/useFocus";
@@ -50,7 +50,9 @@ export const TableHeader = ({
             </Button>
 
             <Button
-              onMouseDown={() => saveFlashcards(folderName, cards)}
+              onMouseDown={(event) => event.shiftKey || event.metaKey
+                ? copyFlashcards(filteredCards)
+                : saveFlashcards(folderName, filteredCards)}
               zoomOnHover
               disabled={!filteredCards.length}
               className={css.icon}

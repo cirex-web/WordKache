@@ -7,6 +7,10 @@ export const downloadFile = (fileName: string, data: string) => {
     a.click();
 }
 export const saveFlashcards = (folderName: string, cards: Card[]) => {
-    const textString = cards.map(card => card.front.text + "\t" + card.back.text).join("\n");
-    downloadFile(folderName + ".tsv", "Input\tTranslation\n" + textString);
+    downloadFile(folderName + ".tsv", makeTextString(cards));
 }
+export const copyFlashcards = (cards: Card[]) => {
+    navigator.clipboard.writeText(makeTextString(cards));
+}
+
+const makeTextString = ((cards: Card[]) => cards.map(card => card.front.text + "\t" + card.back.text).join("\n"));
