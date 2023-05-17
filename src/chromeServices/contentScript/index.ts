@@ -14,20 +14,29 @@ const getMatchingTranslatorConfig = (): Site | null => {
 }
 
 
-const takeSnapshot = (event: Event) => {
+const takeSnapshot = (event?: Event) => {
 
     if (existingMatchedSite === null) {
         return;
     }
-    const target = event.target;
+    const target = event?.target;
     const newInputText = (target instanceof HTMLTextAreaElement) ? target.value : (target instanceof HTMLElement ? target.textContent : null);
     console.log(existingMatchedSite, newInputText);
 
     processCurrentSnapshot(existingMatchedSite.getTranslationSnapshot(newInputText)); //snapshot right before UI components (like the textbox) change
 }
 
-window.addEventListener("blur", takeSnapshot);
+window.addEventListener("blur", () => takeSnapshot());
+window.addEventListener("click", (ev) => {
+    if (!Object.keys(ev.detail).includes("wordkache")) {
 
+        ev.stopImmediatePropagation();
+        const target = ev.target;
+        takeSnapshot();
+        target?.dispatchEvent(new CustomEvent('click', { detail: { "wordkache": true } }));
+    }
+}, true);
+//I got my head out the sunroof
 onLocationChange(() => {
 
     const matchedSite = getMatchingTranslatorConfig();
