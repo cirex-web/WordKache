@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
+import { UserManual } from "./UserManual";
 import { Card, Folder } from "../storageTypes";
 import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
@@ -56,10 +57,11 @@ function App() {
   };
   const deleteCards = (cardIds: string[]) => {
     if (!cards) return;
-    ChromeStorage.setPair(
-      "cards",
-      cards.filter((card) => !cardIds.includes(card.id))
-    );
+    const cardsClone = [...cards];
+    for (const card of cards) {
+      if (cardIds.includes(card.id)) card.deleted = true; //fake deletion
+    }
+    ChromeStorage.setPair("cards", cardsClone);
   };
 
   const flipCards = (cardIds: string[]) => {
@@ -73,18 +75,21 @@ function App() {
   }
 
   const cardsUnderCurrentFolder = cards?.filter(
-    (card) => card.location === activeFolder.id
+    (card) => card.location === activeFolder.id && !card.hidden && !card.deleted //top-level filtering
   );
 
   return (
     <FolderContext.Provider value={{ activeFolder, setActiveFolder }}>
-      <div
-        style={{
-          borderRight: "3px solid var(--light-1)",
-        }}
-      >
+      <div className={css.menu}>
         <img src={logo} className={css.logo} alt="logo" />
-        {folders && <FolderNav folders={folders} />}
+        <FolderNav folders={folders || []} />
+        <UserManual
+          numCardsHidden={
+            cards
+              ? cards.reduce<number>((sum, card) => sum + +!!card.hidden, 0)
+              : 0
+          }
+        />
       </div>
       {cardsUnderCurrentFolder && (
         <WordTable

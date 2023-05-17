@@ -10,7 +10,7 @@ import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import { Icon } from "../../components/Icon";
 import classNames from "classnames";
-import { setPriority } from "os";
+import { copyFlashcards } from "../../utils/file";
 
 const Placeholder = ({
   image,
@@ -35,6 +35,7 @@ const WordTable = ({
   deleteCards,
   flipCards,
 }: {
+  /** Most recent cards are at the end, so this is reversed when displaying the table */
   cards: Card[];
   moveCards: (cardIds: string[], folderId?: string) => void;
   deleteCards: (cardIds: string[]) => void;
@@ -44,11 +45,13 @@ const WordTable = ({
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
+
   const [filterFront, setFrontFilter] = useState<string[]>([]);
   const [filterBack, setBackFilter] = useState<string[]>([]);
   const [sortFront, setSortFront] = useState("recent");
   const [sortBack, setSortBack] = useState("recent");
   const [sort, setSort] = useState("null");
+  const pivotIndexRef = React.useRef(0);
 
   //Search
   const fuse = new Fuse(cards, {
@@ -58,6 +61,7 @@ const WordTable = ({
   let filteredCards = !searchInput.length
     ? [...cards].reverse() //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
+
   const activeCards = filteredCards.filter((card) =>
     activeCardIds.includes(card.id)
   );
@@ -117,19 +121,71 @@ const WordTable = ({
       (!filterBack.length || filterBack.includes(card.back.lang))
   );
 
+  const getRangeEndpoint = (startIndex: number, direction: number) => {
+    if (direction === 0) return startIndex;
+    const cardIds = filteredCards.map((card) => card.id);
+    let returnI = -1;
+    for (let i = startIndex; i < cardIds.length && i >= 0; i += direction) {
+      if (activeCardIds.includes(cardIds[i])) {
+        returnI = i;
+      } else {
+        break;
+      }
+    }
+    return returnI;
+  };
+  const inRange = (i: number, start: number, end: number) =>
+    Math.sign(i - start) * Math.sign(i - end) <= 0;
   const handleRowSelect = (
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     cardId: string
   ) => {
-    const activeCardIdsCopy =
-      event.shiftKey || event.metaKey ? [...activeCardIds] : [];
-    if (activeCardIdsCopy.includes(cardId)) {
+    if (event.shiftKey) {
+      const cardIds = filteredCards.map((card) => card.id);
+      const pivotIndex = pivotIndexRef.current;
+      const targetIndex = cardIds.indexOf(cardId);
+
+      const leftIndex = getRangeEndpoint(pivotIndex, 1);
+      const rightIndex = getRangeEndpoint(pivotIndex, -1); //not really left or right, but bear with me (non-inclusive filled segment)
+
       setActiveCardsIds(
-        activeCardIdsCopy.filter((activeCardId) => activeCardId !== cardId)
+        cardIds.filter(
+          (cardId, i) =>
+            (activeCardIds.includes(cardId) &&
+              !inRange(i, rightIndex, leftIndex)) ||
+            inRange(i, pivotIndex, targetIndex)
+        )
       );
     } else {
-      setActiveCardsIds([...activeCardIdsCopy, cardId]);
+      const activeCardIdsCopy =
+        event.ctrlKey || event.metaKey ? [...activeCardIds] : [];
+
+      if (activeCardIdsCopy.includes(cardId)) {
+        setActiveCardsIds(
+          activeCardIdsCopy.filter((activeCardId) => activeCardId !== cardId)
+        );
+      } else {
+        setActiveCardsIds([...activeCardIdsCopy, cardId]);
+      }
+      pivotIndexRef.current = filteredCards.findIndex(
+        (card) => card.id === cardId
+      );
     }
+  };
+
+  const handleKeyboardShortcuts = (
+    event: React.KeyboardEvent<HTMLTableRowElement>
+  ) => {
+    if (event.key === "Escape") {
+      setActiveCardsIds([]);
+      event.preventDefault();
+    }
+    if (event.key === "a" && (event.metaKey || event.ctrlKey)) {
+      setActiveCardsIds(filteredCards.map((card) => card.id));
+      event.preventDefault();
+    }
+    if (event.key === "c" && (event.metaKey || event.ctrlKey)) copyFlashcards(activeCards);
+
   };
 
   // Deselect any selected cards that go off into the abyss when a filter query is typed
@@ -162,10 +218,10 @@ const WordTable = ({
         setSearchInput={setInput}
         handleFilters={handleFilters}
         filteredCards={filteredCards}
-        rawCards={cards}
+        cards={cards}
       />
       {filteredCards.length ? (
-        <div className={css.tableContainer}>
+        <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>
           <table>
             <thead>
               <tr>
@@ -241,6 +297,7 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
+                  tabIndex={0}
                   onMouseDown={(ev) => handleRowSelect(ev, card.id)}
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),

@@ -61,7 +61,7 @@ export const siteConfigs: ISiteConfig[] = [
             },
             text: {
                 type: "DOM",
-                js: (body) => body.querySelector("#target-dummydiv")?.textContent?.trim() ?? ""
+                js: (body) => body.querySelector(`d-textarea[data-testid='translator-target-input']`)?.textContent?.trim() ?? ""
             }
 
         },

@@ -1,0 +1,45 @@
+.container {
+  position: relative;
+  border-top: 2px solid var(--light-1);
+}
+
+.textBox {
+  position: absolute;
+  left: 10px;
+  bottom: 100%;
+  background-color: var(--light-1);
+  color: var(--dark-1);
+  transform-origin: bottom left;
+  padding: 15px;
+  display: block;
+  width: 450px;
+  overflow-wrap: normal;
+  border-radius: 10px;
+  z-index: 42;
+  transition: 0.3s all;
+  max-height: 300px;
+  overflow: scroll;
+}
+.open {
+  transform: translate(0);
+  opacity: 1;
+}
+.closed {
+  transform: translate(0, -10px);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hotKeyContainer {
+  border: 1px solid var(--dark-1);
+  border-radius: 5px;
+  width: fit-content;
+  padding: 2px 5px;
+  display: inline-block;
+}
+
+.shortcutTable {
+  display: grid;
+  grid-template-columns: 150px 1.3fr;
+  row-gap: 5px;
+}
