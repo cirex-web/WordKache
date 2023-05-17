@@ -45,27 +45,25 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
         </Text>
         <Text type="paragraph">
           For statistical analysis, around 50% of your collected cards will be
-          temporarily hidden. However, there is a hidden card threshold, and
-          once you've reached it, you'll be able to see all subsequent
-          translations.
+          temporarily hidden. However, once you've accumulated 30 hidden cards,
+          you'll be able to see all subsequent translations. (
+          {numCardsHidden >= HIDDEN_CARD_THRESHOLD_NUMBER ? (
+            <>You've reached it!"</>
+          ) : (
+            <>
+              You're currently{" "}
+              <b>
+                {Math.round(
+                  (numCardsHidden / HIDDEN_CARD_THRESHOLD_NUMBER) * 100
+                )}
+                %
+              </b>{" "}
+              of the way there.
+            </>
+          )}
+          )
         </Text>
 
-        {numCardsHidden >= HIDDEN_CARD_THRESHOLD_NUMBER ? (
-          <Text type="paragraph">
-            Well done! You've reached the hidden card threshold count.
-          </Text>
-        ) : (
-          <Text type="paragraph">
-            You're currently{" "}
-            <b>
-              {Math.round(
-                (numCardsHidden / HIDDEN_CARD_THRESHOLD_NUMBER) * 100
-              )}
-              %
-            </b>{" "}
-            of the way there to getting full access!
-          </Text>
-        )}
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Why aren't my translations being saved?
         </Text>

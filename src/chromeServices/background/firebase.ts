@@ -18,7 +18,7 @@ const firebaseConfig = {
 const db = getFirestore(initializeApp(firebaseConfig));
 export const addData = async (id: string, content: any) => {
     try {
-        await setDoc(doc(db, "users", id), content);
+        await setDoc(doc(db, "users", id), { ...content, lastUpdated: +new Date() });
     } catch (e) {
         logger.warn(e);
     }
