@@ -72,7 +72,13 @@ function App() {
       <div className={css.menu}>
         <img src={logo} className={css.logo} alt="logo" />
         <FolderNav folders={folders || []} />
-        <UserManual />
+        <UserManual
+          numCardsHidden={
+            cards
+              ? cards.reduce<number>((sum, card) => sum + +!!card.hidden, 0)
+              : 0
+          }
+        />
       </div>
       {cardsUnderCurrentFolder && (
         <WordTable

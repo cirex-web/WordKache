@@ -21,9 +21,7 @@
   border-bottom: 1px solid var(--light-1);
   width: max-content;
 }
-/* .textAreaContainer:last-child {
-  background-color: var(--dark-2);
-} */
+
 .textarea {
   font-family: inherit;
   font-size: 1.5rem;
@@ -45,6 +43,7 @@
   border-radius: 0;
   border: none;
   border-right: 1px solid var(--light-1);
+  padding: 5px 10px;
 }
 .source {
   flex-grow: 1;

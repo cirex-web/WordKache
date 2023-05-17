@@ -148,6 +148,7 @@ const WordTable = ({
         folderName={activeFolder.name}
         setSearchInput={setInput}
         cards={cards}
+        filteredCards={filteredCards}
       />
       {filteredCards.length ? (
         <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>

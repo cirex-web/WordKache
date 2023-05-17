@@ -9,7 +9,7 @@ const HotKey = ({ children }: { children: string }) => {
   return <div className={css.hotKeyContainer}>{children}</div>;
 };
 
-export const UserManual = () => {
+export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
   const [boxOpen, setBoxOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -22,32 +22,62 @@ export const UserManual = () => {
     window.addEventListener("click", closeBox);
     return () => window.removeEventListener("click", closeBox);
   }, [boxOpen]);
-
+  const HIDDEN_CARD_THRESHOLD_NUMBER = 30;
   return (
-    <Text type="heading" className={css.container}>
+    <Text type="subheading" className={css.container}>
       <Button
-        noBorder
-        zoomOnHover
         onClick={(ev) => {
           setBoxOpen(!boxOpen);
           ev.stopPropagation();
         }}
-        style={{ padding: "10px" }}
+        style={{ padding: "10px", width: "100%" }}
       >
-        <Icon name="info" />
+        <Icon name="help" />{" "}
+        {numCardsHidden > 0 ? `${numCardsHidden} Cards Hidden` : "Info"}
       </Button>
       <div
         className={classNames(css.textBox, boxOpen ? css.open : css.closed)}
         ref={popupRef}
       >
-        <Text type="heading" lineHeight={1.5} bold>
+        <Text type="heading" lineHeight={2} bold>
           You're using a Beta version!
         </Text>
         <Text type="paragraph">
-          ~50% of cards will be hidden, but don't worry, you'll see them after
-          beta testing is over!
+          For statistical analysis, around 50% of your collected cards will be
+          temporarily hidden. However, once you've accumulated 30 hidden cards,
+          you'll be able to see all subsequent translations. (
+          {numCardsHidden >= HIDDEN_CARD_THRESHOLD_NUMBER ? (
+            <>You've reached it!"</>
+          ) : (
+            <>
+              You're currently{" "}
+              <b>
+                {Math.round(
+                  (numCardsHidden / HIDDEN_CARD_THRESHOLD_NUMBER) * 100
+                )}
+                %
+              </b>{" "}
+              of the way there.
+            </>
+          )}
+          )
         </Text>
 
+        <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
+          Why aren't my translations being saved?
+        </Text>
+        <Text type="paragraph">
+          We currently only support Google Translate and DeepL. Make sure that
+          if you're using Google Translate, you're on
+          translate.google.com and not the embedded Google Search one. If it's still not working, leave a comment in our feedback form.
+        </Text>
+        <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
+          I have feedback/questions!
+        </Text>
+        <Text type="paragraph">
+          We're actively monitoring all responses on{" "}
+          <a href="https://forms.gle/bkos6SGzr6Jeo33n6">this form</a>.
+        </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Hotkeys
         </Text>

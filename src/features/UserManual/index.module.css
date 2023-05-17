@@ -1,5 +1,6 @@
 .container {
   position: relative;
+  border-top: 2px solid var(--light-1);
 }
 
 .textBox {
@@ -11,11 +12,13 @@
   transform-origin: bottom left;
   padding: 15px;
   display: block;
-  width: 250px;
+  width: 450px;
   overflow-wrap: normal;
   border-radius: 10px;
   z-index: 42;
   transition: 0.3s all;
+  max-height: 300px;
+  overflow: scroll;
 }
 .open {
   transform: translate(0);
@@ -37,6 +40,6 @@
 
 .shortcutTable {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
+  grid-template-columns: 150px 1.3fr;
   row-gap: 5px;
 }
