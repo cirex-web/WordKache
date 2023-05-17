@@ -45,6 +45,7 @@ export const TableHeader = ({
               }}
               zoomOnHover
               disabled={!cards.length}
+              className={css.icon}
             >
               <Icon name="search" />
             </Button>
@@ -55,6 +56,7 @@ export const TableHeader = ({
               zoomOnHover
               style={{ marginLeft: "-5px" }}
               disabled={!filteredCards.length}
+              className={css.icon}
             >
               <Icon name="download" />
             </Button>

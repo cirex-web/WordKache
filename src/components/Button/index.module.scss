@@ -1,0 +1,35 @@
+.button {
+  background-color: transparent;
+  outline: none;
+  border: 1px solid var(--light-1);
+  color: var(--light-1);
+  font-size: inherit;
+  cursor: pointer;
+  transition: 0.15s all;
+  background-color: black;
+
+  &.noBorder {
+    border: none;
+  }
+  &:hover {
+    background-color: var(--dark-2);
+    &:active {
+      background-color: var(--dark-1);
+    }
+  }
+  &:disabled {
+    color: var(--light-2);
+    pointer-events: none;
+  }
+}
+.zoomButton {
+  background-color: transparent;
+  &:hover {
+    background-color: transparent;
+    transform: scale(1.2);
+    &:active {
+      background-color: transparent;
+      transform: scale(1);
+    }
+  }
+}
