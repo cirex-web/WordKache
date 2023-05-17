@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Icon } from "../../../components/Icon";
 import { Input } from "../../../components/Input";
 import { Text } from "../../../components/Text";
@@ -10,26 +10,18 @@ import { useFocus } from "../../../utils/useFocus";
 export const TableHeader = ({
   folderName,
   setSearchInput,
-  activeCards,
   cards,
   filteredCards,
 }: {
   folderName: string;
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
   cards: Card[];
-  activeCards: Card[];
   filteredCards: Card[]; //NOTE: awful lot of prop drilling (maybe use a context?)
 }) => {
   const [inputOpen, setInputOpen] = useState(false);
   const [inputRef] = useFocus();
+  console.log(filteredCards);
 
-  useEffect (() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if(event.key === "c" && (event.metaKey || event.ctrlKey)) copyFlashcards(folderName, activeCards.reverse());
-    }
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  });
 
 
   return (
@@ -61,9 +53,9 @@ export const TableHeader = ({
             </Button>
 
             <Button
-              onMouseDown={(event) => event.shiftKey || event.metaKey 
-                ? copyFlashcards(folderName, filteredCards) 
-                : saveFlashcards(folderName, cards)}
+              onMouseDown={(event) => event.shiftKey || event.metaKey
+                ? copyFlashcards(filteredCards)
+                : saveFlashcards(folderName, filteredCards)}
               zoomOnHover
               disabled={!filteredCards.length}
               className={css.icon}

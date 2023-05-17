@@ -9,6 +9,7 @@ import css from "./index.module.css";
 import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import classNames from "classnames";
+import { copyFlashcards } from "../../utils/file";
 
 const Placeholder = ({
   image,
@@ -32,6 +33,7 @@ const WordTable = ({
   moveCards,
   deleteCards,
 }: {
+  /** Most recent cards are at the end, so this is reversed when displaying the table */
   cards: Card[];
   moveCards: (cardIds: string[], folderId?: string) => void;
   deleteCards: (cardIds: string[]) => void;
@@ -117,6 +119,8 @@ const WordTable = ({
       setActiveCardsIds(filteredCards.map((card) => card.id));
       event.preventDefault();
     }
+    if (event.key === "c" && (event.metaKey || event.ctrlKey)) copyFlashcards(activeCards);
+
   };
 
   // Deselect any selected cards that go off into the abyss when a filter query is typed
@@ -147,7 +151,6 @@ const WordTable = ({
       <TableHeader
         folderName={activeFolder.name}
         setSearchInput={setInput}
-        activeCards={cards.filter((card) => activeCardIds.includes(card.id))}
         cards={cards}
         filteredCards={filteredCards}
       />
