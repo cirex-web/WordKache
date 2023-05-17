@@ -76,7 +76,7 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
         </Text>
         <Text type="paragraph">
           We're actively monitoring all responses on{" "}
-          <a href="https://forms.gle/bkos6SGzr6Jeo33n6">this form</a>.
+          <a href="https://forms.gle/bkos6SGzr6Jeo33n6" target="_blank" rel='noreferrer'>this form</a>.
         </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Hotkeys
