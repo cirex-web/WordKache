@@ -47,7 +47,7 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
           temporarily hidden. However, once you've accumulated 30 hidden cards,
           you'll be able to see all subsequent translations. (
           {numCardsHidden >= HIDDEN_CARD_THRESHOLD_NUMBER ? (
-            <>You've reached it!"</>
+            <>You've reached it!</>
           ) : (
             <>
               You're currently{" "}
