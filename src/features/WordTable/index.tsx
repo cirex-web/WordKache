@@ -29,7 +29,6 @@ const Placeholder = ({
   );
 };
 
-
 const WordTable = ({
   cards,
   moveCards,
@@ -41,7 +40,7 @@ const WordTable = ({
   deleteCards: (cardIds: string[]) => void;
   flipCards: (cardIds: string[]) => void;
 }) => {
-  const sortOrder:string[] = ["recent", "lexo", "rLexo"];
+  const sortOrder: string[] = ["recent", "lexo", "rLexo"];
   const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
@@ -50,7 +49,6 @@ const WordTable = ({
   const [sortFront, setSortFront] = useState("recent");
   const [sortBack, setSortBack] = useState("recent");
   const [sort, setSort] = useState("null");
-
 
   //Search
   const fuse = new Fuse(cards, {
@@ -65,7 +63,7 @@ const WordTable = ({
   );
 
   const handleFilters = (newFilter: string, type: string) => {
-    switch(type){
+    switch (type) {
       case "frontAdd":
         setFrontFilter([...filterFront, newFilter]);
         break;
@@ -82,36 +80,42 @@ const WordTable = ({
         console.log("Error: Invalid filter type");
         break;
     }
-  }
-
+  };
 
   const frontSort = (main: boolean = true) => {
-    if(sortFront === "recent"){}
-    else{
-      filteredCards.sort((a, b) => main || a.back.text === b.back.text ? a.front.text.localeCompare(b.front.text) : 0);
-      if(sortFront === "rLexo")
-        filteredCards.reverse();
+    if (sortFront === "recent") {
+    } else {
+      filteredCards.sort((a, b) =>
+        main || a.back.text === b.back.text
+          ? a.front.text.localeCompare(b.front.text)
+          : 0
+      );
+      if (sortFront === "rLexo") filteredCards.reverse();
     }
-    if(main) backSort(false);
-  }
+    if (main) backSort(false);
+  };
 
   const backSort = (main: boolean = true) => {
-    if(sortBack === "recent"){}
-    else{
-      filteredCards.sort((a, b) => main || a.front.text === b.front.text ? a.back.text.localeCompare(b.back.text) : 0);
-      if(sortBack === "rLexo")
-        filteredCards.reverse();
+    if (sortBack === "recent") {
+    } else {
+      filteredCards.sort((a, b) =>
+        main || a.front.text === b.front.text
+          ? a.back.text.localeCompare(b.back.text)
+          : 0
+      );
+      if (sortBack === "rLexo") filteredCards.reverse();
     }
-    if(main) frontSort(false);
-  }
+    if (main) frontSort(false);
+  };
 
-  if(sort === "front")
-    frontSort();
-  else
-    backSort();
-  
-  filteredCards = filteredCards.filter((card) => (!filterFront.length || filterFront.includes(card.front.lang)) && (!filterBack.length || filterBack.includes(card.back.lang)));
+  if (sort === "front") frontSort();
+  else backSort();
 
+  filteredCards = filteredCards.filter(
+    (card) =>
+      (!filterFront.length || filterFront.includes(card.front.lang)) &&
+      (!filterBack.length || filterBack.includes(card.back.lang))
+  );
 
   const handleRowSelect = (
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
@@ -165,18 +169,70 @@ const WordTable = ({
           <table>
             <thead>
               <tr>
-                <th className = {css.headerContainer} onClick = {() => {setSortFront(sortOrder[(sortOrder.indexOf(sortFront) + 1) % sortOrder.length]); setSort("front")}}>
-                  <Text type="subheading">Original</Text> 
-                  <span className = {css.sort} style = {{color: sort === "front" ? "var(--accent-1)": "var(--light-1)"}}>
-                  <Icon name="expand_less" style = {{opacity: !(sortOrder.indexOf(sortFront) % 2) ? 1 : 0}}/> 
-                  <Icon name="expand_more" style = {{opacity: sortOrder.indexOf(sortFront) <= 1 ? 1 : 0}}/>
+                <th
+                  className={css.headerContainer}
+                  onClick={() => {
+                    setSortFront(
+                      sortOrder[
+                        (sortOrder.indexOf(sortFront) + 1) % sortOrder.length
+                      ]
+                    );
+                    setSort("front");
+                  }}
+                >
+                  <Text type="subheading">Original</Text>
+                  <span
+                    className={css.sort}
+                    style={{
+                      color:
+                        sort === "front" ? "var(--accent-1)" : "var(--light-1)",
+                    }}
+                  >
+                    <Icon
+                      name="expand_less"
+                      style={{
+                        opacity: !(sortOrder.indexOf(sortFront) % 2) ? 1 : 0,
+                      }}
+                    />
+                    <Icon
+                      name="expand_more"
+                      style={{
+                        opacity: sortOrder.indexOf(sortFront) <= 1 ? 1 : 0,
+                      }}
+                    />
                   </span>
                 </th>
-                <th className = {css.headerContainer} onClick = {() => {setSortBack((sortOrder[(sortOrder.indexOf(sortBack) + 1) % sortOrder.length])); ; setSort("back")}}>
+                <th
+                  className={css.headerContainer}
+                  onClick={() => {
+                    setSortBack(
+                      sortOrder[
+                        (sortOrder.indexOf(sortBack) + 1) % sortOrder.length
+                      ]
+                    );
+                    setSort("back");
+                  }}
+                >
                   <Text type="subheading">Translation</Text>
-                  <span className = {css.sort} style = {{color: sort === "back" ? "var(--accent-1)": "var(--light-1)"}}>
-                  <Icon name="expand_less" style = {{opacity: !(sortOrder.indexOf(sortBack) % 2) ? 1 : 0}}/> 
-                  <Icon name="expand_more" style = {{opacity: sortOrder.indexOf(sortBack) <= 1 ? 1 : 0}}/>
+                  <span
+                    className={css.sort}
+                    style={{
+                      color:
+                        sort === "back" ? "var(--accent-1)" : "var(--light-1)",
+                    }}
+                  >
+                    <Icon
+                      name="expand_less"
+                      style={{
+                        opacity: !(sortOrder.indexOf(sortBack) % 2) ? 1 : 0,
+                      }}
+                    />
+                    <Icon
+                      name="expand_more"
+                      style={{
+                        opacity: sortOrder.indexOf(sortBack) <= 1 ? 1 : 0,
+                      }}
+                    />
                   </span>
                 </th>
               </tr>
