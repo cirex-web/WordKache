@@ -7,7 +7,6 @@ export const downloadFile = (fileName: string, data: string) => {
     a.click();
 }
 export const saveFlashcards = (folderName: string, cards: Card[]) => {
-    console.log(cards, makeTextString(cards));
     downloadFile(folderName + ".tsv", makeTextString(cards));
 }
 export const copyFlashcards = (cards: Card[]) => {

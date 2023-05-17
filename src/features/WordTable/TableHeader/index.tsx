@@ -20,9 +20,6 @@ export const TableHeader = ({
 }) => {
   const [inputOpen, setInputOpen] = useState(false);
   const [inputRef] = useFocus();
-  console.log(filteredCards);
-
-
 
   return (
     <div className={css.header}>
