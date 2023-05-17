@@ -222,7 +222,7 @@ const WordTable = ({
       />
       {filteredCards.length ? (
         <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>
-          <table>
+          <table className={css.table}>
             <thead>
               <tr>
                 <th

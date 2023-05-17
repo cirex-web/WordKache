@@ -30,7 +30,7 @@ const LanguageTable = ({
       </tr>
       {Array.from(Array(Math.max(frontLangs.length, backLangs.length))).map(
         (e, i) => (
-          <tr>
+          <tr key={i}>
             {i < frontLangs.length ? (
               <td>
                 <label>
@@ -122,15 +122,16 @@ export const TableHeader = ({
               <Icon name="search" />
             </Button>
 
-            <Button
-              zoomOnHover
-              onMouseDown={() => {
-                setDropOpen(!dropOpen);
-              }}
-              disabled={!filteredCards.length}
-              className={css.filterButtonContainer}
-            >
-              <Icon name="Filter_Alt" />
+            <div className={css.filterButtonContainer}>
+              <Button
+                zoomOnHover
+                onMouseDown={() => {
+                  setDropOpen(!dropOpen);
+                }}
+                disabled={!filteredCards.length}
+              >
+                <Icon name="Filter_Alt" />
+              </Button>
               <div
                 className={classNames(
                   css.dropdown,
@@ -147,7 +148,7 @@ export const TableHeader = ({
                   </tbody>
                 </table>
               </div>
-            </Button>
+            </div>
 
             <Button
               onMouseDown={(event) =>

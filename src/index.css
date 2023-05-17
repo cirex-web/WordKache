@@ -47,6 +47,7 @@ li {
   padding: 0;
 }
 
+/* isolate this style */
 table {
   margin: auto;
   border-collapse: collapse;
