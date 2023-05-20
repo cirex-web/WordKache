@@ -50,9 +50,11 @@ export const TableHeader = ({
             </Button>
 
             <Button
-              onMouseDown={(event) => event.shiftKey || event.metaKey
-                ? copyFlashcards(filteredCards)
-                : saveFlashcards(folderName, filteredCards)}
+              onMouseDown={(event) =>
+                event.shiftKey || event.metaKey
+                  ? copyFlashcards(filteredCards)
+                  : saveFlashcards(folderName, filteredCards)
+              }
               zoomOnHover
               disabled={!filteredCards.length}
               className={css.icon}

@@ -41,12 +41,12 @@
         "*://www.linguee.com/*"
       ],
       "js": [
-        "./static/js/content.js"
+        "/chromeServices/contentScript/index.js"
       ]
     }
   ],
   "background": {
-    "service_worker": "./static/js/background.js",
+    "service_worker": "/chromeServices/background/index.js",
     "type": "module"
   }
 }
