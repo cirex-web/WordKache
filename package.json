@@ -48,12 +48,9 @@
       "last 1 safari version"
     ]
   },
-  "cracoConfig": "./craco.config.js",
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
     "@types/chrome": "^0.0.226",
     "@types/node": "^18.15.11",
-    "craco-esbuild": "^0.5.2",
     "cross-env": "^7.0.3",
     "css-tree": "^2.3.1",
     "esbuild": "^0.17.19",
