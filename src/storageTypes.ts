@@ -25,3 +25,18 @@ export interface Folder {
     name: string,
     id: string
 }
+
+/** Official Storage Type */
+export interface Filter {
+    destination: string,
+    frontLang?: string[],
+    backLang?: string[],
+    words?: string[],
+    size?: number,
+    id: string,
+}
+
+export interface FilterDirectory{
+    filters: Filter[],
+    id: string,
+}

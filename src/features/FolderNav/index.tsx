@@ -112,7 +112,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
           style={{
             display: "flex",
             alignItems: "center",
-            background: "black",
+            background: "transparent",
             height: "10px",
           }} //For some reason I can't make it the same using class and css file
         >
@@ -125,7 +125,7 @@ export const FolderNav = ({ folders, addFolder, deleteFolder, renameFolder, chan
           style={{
             display: "flex",
             alignItems: "center",
-            background: "black",
+            background: "transparent",
             height: "10px",
           }}
         >

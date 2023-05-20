@@ -1,0 +1,26 @@
+.container {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.tableContainer {
+    overflow: scroll;
+    flex-grow: 1;
+  }
+
+
+.filterTable{
+    overflow: scroll;
+    flex-grow: 1;
+}
+
+.filterHeader{
+    box-shadow: 0 0px 10px 0 var(--light-1); 
+}
+
+tr.selected {
+    background-color: var(--dark-2);
+    font-weight: bold;
+}

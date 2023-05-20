@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
-import { Card, Folder } from "../storageTypes";
+import { Card, Folder, Filter, FilterDirectory } from "../storageTypes";
 import { FolderNav } from "./FolderNav";
 import { ForwardingPage } from "./ForwardPage";
 import { ChromeStorage, useStorage } from "../utils/storage";
@@ -23,9 +23,13 @@ export const FolderContext = createContext<{
 export const ForwardContext = createContext<{
   forwarding: boolean;
   setForwarding: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedFilter: Filter[] | undefined;
+  setSelectedFilter: React.Dispatch<React.SetStateAction<Filter[]>> | undefined;
 }>({
   forwarding: false,
   setForwarding: () => {}, //avoid undefined error
+  selectedFilter: undefined,
+  setSelectedFilter: undefined,
 });
 
 export const UseActiveFolderContext = () => {
@@ -46,6 +50,15 @@ export const UseSelectedFolderContext = () => {
   return { selectedFolder, setSelectedFolder };
 };
 
+export const UseForwardingContext = () => {
+  const { selectedFilter, setSelectedFilter } = useContext(ForwardContext);
+  if (!selectedFilter || !setSelectedFilter)
+    throw new Error(
+      "You've used FilterContext outside of its designated scope!"
+    );
+  return { selectedFilter, setSelectedFilter };
+}
+
 export const JustCollectedFolder: Folder = {
   name: "Just Collected",
   id: "root",
@@ -55,16 +68,16 @@ const emptyArray: any[] = [];
 function App() {
   const cards = useStorage<Card[]>("cards", emptyArray);
   const folders = useStorage<Folder[]>("folders", emptyArray);
+  const filters = useStorage<FilterDirectory[]>("filters", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);
-
   const [selectedFolder, setSelectedFolder] = useState<Folder[]>([JustCollectedFolder]);
+  const [selectedFilter, setSelectedFilter] = useState<Filter[]>([]);
   const [forwarding, setForwarding] = useState<boolean>(false);
   const saveId = "defaultFolder";
 
   useEffect(() => {
     if (folders && folders.length === 0) {
       //loaded without any folders
-      console.log(folders);
       ChromeStorage.setPair("folders", [
         {
           name: "Saved",
@@ -86,7 +99,6 @@ function App() {
   };
 
   const deleteFolder = () => {
-    console.log(selectedFolder, folders);
     const newFolders = [];
     for (let i = 0; i < folders!.length; i++) {
       const folder = folders![i];
@@ -131,6 +143,31 @@ function App() {
     ChromeStorage.setPair("folders", folderIds);
   };
 
+  const addFilter = (newFilter: Filter, folder: string) => {
+    if(!(filters?.some((filter) => filter.id === folder)))
+      filters!.push({filters: [], id: folder})
+
+    filters?.map((filter) => {
+      if (filter.id === folder) {
+        filter.filters.push({
+          ...newFilter,
+        });
+      }
+      return filter;
+    })
+    ChromeStorage.setPair("filters", filters);
+  }
+
+  const deleteFilter = (filterIds: string[], folderId: string) => {
+    filters?.map((filter) => {
+      if (filter.id === folderId) {
+        filter.filters = filter.filters.filter((filter) => !filterIds.includes(filter.id));
+      }
+      return filter;
+    })
+    ChromeStorage.setPair("filters", filters);
+  }
+
   const last = (arr: any[]) => arr[arr.length - 1];
 
   const moveCards = (cardIds: string[]) => {
@@ -173,10 +210,42 @@ function App() {
     (card) => card.location === activeFolder.id && !card.hidden && !card.deleted //top-level filtering
   );
 
+  const filterCards = (folderCards: Card[], filters: Filter[]) => {
+    if (cards === undefined || !folderCards.length || !filters.length) return;
+    const fitSize = (filter: Filter, card: Card) => (Math.sign(filter.size!) + 1 ? 
+    (card.back.text.length < Math.abs(filter.size!) || card.front.text.length < Math.abs(filter.size!)) : 
+    (card.back.text.length > Math.abs(filter.size!) || card.front.text.length > Math.abs(filter.size!)));
+
+    const hasWords = (filter: Filter, card: Card) => (filter.words!.every((word) => card.back.text.includes(word) || card.front.text.includes(word))) //bad implementation because doesn't check for white space, please remake with regex
+    let moveCards = new Map<string, string>();
+    for (const filter of filters) {
+      for(const card of folderCards){
+        if (filter.frontLang === undefined || filter.frontLang!.includes(card.front.lang)){ //extended and statements
+          if (filter.backLang === undefined || filter.backLang!.includes(card.back.lang)){
+            if(filter.words === undefined || hasWords(filter, card)){
+              if(filter.size === undefined || fitSize(filter, card)){ 
+                moveCards.set(card.id, filter.destination);
+              }
+            }
+          }
+        }
+      }
+    }
+    for(const card of cards){
+      if(moveCards.has(card.id))
+        card.location = moveCards.get(card.id)!; //pass by reference so no need to make new cards
+    }
+    ChromeStorage.setPair("cards", cards);
+  }
+
+  const filtersUnderCurrentFolder = filters === undefined || !filters.length ? []: filters!.find((filter) => filter.id === activeFolder.id)?.filters;
+  if(filtersUnderCurrentFolder !== undefined && cardsUnderCurrentFolder !== undefined) 
+    filterCards(cardsUnderCurrentFolder, filtersUnderCurrentFolder);
+
   return (
 
     <FolderContext.Provider value={{ activeFolder, setActiveFolder, selectedFolder, setSelectedFolder }}>
-      <ForwardContext.Provider value={{ forwarding, setForwarding }}>
+      <ForwardContext.Provider value={{ forwarding, setForwarding, selectedFilter, setSelectedFilter }}>
       <div
         style={{
           borderRight: "3px solid var(--light-1)",
@@ -195,7 +264,13 @@ function App() {
         }
       </div>
       {forwarding?
-        <ForwardingPage curFolder={activeFolder.id} folders={folders === undefined ? []: folders}/>
+        <ForwardingPage 
+          curFolder={activeFolder.id} 
+          folders={folders === undefined ? []: folders} 
+          filters = {filtersUnderCurrentFolder} 
+          addFilter = {addFilter}
+          deleteFilter = {deleteFilter}
+          />
       : 
       cardsUnderCurrentFolder && (
         <WordTable
