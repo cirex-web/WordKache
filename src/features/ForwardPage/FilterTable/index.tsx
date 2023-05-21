@@ -60,7 +60,7 @@ export const FilterTable = ({
                     <thead>
                         <tr className = {css.filterHeader}>
                             <th>
-                                Filter
+                                Conditions
                             </th>
                             <th>
                                 Destination
