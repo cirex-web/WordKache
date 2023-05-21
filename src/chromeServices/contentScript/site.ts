@@ -26,11 +26,7 @@ export class Site {
         }
     }
 
-    getTextbox = () => {
-        const textBox = this.#siteConfig.input.getTextBox(document.body);
-        if (textBox === null) throw new Error(`Textbox for site config of URL ${this} does not exist. Please fix ASAP`);
-        return textBox;
-    }
+    getTextbox = () => this.#siteConfig.input.getTextBox(document.body);
     toString = () => {
         return this.#siteConfig.urlChecks.host;
     }

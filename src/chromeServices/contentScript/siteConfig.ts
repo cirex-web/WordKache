@@ -84,17 +84,13 @@ export const siteConfigs: ISiteConfig[] = [
             lang: {
                 type: "DOM",
                 js:
-                    (body) => {
-                        const matches =body.querySelector("#tw-sl");
-                        console.assert(matches !== null);
-                        return (matches === null ? "" : matches.textContent?.trim() ?? "");
-                    }
+                    (body) => body.querySelector(`#tw-source-text-ta`)?.attributes?.getNamedItem("lang")?.value ?? ""
             }
         },
         output: {
             lang: {
                 type: "DOM",
-                js: (body) => body.querySelector("#tw-tl")?.textContent?.trim() ?? "",
+                js: (body) => body.querySelector("#tw-target-text")?.children[0]?.attributes.getNamedItem("lang")?.value ?? "",
             },
             text: {
                 type: "DOM",
