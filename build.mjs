@@ -23,6 +23,7 @@ const esbuildPlugins = [inlineImage(), ScssModulesPlugin({}), CssModulesPlugin()
         from: ['./public/*'],
         to: ['./build'],
     },
+    watch: WATCH
 })];
 
 if (PROD) esbuildPlugins.push(eslint({ throwOnWarning: true })); //lint production build

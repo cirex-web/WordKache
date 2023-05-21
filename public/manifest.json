@@ -38,7 +38,8 @@
         "*://www.freetranslations.org/*",
         "*://mymemory.translated.net/*",
         "*://www.babelfish.com/*",
-        "*://www.linguee.com/*"
+        "*://www.linguee.com/*",
+        "*://www.google.com/*"
       ],
       "js": [
         "/chromeServices/contentScript/index.js"

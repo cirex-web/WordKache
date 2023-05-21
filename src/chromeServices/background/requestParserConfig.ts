@@ -1,3 +1,4 @@
+import { logger } from "../logger";
 import { IRequestParserConfig } from "../types";
 
 export const requestParserConfig: IRequestParserConfig[] = [
@@ -7,6 +8,14 @@ export const requestParserConfig: IRequestParserConfig[] = [
         },
         "parseBody": (body) => {
             return JSON.parse(body[0][0][1])[0][0]; //honestly you can also get lang from here
+        }
+    },
+    {
+        match: (url) => {
+            return url.hostname + url.pathname === "www.google.com/async/translate";
+        },
+        parseBody: (body) => {
+            logger.info(body);
         }
     }
     // {

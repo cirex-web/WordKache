@@ -10,15 +10,15 @@ export const siteConfigs: ISiteConfig[] = [
             },
             "host": "translate.google.com",
         },
-        "input": {
+        input: {
             getTextBox: (body) => body.querySelector(`textarea`),
             text: {
                 type: "DOM",
                 js: (body) => body.querySelector(`[jsname="lKng5e"]`)?.textContent?.trim() ?? ""
             },
-            "lang": {
-                "type": "DOM",
-                "js":
+            lang: {
+                type: "DOM",
+                js:
                     (body) => {
                         const matches = body.querySelectorAll('[aria-selected="true"] [jsname="V67aGc"]');
                         console.assert(matches.length);
@@ -27,13 +27,13 @@ export const siteConfigs: ISiteConfig[] = [
             }
 
         },
-        "output": {
-            "lang": {
-                "type": "URL_PARAM",
-                "param": "tl"
+        output: {
+            lang: {
+                type: "URL_PARAM",
+                param: "tl"
             },
             text: {
-                "type": "DOM",
+                type: "DOM",
                 js: (body) => body.querySelector(`[class="ryNqvb"]`)?.textContent?.trim() ?? "",
 
             }
@@ -69,5 +69,33 @@ export const siteConfigs: ISiteConfig[] = [
             return !document.getElementById("dl_translator")?.classList.contains("lmt--active_translation_request");
         }
 
+    },
+    {
+        name: "Google Translate",
+        urlChecks: {
+            host: "www.google.com",
+        },
+        input: {
+            getTextBox: (body) => body.querySelector(`#tw-source-text-ta`),
+            text: {
+                type: "DOM",
+                js: (body) => (body.querySelector("#tw-source-text-ta") as HTMLTextAreaElement)?.value?.trim() ?? ""
+            },
+            lang: {
+                type: "DOM",
+                js:
+                    (body) => body.querySelector(`#tw-source-text-ta`)?.attributes?.getNamedItem("lang")?.value ?? ""
+            }
+        },
+        output: {
+            lang: {
+                type: "DOM",
+                js: (body) => body.querySelector("#tw-target-text")?.children[0]?.attributes.getNamedItem("lang")?.value ?? "",
+            },
+            text: {
+                type: "DOM",
+                js: (body) => body.querySelector("#tw-target-text")?.textContent?.trim() ?? "",
+            }
+        }
     }
 ];
