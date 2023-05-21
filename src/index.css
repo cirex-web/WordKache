@@ -13,6 +13,8 @@
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 48;
   font-size: inherit;
+  line-height: inherit; /* Google defaults this to 1 for some reason */
+  vertical-align: bottom; /* NOTE: idk why this works in making the icon container not have any extra space on the top or bottom, but it does.. */
 }
 
 html {
@@ -58,7 +60,7 @@ table {
   user-select: none;
 }
 
-tr {
+tbody > tr {
   transition: 0.2s font-weight, 0.2s color, 0.1s background-color;
   border-top: 0.5px solid var(--light-2);
 }

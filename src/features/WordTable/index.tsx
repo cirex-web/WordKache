@@ -10,6 +10,7 @@ import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import classNames from "classnames";
 import { handleRowSelect } from "../../utils/rangeSelect";
+import { copyFlashcards } from "../../utils/file";
 
 const Placeholder = ({
   image,
@@ -33,6 +34,7 @@ const WordTable = ({
   moveCards,
   deleteCards,
 }: {
+  /** Most recent cards are at the end, so this is reversed when displaying the table */
   cards: Card[];
   moveCards: (cardIds: string[], folderId?: string) => void;
   deleteCards: (cardIds: string[]) => void;
@@ -54,8 +56,6 @@ const WordTable = ({
   const activeCards = filteredCards.filter((card) =>
     activeCardIds.includes(card.id)
   );
-
-  //what do you do about filtering??
 
   // Deselect any selected cards that go off into the abyss when a filter query is typed
   useEffect(() => {
@@ -79,16 +79,30 @@ const WordTable = ({
       setActiveCardsIds([]);
     }
   };
-
+  const handleKeyboardShortcuts = (
+    event: React.KeyboardEvent<HTMLTableRowElement>
+  ) => {
+    if (event.key === "Escape") {
+      setActiveCardsIds([]);
+      event.preventDefault();
+    }
+    if (event.key === "a" && (event.metaKey || event.ctrlKey)) {
+      setActiveCardsIds(filteredCards.map((card) => card.id));
+      event.preventDefault();
+    }
+    if (event.key === "c" && (event.metaKey || event.ctrlKey))
+      copyFlashcards(activeCards);
+  };
   return (
     <div className={css.container}>
       <TableHeader
         folderName={activeFolder.name}
         setSearchInput={setInput}
         cards={cards}
+        filteredCards={filteredCards}
       />
       {filteredCards.length ? (
-        <div className={css.tableContainer}>
+        <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>
           <table>
             <thead>
               <tr>
@@ -115,6 +129,7 @@ const WordTable = ({
                       )
                     )
                   }
+                  tabIndex={0}
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),
                   })}

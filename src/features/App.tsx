@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { Card, Folder, Filter, FilterDirectory } from "../storageTypes";
+import { UserManual } from "./UserManual";
 import { FolderNav } from "./FolderNav";
 import { ForwardingPage } from "./ForwardPage";
 import { ChromeStorage, useStorage } from "../utils/storage";
@@ -57,7 +58,7 @@ export const UseForwardingContext = () => {
       "You've used FilterContext outside of its designated scope!"
     );
   return { selectedFilter, setSelectedFilter };
-}
+};
 
 export const JustCollectedFolder: Folder = {
   name: "Just Collected",
@@ -70,7 +71,9 @@ function App() {
   const folders = useStorage<Folder[]>("folders", emptyArray);
   const filters = useStorage<FilterDirectory[]>("filters", emptyArray);
   const [activeFolder, setActiveFolder] = useState<Folder>(JustCollectedFolder);
-  const [selectedFolder, setSelectedFolder] = useState<Folder[]>([JustCollectedFolder]);
+  const [selectedFolder, setSelectedFolder] = useState<Folder[]>([
+    JustCollectedFolder,
+  ]);
   const [selectedFilter, setSelectedFilter] = useState<Filter[]>([]);
   const [forwarding, setForwarding] = useState<boolean>(false);
   const saveId = "defaultFolder";
@@ -144,8 +147,8 @@ function App() {
   };
 
   const addFilter = (newFilter: Filter, folder: string) => {
-    if(!(filters?.some((filter) => filter.id === folder)))
-      filters!.push({filters: [], id: folder})
+    if (!filters?.some((filter) => filter.id === folder))
+      filters!.push({ filters: [], id: folder });
 
     filters?.map((filter) => {
       if (filter.id === folder) {
@@ -154,19 +157,21 @@ function App() {
         });
       }
       return filter;
-    })
+    });
     ChromeStorage.setPair("filters", filters);
-  }
+  };
 
   const deleteFilter = (filterIds: string[], folderId: string) => {
     filters?.map((filter) => {
       if (filter.id === folderId) {
-        filter.filters = filter.filters.filter((filter) => !filterIds.includes(filter.id));
+        filter.filters = filter.filters.filter(
+          (filter) => !filterIds.includes(filter.id)
+        );
       }
       return filter;
-    })
+    });
     ChromeStorage.setPair("filters", filters);
-  }
+  };
 
   const last = (arr: any[]) => arr[arr.length - 1];
 
@@ -212,18 +217,32 @@ function App() {
 
   const filterCards = (folderCards: Card[], filters: Filter[]) => {
     if (cards === undefined || !folderCards.length || !filters.length) return;
-    const fitSize = (filter: Filter, card: Card) => (Math.sign(filter.size!) + 1 ? 
-    (card.back.text.length < Math.abs(filter.size!) || card.front.text.length < Math.abs(filter.size!)) : 
-    (card.back.text.length > Math.abs(filter.size!) || card.front.text.length > Math.abs(filter.size!)));
+    const fitSize = (filter: Filter, card: Card) =>
+      Math.sign(filter.size!) + 1
+        ? card.back.text.length < Math.abs(filter.size!) ||
+          card.front.text.length < Math.abs(filter.size!)
+        : card.back.text.length > Math.abs(filter.size!) ||
+          card.front.text.length > Math.abs(filter.size!);
 
-    const hasWords = (filter: Filter, card: Card) => (filter.words!.every((word) => card.back.text.includes(word) || card.front.text.includes(word))) //bad implementation because doesn't check for white space, please remake with regex
+    const hasWords = (filter: Filter, card: Card) =>
+      filter.words!.every(
+        (word) =>
+          card.back.text.includes(word) || card.front.text.includes(word)
+      ); //bad implementation because doesn't check for white space, please remake with regex
     let moveCards = new Map<string, string>();
     for (const filter of filters) {
-      for(const card of folderCards){
-        if (filter.frontLang === undefined || filter.frontLang!.includes(card.front.lang)){ //extended and statements
-          if (filter.backLang === undefined || filter.backLang!.includes(card.back.lang)){
-            if(filter.words === undefined || hasWords(filter, card)){
-              if(filter.size === undefined || fitSize(filter, card)){ 
+      for (const card of folderCards) {
+        if (
+          filter.frontLang === undefined ||
+          filter.frontLang!.includes(card.front.lang)
+        ) {
+          //extended and statements
+          if (
+            filter.backLang === undefined ||
+            filter.backLang!.includes(card.back.lang)
+          ) {
+            if (filter.words === undefined || hasWords(filter, card)) {
+              if (filter.size === undefined || fitSize(filter, card)) {
                 moveCards.set(card.id, filter.destination);
               }
             }
@@ -231,56 +250,71 @@ function App() {
         }
       }
     }
-    for(const card of cards){
-      if(moveCards.has(card.id))
-        card.location = moveCards.get(card.id)!; //pass by reference so no need to make new cards
+    for (const card of cards) {
+      if (moveCards.has(card.id)) card.location = moveCards.get(card.id)!; //pass by reference so no need to make new cards
     }
     ChromeStorage.setPair("cards", cards);
-  }
+  };
 
-  const filtersUnderCurrentFolder = filters === undefined || !filters.length ? []: filters!.find((filter) => filter.id === activeFolder.id)?.filters;
-  if(filtersUnderCurrentFolder !== undefined && cardsUnderCurrentFolder !== undefined) 
+  const filtersUnderCurrentFolder =
+    filters === undefined || !filters.length
+      ? []
+      : filters!.find((filter) => filter.id === activeFolder.id)?.filters;
+  if (
+    filtersUnderCurrentFolder !== undefined &&
+    cardsUnderCurrentFolder !== undefined
+  )
     filterCards(cardsUnderCurrentFolder, filtersUnderCurrentFolder);
 
   return (
-
-    <FolderContext.Provider value={{ activeFolder, setActiveFolder, selectedFolder, setSelectedFolder }}>
-      <ForwardContext.Provider value={{ forwarding, setForwarding, selectedFilter, setSelectedFilter }}>
-      <div
-        style={{
-          borderRight: "3px solid var(--light-1)",
-        }}
+    <FolderContext.Provider
+      value={{
+        activeFolder,
+        setActiveFolder,
+        selectedFolder,
+        setSelectedFolder,
+      }}
+    >
+      <ForwardContext.Provider
+        value={{ forwarding, setForwarding, selectedFilter, setSelectedFilter }}
       >
-        <img src={logo} className={css.logo} alt="logo" />
+        <div className={css.menu}>
+          <img src={logo} className={css.logo} alt="logo" />
 
-        {folders && 
-          <FolderNav 
-            folders={folders} 
-            addFolder={addFolder} 
-            deleteFolder = {deleteFolder} 
-            renameFolder={renameFolder} 
+          <FolderNav
+            folders={folders || []}
+            addFolder={addFolder}
+            deleteFolder={deleteFolder}
+            renameFolder={renameFolder}
             changeOrder={reOrderFolders}
           />
-        }
-      </div>
-      {forwarding?
-        <ForwardingPage 
-          curFolder={activeFolder.id} 
-          folders={folders === undefined ? []: folders} 
-          filters = {filtersUnderCurrentFolder} 
-          addFilter = {addFilter}
-          deleteFilter = {deleteFilter}
+
+          <UserManual
+            numCardsHidden={
+              cards
+                ? cards.reduce<number>((sum, card) => sum + +!!card.hidden, 0)
+                : 0
+            }
           />
-      : 
-      cardsUnderCurrentFolder && (
-        <WordTable
-          cards={cardsUnderCurrentFolder}
-          moveCards={moveCards}
-          key={activeFolder.id}
-          deleteCards={deleteCards}
-        />
-      )
-      }
+        </div>
+        {forwarding ? (
+          <ForwardingPage
+            curFolder={activeFolder.id}
+            folders={folders === undefined ? [] : folders}
+            filters={filtersUnderCurrentFolder}
+            addFilter={addFilter}
+            deleteFilter={deleteFilter}
+          />
+        ) : (
+          cardsUnderCurrentFolder && (
+            <WordTable
+              cards={cardsUnderCurrentFolder}
+              moveCards={moveCards}
+              key={activeFolder.id}
+              deleteCards={deleteCards}
+            />
+          )
+        )}
       </ForwardContext.Provider>
     </FolderContext.Provider>
   );

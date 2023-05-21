@@ -1,14 +1,15 @@
+import classNames from "classnames";
 import css from "./text.module.css";
 
-interface ITextProps extends React.HTMLProps<HTMLSpanElement> {
-  type?: "paragraph" | "heading" | "subheading";
+interface ITextProps extends React.HTMLProps<HTMLDivElement> {
+  type?: "paragraph" | "heading" | "subheading" | "xLargeHeading";
   noWrap?: boolean;
   bold?: boolean;
   dark?: boolean;
   noSelect?: boolean;
   /** Light gray basically */
   dull?: boolean;
-  lineHeight?: number; //Copied from master
+  lineHeight?: number;
 }
 
 export const Text = ({
@@ -20,13 +21,13 @@ export const Text = ({
   dull,
   style,
   className,
-  lineHeight,
   noSelect,
+  lineHeight,
   ...rest
 }: ITextProps) => {
   return (
-    <span
-      className={(type ? css[type] : "") + " " + className}
+    <div
+      className={classNames(type && css[type], className)}
       style={{
         ...(noWrap
           ? {
@@ -38,12 +39,12 @@ export const Text = ({
         fontWeight: bold ? "bold" : "",
         color: dark ? "var(--dark-1)" : dull ? "var(--light-2)" : "",
         userSelect: noSelect ? "none" : "auto",
-        lineHeight, 
+        lineHeight,
         ...style,
       }}
       {...rest}
     >
       {children}
-    </span>
+    </div>
   );
 };

@@ -17,6 +17,7 @@ tr.selected {
   overflow: scroll;
   flex-grow: 1;
 }
+
 .tableContainer {
   overflow: scroll;
   flex-grow: 1;

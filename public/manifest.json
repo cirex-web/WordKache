@@ -1,7 +1,9 @@
 {
   "name": "WordKache - Save your translations",
+  "short_name": "WordKache",
   "description": "Save and export your online translations!",
-  "version": "0.2",
+  "version": "0.4",
+  "version_name": "0.4 beta",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
@@ -14,7 +16,8 @@
   },
   "permissions": [
     "storage",
-    "webRequest"
+    "webRequest",
+    "alarms"
   ],
   "host_permissions": [
     "*://translate.google.com/*"
@@ -22,16 +25,28 @@
   "content_scripts": [
     {
       "matches": [
-        "http://*/*",
-        "https://*/*"
+        "*://translate.google.com/*",
+        "*://www.deepl.com/*",
+        "*://www.spanishdict.com/*",
+        "*://www.bing.com/translator/*",
+        "*://www.translatedict.com/*",
+        "*://www.translate.com/*",
+        "*://www.online-translator.com/*",
+        "*://www.collinsdictionary.com/*",
+        "*://www.reverso.net/*",
+        "*://translate.yandex.com/*",
+        "*://www.freetranslations.org/*",
+        "*://mymemory.translated.net/*",
+        "*://www.babelfish.com/*",
+        "*://www.linguee.com/*"
       ],
       "js": [
-        "./static/js/content.js"
+        "/chromeServices/contentScript/index.js"
       ]
     }
   ],
   "background": {
-    "service_worker": "./static/js/background.js",
+    "service_worker": "/chromeServices/background/index.js",
     "type": "module"
   }
 }
