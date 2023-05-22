@@ -1,7 +1,7 @@
-import { Card, Folder } from "../storageTypes";
+import { Card, Folder, Filter } from "../../types/storageTypes";
 
 // just for npm start
-export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
+export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Filter[] } = {
     "cards": [
         {
             "back": {
@@ -310,5 +310,39 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
         {
             "id": "defaultFolder",
             "name": "Saved"
-        },]
+        },
+        {
+            name: "Just Collected",
+            id: "root",
+        }
+    ],
+
+    "filters": [
+        {
+            "frontLang": ["en"],
+            "backLang": ["es"],
+            "words": ["hello", "world"],
+
+            "destination": "defaultFolder",
+            "id": "12412421",
+        },
+        {
+            "frontLang": ["es"],
+            "backLang": ["en"],
+            "words": ["hello", "world"],
+            "destination": "defaultFolder",
+            "id": "5325742",
+        },
+        {
+            "frontLang": ["es"],
+            "backLang": ["fr"],
+            "words": ["hello", "world"],
+            "length": {
+                "number": 10,
+                "direction": "greater",
+            },
+            "destination": "defaultFolder",
+            "id": "1352389",
+        },
+    ]
 }

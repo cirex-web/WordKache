@@ -32,11 +32,9 @@ export interface Filter {
     frontLang?: string[],
     backLang?: string[],
     words?: string[],
-    size?: number,
-    id: string,
-}
-
-export interface FilterDirectory{
-    filters: Filter[],
+    length?: {
+        direction: "greater" | "less",
+        number: number;
+    },
     id: string,
 }

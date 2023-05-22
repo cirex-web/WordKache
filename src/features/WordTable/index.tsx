@@ -1,8 +1,8 @@
 import Fuse from "fuse.js";
 import React, { useEffect, useState } from "react";
-import { Card } from "../../storageTypes";
+import { Card } from "../../types/storageTypes";
 import { Text } from "../../components/Text";
-import { UseActiveFolderContext } from "../App";
+import { UseFolderContext } from "../App";
 import { TableHeader } from "./TableHeader";
 import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
@@ -36,10 +36,10 @@ const WordTable = ({
 }: {
   /** Most recent cards are at the end, so this is reversed when displaying the table */
   cards: Card[];
-  moveCards: (cardIds: string[], folderId?: string) => void;
+  moveCards: (cardIds: string[], folderIds: string[]) => void;
   deleteCards: (cardIds: string[]) => void;
 }) => {
-  const { activeFolder } = UseActiveFolderContext();
+  const { activeFolder } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
   const pivotIndexRef = React.useRef(0); //I know this should be ideally in the search util

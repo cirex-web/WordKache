@@ -1,8 +1,8 @@
 import { logger } from "../logger";
-import { ChromeStorage } from "../../utils/storage";
+import { ChromeStorage } from "../../utils/storage/storage";
 import { ITranslationSnapshot } from "../types";
 import { requestParsers } from "./requestParser";
-import { Card } from "../../storageTypes";
+import { Card, Folder } from "../../types/storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
@@ -148,10 +148,28 @@ async function updateStorageVersion() {
         // eslint-disable-next-line no-fallthrough
         case 2:
             await ChromeStorage.setPair("userId", nanoid(5));
+        /*@ts-ignore*/
         // eslint-disable-next-line no-fallthrough
         case 3:
-            logger.info("Updated to storage version 3");
-            await ChromeStorage.setPair("storageVersion", 3);
+            const folders = ((await ChromeStorage.get("folders")) ?? []) as Folder[];
+            if (!folders.length) {
+                await ChromeStorage.setPair("folders", [
+                    //move the folder creation to backend
+                    {
+                        name: "Saved",
+                        id: nanoid(),
+                    },
+                    {
+                        name: "Just Collected",
+                        id: "root",
+                    },
+                ]);
+            }
+        /*@ts-ignore*/
+        // eslint-disable-next-line no-fallthrough
+        case 4:
+            logger.info("Updated to storage version 4");
+            await ChromeStorage.setPair("storageVersion", 4);
             break;
         default:
             throw new Error(`Invalid storage version ${currentVersion}`);

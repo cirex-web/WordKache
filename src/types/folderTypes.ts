@@ -4,4 +4,4 @@ export interface FileDirectory {
     open?: boolean,
     subFolders?: FileDirectory[]
 }
-export type AllFiles = FileDirectory[]
+export type AllFolders = FileDirectory[]

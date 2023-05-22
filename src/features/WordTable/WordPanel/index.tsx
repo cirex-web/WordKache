@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { Button } from "../../../components/Button";
 import { Text } from "../../../components/Text";
-import { Card } from "../../../storageTypes";
+import { Card } from "../../../types/storageTypes";
 import css from "./index.module.css";
 import React, { useLayoutEffect, useRef, useState } from "react";
 

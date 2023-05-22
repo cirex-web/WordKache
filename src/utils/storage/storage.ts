@@ -81,6 +81,7 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
     }, [key, defaultValue]);
     return value;
 }
+
 export const ChromeStorage = {
     "get": (key: string) => {
         return new Promise((re) => {
@@ -88,8 +89,8 @@ export const ChromeStorage = {
         });
     },
     "getAll": () => {
-        return new Promise<{[k:string]:any}>(re => {
-            chrome.storage.local.get(null).then((obj)=>re(obj));
+        return new Promise<{ [k: string]: any }>(re => {
+            chrome.storage.local.get(null).then((obj) => re(obj));
         });
     },
     "set": (items: {
