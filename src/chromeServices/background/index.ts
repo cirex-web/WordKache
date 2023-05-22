@@ -6,11 +6,11 @@ import { Card, Folder } from "../../types/storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
-import { addData } from "./firebase";
+import { addData } from "../../utils/firebase";
 
 
 
-logger.info("Kache background script init!")
+logger.info("WordKache background script init!")
 
 let currentWebRequest: {
     id: string,
