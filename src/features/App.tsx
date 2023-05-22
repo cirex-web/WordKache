@@ -7,6 +7,7 @@ import { FolderNav } from "./FolderNav";
 import { ChromeStorage, useStorage } from "../utils/storage";
 import logo from "../assets/logo.svg";
 import { nanoid } from "nanoid";
+import { getUserDataSpreadsheet } from "../utils/firebase";
 
 export const FolderContext = createContext<{
   activeFolder: Folder | undefined;
@@ -66,6 +67,10 @@ function App() {
   const cardsUnderCurrentFolder = cards?.filter(
     (card) => card.location === activeFolder.id && !card.hidden && !card.deleted //top-level filtering
   );
+
+  useEffect(() => {
+    getUserDataSpreadsheet();
+  }, []);
 
   return (
     <FolderContext.Provider value={{ activeFolder, setActiveFolder }}>

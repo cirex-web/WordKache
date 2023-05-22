@@ -5,7 +5,7 @@ import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
 import classNames from "classnames";
 import { useStorage } from "../../utils/storage";
-import { fetchData } from "../../utils/firebase";
+import { fetchData } from "../../utils/firebase.js";
 
 const HotKey = ({ children }: { children: string }) => {
   return <div className={css.hotKeyContainer}>{children}</div>;

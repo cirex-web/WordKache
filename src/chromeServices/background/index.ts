@@ -6,7 +6,7 @@ import { Card } from "../../storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
-import { addData } from "../../utils/firebase";
+import { addData } from "../../utils/firebase.js";
 
 
 

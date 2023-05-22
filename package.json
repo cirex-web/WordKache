@@ -61,6 +61,7 @@
     "esbuild-sass-plugin": "^2.9.0",
     "esbuild-scss-modules-plugin": "^1.1.1",
     "tslib": "^2.5.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz",
     "zip-a-folder": "^1.1.5"
   }
 }
