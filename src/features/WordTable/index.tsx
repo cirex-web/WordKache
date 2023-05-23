@@ -39,7 +39,7 @@ const WordTable = ({
   moveCards: (cardIds: string[], folderIds: string[]) => void;
   deleteCards: (cardIds: string[]) => void;
 }) => {
-  const { activeFolderId, selectedFolderIds } = UseFolderContext();
+  const { activeFolderId, selectedFolderIds, folders } = UseFolderContext();
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
   const pivotIndexRef = React.useRef(0); //I know this should be ideally in the search util
@@ -96,7 +96,7 @@ const WordTable = ({
   return (
     <div className={css.container}>
       <TableHeader
-        folderName={activeFolderId}
+        folderName={folders.find((folder) => folder.id === activeFolderId)?.name ?? "Error"}
         setSearchInput={setInput}
         cards={cards}
         filteredCards={filteredCards}
