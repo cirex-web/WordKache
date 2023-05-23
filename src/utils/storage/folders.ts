@@ -123,7 +123,11 @@ export const useFolders = () => {
         console.assert(sourceFolder && targetFolder);
         if (!sourceFolder || !targetFolder) return;
 
+        const sourceIndex = folderCopy.indexOf(sourceFolder);
+        const targetIndex = folderCopy.indexOf(targetFolder);
+
         sourceFolder.parentId = targetFolder.parentId;
+        folderCopy.splice(targetIndex+1, 0, ...folderCopy.splice(sourceIndex, 1)) // Insert source folder after target folder
         updateStorage(folderCopy);
     };
     return { deleteFolders, moveFolder, renameFolder, folders, addFolder }

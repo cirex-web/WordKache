@@ -1,4 +1,4 @@
-import { Card } from "../storageTypes";
+import { Card } from "../types/storageTypes";
 
 export const downloadFile = (fileName: string, data: string) => {
     const a = document.createElement("a");

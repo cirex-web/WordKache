@@ -7,42 +7,28 @@ import logo from "../assets/logo.svg";
 import { useCards } from "../utils/storage/cards";
 import { useFolders } from "../utils/storage/folders";
 import { UserManual } from "./UserManual";
+import { Folder } from "../types/storageTypes";
 
 export const FolderContext = createContext<{
   /** The folder you currently are in */
-  activeFolderId?: string;
-  setActiveFolderId?: React.Dispatch<React.SetStateAction<string>>;
+  folders: Folder[];
+  activeFolderId: string;
+  setActiveFolderId: React.Dispatch<React.SetStateAction<string>>;
   /** Your range-selected folders */
-  selectedFolderIds?: string[];
-  setSelectedFolderIds?: React.Dispatch<React.SetStateAction<string[]>>;
-  moveFolder?: (sourceId: string, targetId: string) => void;
-}>({});
+  selectedFolderIds: string[];
+  setSelectedFolderIds: React.Dispatch<React.SetStateAction<string[]>>;
+  moveFolder: (sourceId: string, targetId: string) => void;
+} | undefined>(undefined);
 
 export const UseFolderContext = () => {
-  const {
-    activeFolderId,
-    setActiveFolderId,
-    selectedFolderIds,
-    setSelectedFolderIds,
-    moveFolder,
-  } = useContext(FolderContext);
+  const context = useContext(FolderContext);
   if (
-    !activeFolderId ||
-    !setActiveFolderId ||
-    !selectedFolderIds ||
-    !setSelectedFolderIds ||
-    !moveFolder
+    context === undefined 
   )
     throw new Error(
       "You've used FolderContext outside of its designated scope!"
     );
-  return {
-    activeFolderId,
-    setActiveFolderId,
-    selectedFolderIds,
-    setSelectedFolderIds,
-    moveFolder,
-  };
+  return context;
 };
 
 function App() {
@@ -60,6 +46,7 @@ function App() {
   return (
     <FolderContext.Provider
       value={{
+        folders: folders ?? [],
         activeFolderId,
         setActiveFolderId,
         selectedFolderIds,

@@ -4,7 +4,7 @@ import { Input } from "../../../components/Input";
 import { Text } from "../../../components/Text";
 import css from "./index.module.css";
 import { saveFlashcards, copyFlashcards } from "../../../utils/file";
-import { Card } from "../../../storageTypes";
+import { Card } from "../../../types/storageTypes";
 import { Button } from "../../../components/Button";
 import { useFocus } from "../../../utils/useFocus";
 export const TableHeader = ({
