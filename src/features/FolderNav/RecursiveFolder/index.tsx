@@ -100,7 +100,11 @@ export const RecursiveFolder = ({
           }
           noSelect
           onMouseDown={(ev) => {
-            setActiveFolderId(folders.id);
+            if((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
+              setActiveFolderId("");
+            else
+              setActiveFolderId(folders.id);
+            
             selectFolders(ev, folders.id);
             nameChangeRef.current =
               ev.detail >= 2 &&

@@ -15,6 +15,7 @@ interface IGeneralInputProps {
   update: (key: string, val: any) => void;
   defaultValue: string;
   required?: boolean;
+  keyInd?: number;
 }
 interface ISelectProps extends IGeneralInputProps {
   options: { value: string; text: string }[];
@@ -22,7 +23,7 @@ interface ISelectProps extends IGeneralInputProps {
 interface IInputProps extends IGeneralInputProps {
   parse: (val: string) => any;
 }
-const FormInput = ({ name, update, parse, defaultValue }: IInputProps) => {
+const FormInput = ({ name, update, parse, defaultValue, keyInd }: IInputProps) => {
   return (
     <Input
       name={name}
@@ -32,18 +33,22 @@ const FormInput = ({ name, update, parse, defaultValue }: IInputProps) => {
         const parsedVal = textValue.length === 0 ? "" : parse(ev.target.value); //if the textbox is empty, count it as valid input
         update(name, parsedVal);
       }}
+      className ={css.filterInput}
+      key = {keyInd}
     />
   );
 };
-const FormSelect = ({ options, name, update, defaultValue }: ISelectProps) => {
+const FormSelect = ({ options, name, update, defaultValue, keyInd }: ISelectProps) => {
   return (
     <select
       name={name}
       onChange={(ev) => update(name, ev.target.value)}
       defaultValue={defaultValue}
+      className ={css.filterInput}
+      key = {keyInd}
     >
       {options.map(({ value, text }) => (
-        <option value={value} key={value}>
+        <option key={value} value={value}>
           {text}
         </option>
       ))}
@@ -124,13 +129,13 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
             {formConfig.map((inputs) => {
               if (!inputs.length) return undefined;
               return (
-                <div>
-                  <label htmlFor={inputs[0].name}>{inputs[0].name}</label>
-                  {inputs.map((input) => {
+                <div className = {css.smallGrid}>
+                  {inputs.map((input, ind) => {
+                    <label htmlFor={input.name}>{input.name}</label>
                     return input.type === "select" ? (
-                      <FormSelect {...input} update={updateInputData} />
+                      <FormSelect {...input} update={updateInputData} key = {ind} keyInd={ind}/>
                     ) : (
-                      <FormInput update={updateInputData} {...input} />
+                      <FormInput update={updateInputData} {...input} key = {ind} keyInd={ind}/>
                     );
                   })}
                 </div>

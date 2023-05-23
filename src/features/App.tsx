@@ -37,7 +37,6 @@ function App() {
   const { cards, moveCards, deleteCards } = useCards();
   const [activeFolderId, setActiveFolderId] = useState("root");
   const [selectedFolderIds, setSelectedFolderIds] = useState(["root"]);
-  const [filterWindowOpen, setFilterWindowOpen] = useState(false);
 
   const cardsUnderCurrentFolder = cards?.filter(
     (card) => card.location === activeFolderId && !card.hidden && !card.deleted //top-level filtering
@@ -72,7 +71,7 @@ function App() {
           }
         />
       </div>
-      {filterWindowOpen ? (
+      {!activeFolderId.length ? (
         <ForwardingPage folders={folders === undefined ? [] : folders} />
       ) : (
         cardsUnderCurrentFolder && (
