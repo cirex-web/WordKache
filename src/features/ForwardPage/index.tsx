@@ -7,7 +7,7 @@ import { Icon } from "../../components/Icon";
 import { FilterTable } from "./FilterTable";
 import { useFilters } from "../../utils/storage/filters";
 import { nanoid } from "nanoid";
-import { Input } from "../../components/Input";
+import { Input, Select } from "../../components/Input";
 import { getFormConfig } from "./formConfig";
 
 interface IGeneralInputProps {
@@ -40,7 +40,7 @@ const FormInput = ({ name, update, parse, defaultValue, keyInd }: IInputProps) =
 };
 const FormSelect = ({ options, name, update, defaultValue, keyInd }: ISelectProps) => {
   return (
-    <select
+    <Select
       name={name}
       onChange={(ev) => update(name, ev.target.value)}
       defaultValue={defaultValue}
@@ -52,7 +52,7 @@ const FormSelect = ({ options, name, update, defaultValue, keyInd }: ISelectProp
           {text}
         </option>
       ))}
-    </select>
+    </Select>
   );
 };
 
@@ -61,19 +61,20 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
   const formConfig = getFormConfig(folders);
   const [inputData, setInputData] = useState<{
     /** If undefined, it means that whatever's in the input is invalid */
-    [name: string]: any;
+    [name: string]: {value: any; required: boolean};
   }>(
     formConfig.flat().reduce((obj, curInput) => {
       return {
         ...obj,
-        [curInput.name]: curInput.defaultValue,
+        [curInput.name]: {value: curInput.defaultValue, required: curInput.required},
       };
     }, {})
   );
+
   const [selectedFilter, setSelectedFilter] = useState<Filter[]>([]);
 
   const updateInputData = (name: string, val: any) => {
-    setInputData({ ...inputData, [name]: val });
+    setInputData({ ...inputData, [name]: {value: val, required: inputData[name].required} });
   };
 
   const [expand, setExpand] = useState<boolean>(true);
@@ -81,13 +82,13 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
   const createFilter = (): string => {
     const newFilter: Filter = {
       //TODO: some stricter type checking
-      destination: inputData.destination,
-      frontLang: inputData.frontLang,
-      backLang: inputData.backLang,
-      words: inputData.words,
+      destination: inputData.destination.value,
+      frontLang: inputData.frontLang.value,
+      backLang: inputData.backLang.value,
+      words: inputData.words.value,
       length: {
-        direction: inputData.lengthDirection,
-        number: inputData.length,
+        direction: inputData.lengthDirection.value,
+        number: inputData.length.value,
       },
       id: nanoid(),
     };
@@ -102,7 +103,7 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
       setSelectedFilter([]);
     }
   };
-  const validated = Object.values(inputData).every((data) => !!data);
+  const validated = Object.values(inputData).every((data) => !!data.value || !data.required);
 
   return (
     <div className={css.container} tabIndex={0} onKeyDown={handleBackspace}>
@@ -129,15 +130,17 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
             {formConfig.map((inputs) => {
               if (!inputs.length) return undefined;
               return (
-                <div className = {css.smallGrid}>
-                  {inputs.map((input, ind) => {
-                    <label htmlFor={input.name}>{input.name}</label>
-                    return input.type === "select" ? (
+                <div>
+                  {inputs.map((input, ind) => (
+                    <div className = {css.smallGrid}>
+                    <label htmlFor={input.name} style = {{padding:"5px 0px"}}>{input.display} {input.required && <span className = {css.required}>*</span>}</label>
+                    {input.type === "select" ? (
                       <FormSelect {...input} update={updateInputData} key = {ind} keyInd={ind}/>
                     ) : (
                       <FormInput update={updateInputData} {...input} key = {ind} keyInd={ind}/>
-                    );
-                  })}
+                    )}
+                    </div>
+              ))}
                 </div>
               );
             })}

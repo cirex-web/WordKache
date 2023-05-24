@@ -31,7 +31,7 @@
 
   .smallGrid{
     display: grid;
-    grid-template-columns: 0.05fr 0.3fr 0.65fr;
+    grid-template-columns: 0.3fr 0.65fr;
     margin-left: 10px;
     row-gap: 7px;
   }

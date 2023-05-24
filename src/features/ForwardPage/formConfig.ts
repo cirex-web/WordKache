@@ -15,34 +15,43 @@ export const getFormConfig = (folders: Folder[]) => [
         {
             type: "select",
             name: "destination",
+            display: "Destination",
             defaultValue: "root",
             options: folders
-                .filter((folder) => folder.id !== "root")
+                //.filter((folder) => folder.id !== "root")
                 .map((folder) => {
                     return { value: folder.id, text: folder.name };
                 }),
+            required: true,
         },
         {
             type: "input",
             name: "frontLang",
+            display: "Front Language",
             parse: verifyLanguage,
             defaultValue: "",
+            required: false
         },
         {
             type: "input",
             name: "backLang",
+            display: "Back Language",
             parse: verifyLanguage,
             defaultValue: "",
+            required: false
         },
         {
             type: "input",
             name: "words",
+            display: "Has Words",
             parse: (text: string): String[] => text.split(" "),
             defaultValue: "",
+            required: false
         },
         {
             type: "select",
             name: "lengthDirection",
+            display: "Comparison",
             defaultValue: "greater",
             options: [
                 {
@@ -54,12 +63,15 @@ export const getFormConfig = (folders: Folder[]) => [
                     text: "less than",
                 },
             ],
+            required: false
         },
         {
             type: "input",
             name: "length",
+            display: "Length",
             parse: (text: string) => parseInt(text) || undefined,
             defaultValue: "",
+            required: false
         },
     ],
 ] satisfies ((
@@ -74,5 +86,6 @@ export const getFormConfig = (folders: Folder[]) => [
 ) & {
     defaultValue: string;
     name: string;
+    display: string;
     required?: boolean;
 })[][];

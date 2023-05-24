@@ -99,6 +99,7 @@ export const RecursiveFolder = ({
               : css.folderName
           }
           noSelect
+          style={{ paddingLeft: depth * 12 }} //idk who deleted it
           onMouseDown={(ev) => {
             if((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
               setActiveFolderId("");

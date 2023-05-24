@@ -16,3 +16,19 @@ export const Input = forwardRef<
     ></input>
   );
 });
+
+export const Select = forwardRef<
+  HTMLSelectElement,
+  React.DetailedHTMLProps<
+    React.SelectHTMLAttributes<HTMLSelectElement>,
+    HTMLSelectElement
+  >
+>(({ className, ...rest }, ref) => {
+  return (
+    <select
+      ref={ref}
+      {...rest}
+      className={css.select + " " + (className ?? "")}
+    ></select>
+  );
+});
