@@ -1,0 +1,15 @@
+.buttonTray {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+}
+.header {
+  text-align: left;
+  background-color: var(--dark-2);
+  padding: 10px 20px;
+  border-bottom: 2px solid var(--light-1);
+  position: relative;
+}
+

@@ -1,21 +1,28 @@
 import { forwardRef } from "react";
-import css from "./index.module.css";
+import css from "./index.module.scss";
+import classNames from "classnames";
 
-export const Input = forwardRef<
-  HTMLInputElement,
-  React.DetailedHTMLProps<
+interface IInputProps
+  extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
-  >
->(({ className, ...rest }, ref) => {
-  return (
-    <input
-      ref={ref}
-      {...rest}
-      className={css.input + " " + (className ?? "")}
-    ></input>
-  );
-});
+  > {
+  underline?: boolean;
+}
+
+export const Input = forwardRef<HTMLInputElement, IInputProps>(
+  ({ className, underline, ...rest }, ref) => {
+    return (
+      <input
+        ref={ref}
+        {...rest}
+        className={classNames(css.input, className, {
+          [css.underline]: underline,
+        })}
+      ></input>
+    );
+  }
+);
 
 export const Select = forwardRef<
   HTMLSelectElement,
@@ -28,7 +35,7 @@ export const Select = forwardRef<
     <select
       ref={ref}
       {...rest}
-      className={css.select + " " + (className ?? "")}
+      className={classNames(css.select, className)}
     ></select>
   );
 });

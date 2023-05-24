@@ -9,6 +9,7 @@ import { useFilters } from "../../utils/storage/filters";
 import { nanoid } from "nanoid";
 import { Input, Select } from "../../components/Input";
 import { getFormConfig } from "./formConfig";
+import { Header } from "../../components/Header";
 
 interface IGeneralInputProps {
   name: string;
@@ -22,8 +23,15 @@ interface ISelectProps extends IGeneralInputProps {
 }
 interface IInputProps extends IGeneralInputProps {
   parse: (val: string) => any;
+  placeholder: string;
 }
-const FormInput = ({ name, update, parse, defaultValue }: IInputProps) => {
+const FormInput = ({
+  name,
+  update,
+  parse,
+  defaultValue,
+  placeholder,
+}: IInputProps) => {
   return (
     <Input
       name={name}
@@ -33,7 +41,8 @@ const FormInput = ({ name, update, parse, defaultValue }: IInputProps) => {
         const parsedVal = textValue.length === 0 ? "" : parse(ev.target.value); //if the textbox is empty, count it as valid input
         update(name, parsedVal);
       }}
-      className ={css.filterInput}
+      placeholder={placeholder}
+      underline
     />
   );
 };
@@ -43,7 +52,6 @@ const FormSelect = ({ options, name, update, defaultValue }: ISelectProps) => {
       name={name}
       onChange={(ev) => update(name, ev.target.value)}
       defaultValue={defaultValue}
-      className ={css.filterInput}
     >
       {options.map(({ value, text }) => (
         <option key={value} value={value}>
@@ -55,24 +63,37 @@ const FormSelect = ({ options, name, update, defaultValue }: ISelectProps) => {
 };
 
 export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
-  const filters = useFilters();
+  const { filters, addFilter, deleteFilters } = useFilters();
   const formConfig = getFormConfig(folders);
   const [inputData, setInputData] = useState<{
     /** If undefined, it means that whatever's in the input is invalid */
-    [name: string]: {value: any; required: boolean};
+    [name: string]: { value: any; required: boolean };
   }>(
-    formConfig.flat().reduce((obj, curInput) => {
-      return {
-        ...obj,
-        [curInput.name]: {value: curInput.defaultValue, required: curInput.required},
-      };
-    }, {})
+    formConfig
+      .map((form) =>
+        form.inputs.map((inputConfig) => {
+          return { ...inputConfig, required: form.required }; //pass down the required property into the inputs
+        })
+      )
+      .flat()
+      .reduce((obj, curInput) => {
+        return {
+          ...obj,
+          [curInput.name]: {
+            value: curInput.defaultValue,
+            required: curInput.required,
+          },
+        };
+      }, {})
   );
 
   const [selectedFilter, setSelectedFilter] = useState<Filter[]>([]);
 
   const updateInputData = (name: string, val: any) => {
-    setInputData({ ...inputData, [name]: {value: val, required: inputData[name].required} });
+    setInputData({
+      ...inputData,
+      [name]: { value: val, required: inputData[name].required },
+    });
   };
 
   const [expand, setExpand] = useState<boolean>(true);
@@ -91,25 +112,23 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
       id: nanoid(),
     };
 
-    filters.addFilter(newFilter);
+    addFilter(newFilter);
     return "Added Filter";
   };
 
   const handleBackspace = (ev: React.KeyboardEvent<HTMLDivElement>) => {
     if (ev.key === "Backspace") {
-      filters.deleteFilters(selectedFilter.map((filter) => filter.id));
+      deleteFilters(selectedFilter.map((filter) => filter.id));
       setSelectedFilter([]);
     }
   };
-  const validated = Object.values(inputData).every((data) => !!data.value || !data.required);
+  const validated = Object.values(inputData).every(
+    (data) => !!data.value || !data.required
+  );
 
   return (
     <div className={css.container} tabIndex={0} onKeyDown={handleBackspace}>
-      <div className={css.header}>
-        <Text type="heading" bold noWrap className={css.heading}>
-          Filters
-        </Text>
-      </div>
+      <Header headingText="Filters" />
       <div className={css.content}>
         <Text type="heading" lineHeight={0.5} bold>
           Create Filter
@@ -124,19 +143,38 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
           />
         </Text>
         <div style={{ height: expand ? "100%" : 0 }} className={css.addFilter}>
-          <Text type="paragraph">
-            {formConfig.map((input, ind) => {
+          <Text type="paragraph" className={css.smallGrid}>
+            {formConfig.map((rowConfig, i) => {
+              if (!rowConfig.inputs.length) return undefined;
               return (
-                <div>
-                  <div className = {css.smallGrid}>
-                  <label htmlFor={input.name} style = {{padding:"5px 0px"}}>{input.displayName} {input.required && <span className = {css.required}>*</span>}</label>
-                  {input.type === "select" ? (
-                    <FormSelect {...input} update={updateInputData} key = {ind}/>
-                  ) : (
-                    <FormInput update={updateInputData} {...input} key = {ind}/>
-                  )}
+                <>
+                  <label htmlFor={rowConfig.displayName}>
+                    {rowConfig.displayName}
+                    {rowConfig.required && (
+                      <span className={css.required}>*</span>
+                    )}
+                  </label>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    {rowConfig.inputs.map((input) => {
+                      if (input.type === "select")
+                        return (
+                          <FormSelect
+                            {...input}
+                            update={updateInputData}
+                            key={i}
+                          />
+                        );
+                      else
+                        return (
+                          <FormInput
+                            {...input}
+                            update={updateInputData}
+                            key={i}
+                          />
+                        );
+                    })}
                   </div>
-                </div>
+                </>
               );
             })}
             {/*<div className={css.smallGrid}>
@@ -173,7 +211,7 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
               Has The Words{" "}
               <input
                 className={css.filterInput}
-                placeholder="Seperate With Spaces"
+                placeholder="Separate With Spaces"
                 onChange={(ev) => setWords(" " + ev.target.value)}
               />
               
@@ -211,7 +249,7 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
           </div>
         </div>
         <FilterTable
-          filters={filters.filters === undefined ? [] : filters.filters}
+          filters={filters === undefined ? [] : filters}
           folders={folders}
         />
       </div>

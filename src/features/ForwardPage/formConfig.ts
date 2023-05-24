@@ -10,74 +10,11 @@ const verifyLanguage = (lang: string): string[] | undefined => {
             : undefined;
 };
 
-export const getFormConfig = (folders: Folder[]) => 
-    [
-        {
-            type: "select",
-            name: "destination",
-            displayName: "Destination",
-            defaultValue: "root",
-            childrenOptions?: undefined,
-            options: folders
-                //.filter((folder) => folder.id !== "root")
-                .map((folder) => {
-                    return { value: folder.id, text: folder.name };
-                }),
-            required: true,
-        },
-        {
-            type: "input",
-            name: "frontLang",
-            displayName: "Front Language",
-            parse: verifyLanguage,
-            defaultValue: "",
-            required: false
-        },
-        {
-            type: "input",
-            name: "backLang",
-            displayName: "Back Language",
-            parse: verifyLanguage,
-            defaultValue: "",
-            required: false
-        },
-        {
-            type: "input",
-            name: "words",
-            displayName: "Has Words",
-            parse: (text: string): String[] => text.split(" "),
-            defaultValue: "",
-            required: false
-        },
-        {
-            type: "select",
-            name: "lengthDirection",
-            displayName: "Comparison",
-            defaultValue: "greater",
-            options: [
-                {
-                    value: "greater",
-                    text: "greater than",
-                },
-                {
-                    value: "less",
-                    text: "less than",
-                },
-            ],
-            required: false
-        },
-        {
-            type: "input",
-            name: "length",
-            displayName: "Length",
-            parse: (text: string) => parseInt(text) || undefined,
-            defaultValue: "",
-            required: false
-        },
-] satisfies ((
+type ISingleInput = (
     | {
         type: "input";
         parse: (text: string) => unknown;
+        placeholder: string;
     }
     | {
         type: "select";
@@ -85,8 +22,89 @@ export const getFormConfig = (folders: Folder[]) =>
     }
 ) & {
     defaultValue: string;
-    childrenOptions?: [];
     name: string;
-    displayName: string;
-    required?: boolean;
-})[];
+}
+export const getFormConfig = (folders: Folder[]): {
+    inputs: ISingleInput[],
+    displayName: string,
+    required?: boolean,
+}[] =>
+[
+    {
+        inputs: [{
+            type: "select",
+            name: "destination",
+            defaultValue: "root",
+            options: folders
+                //.filter((folder) => folder.id !== "root")
+                .map((folder) => {
+                    return { value: folder.id, text: folder.name };
+                })
+        }],
+        displayName: "Destination",
+        required: true
+    },
+    {
+        inputs: [{
+            type: "input",
+            name: "frontLang",
+            placeholder: "ISO6391 2 digit standard",
+            parse: verifyLanguage,
+            defaultValue: ""
+        }],
+        displayName: "Front Language",
+        required: false
+    },
+
+    {
+        inputs: [{
+            type: "input",
+            name: "backLang",
+            placeholder: "ISO6391 2 digit standard",
+            parse: verifyLanguage,
+            defaultValue: "",
+        }],
+        displayName: "Back Language",
+        required: false
+    },
+
+    {
+        inputs: [{
+            type: "input",
+            name: "words",
+            placeholder: "Separate With Spaces",
+            parse: (text: string): String[] => text.split(" "),
+            defaultValue: "",
+        }],
+        displayName: "Has Words",
+        required: false
+    },
+    {
+        inputs: [{
+            type: "select",
+            name: "lengthDirection",
+            defaultValue: "greater",
+            options: [
+                {
+                    value: "greater",
+                    text: "Greater Than",
+                },
+                {
+                    value: "less",
+                    text: "Less Than",
+                },
+            ],
+        },
+
+        {
+            type: "input",
+            name: "length",
+            placeholder: "Character Count",
+            parse: (text: string) => parseInt(text) || undefined,
+            defaultValue: "",
+        },
+        ],
+        displayName: "Length",
+        required: false
+    }
+];

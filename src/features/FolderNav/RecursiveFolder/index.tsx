@@ -7,10 +7,11 @@ import React, {
 } from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
-import css from "./index.module.css";
+import css from "./index.module.scss";
 import { FileDirectory } from "../../../types/folderTypes";
 import { Input } from "../../../components/Input";
 import { UseFolderContext } from "../../App";
+import classNames from "classnames/bind";
 
 export const RecursiveFolder = ({
   folders,
@@ -43,7 +44,7 @@ export const RecursiveFolder = ({
   const nameChangeRef = React.useRef(false);
 
   folders.open = subfolderOpen; //TODO: should update the entire folders obj (cuz it's a state a think)
-  useEffect(() => { }, [subfolderOpen]);
+  useEffect(() => {}, [subfolderOpen]);
 
   const updateHeight = useCallback(
     (delta: number) => {
@@ -88,27 +89,21 @@ export const RecursiveFolder = ({
       <li className={css.folder}>
         <Text
           type="subheading"
-          className={
-            active
-              ? css.activeFolderName
-              : selected
-                ? css.selectedFolderName
-                : css.folderName
-          }
+          className={classNames.bind(css)("folderName", {
+            activeFolderName: active,
+            selectedFolderName: selected,
+          })}
           noSelect
-          style={{ paddingLeft: depth * 12 }} //idk who deleted it
+          style={{ paddingLeft: depth * 12 }}
           onMouseDown={(ev) => {
             if ((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
               setActiveFolderId("");
-            else
-              setActiveFolderId(folders.id);
+            else setActiveFolderId(folders.id);
 
             selectFolders(ev, folders.id);
             nameChangeRef.current =
-              ev.detail >= 2 &&
-                folders.id !== "root" &&
-                folders.id !== "defaultFolder"
-                ? true
+              ev.detail >= 2 && folders.id !== "root"
+                ? true //TODO:
                 : nameChangeRef.current;
           }}
           onMouseLeave={() => {
