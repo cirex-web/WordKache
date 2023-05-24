@@ -1,10 +1,10 @@
-import { ForwardedRef, Ref, SelectHTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
 import css from "./index.module.scss";
 import classNames from "classnames";
 
 interface IInputProps
   extends React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
+    React.ComponentProps<"input">,
     HTMLInputElement
   > {
   underline?: boolean;
@@ -26,8 +26,8 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
 
 export const Select = forwardRef<
   HTMLSelectElement,
-  SelectHTMLAttributes<HTMLSelectElement>
->(({ className, ...rest }: SelectHTMLAttributes<HTMLSelectElement>, ref) => {
+  React.ComponentProps<"select">
+>(({ className, ...rest }, ref) => {
   return (
     <select
       ref={ref}

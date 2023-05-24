@@ -23,7 +23,7 @@ interface IGeneralInputProps {
 }
 interface ISelectProps
   extends IGeneralInputProps,
-    ComponentPropsWithoutRef<"select"> {
+    React.ComponentPropsWithoutRef<"select"> {
   options: { value: string; text: string }[];
   name: string;
 }
