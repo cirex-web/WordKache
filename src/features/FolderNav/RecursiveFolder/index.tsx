@@ -36,7 +36,6 @@ export const RecursiveFolder = ({
   const [subfolderHeight, setSubFolderHeight] = useState(0);
   const [subfolderOpen, setSubfolderOpen] = useState(!!folders.open);
 
-  const [mouseOver, setMouseOver] = useState(false);
   const [bottomBorder, setBottomBorder] = React.useState(false);
 
   const active = activeFolderId === folders.id;
@@ -85,8 +84,6 @@ export const RecursiveFolder = ({
         ev.preventDefault();
         setBottomBorder(false);
       }}
-      onMouseEnter={() => setMouseOver(true)}
-      onMouseLeave={() => setMouseOver(false)}
     >
       <li className={css.folder}>
         <Text
@@ -146,22 +143,7 @@ export const RecursiveFolder = ({
           ) : (
             <Text noWrap>{folders.name}</Text>
           )}
-          <span className={css.forwardIcon}>
-            {/*<Icon
-              name="forward"
-              style={{
-                opacity:
-                  mouseOver || (forwarding && folders.id === activeFolder.id)
-                    ? "1"
-                    : "0",
-                fontSize:
-                  forwarding && folders.id === activeFolder.id
-                    ? "2rem"
-                    : "1.5rem",
-              }}
-              onClick={() => setForwarding(!forwarding)}
-            /> Will move to own button*/}
-          </span>
+
         </Text>
 
         {folders.subFolders && (
