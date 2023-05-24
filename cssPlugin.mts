@@ -6,7 +6,7 @@ import crypto from "crypto";
 import postcss from "postcss"
 import * as postcssModules from "postcss-modules"
 import * as sass from "sass";
-
+// sass = sass.default;
 import type * as esbuild from "esbuild";
 
 const PLUGIN = 'esbuild-scss-modules-plugin'

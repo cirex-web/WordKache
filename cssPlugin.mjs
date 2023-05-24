@@ -60,6 +60,7 @@ import crypto from "crypto";
 import postcss from "postcss";
 import * as postcssModules from "postcss-modules";
 import * as sass from "sass";
+sass = sass["default"];
 var PLUGIN = 'esbuild-scss-modules-plugin';
 var DefaultOptions = {
     inject: true,
