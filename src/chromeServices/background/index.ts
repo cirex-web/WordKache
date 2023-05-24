@@ -2,7 +2,7 @@ import { logger } from "../logger";
 import { ChromeStorage } from "../../utils/storage/storage";
 import { ITranslationSnapshot } from "../types";
 import { requestParsers } from "./requestParser";
-import { Card, Folder } from "../../types/storageTypes";
+import { Card, Folder, Filter } from "../../types/storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
@@ -41,10 +41,41 @@ chrome.webRequest.onCompleted.addListener((request) => {
         "https://*/*"]
 });
 
+const filterCards = (snapshot: ITranslationSnapshot, filters: Filter[]) => {
+         if (!filters.length) return "root";
+    
+         const fitSize = (filter: Filter, card: Card) => {
+           if (!filter.length) return false;
+           if (filter.length.direction === "greater") {
+             return (
+               Math.max(card.back.text.length, card.front.text.length) >
+               filter.length.number
+             );
+           } else {
+             return (
+               Math.min(card.back.text.length, card.front.text.length) <=
+               filter.length.number
+             );
+           }
+         };
+
+         const hasWords = (filter: Filter, card: Card) => {
+            if(filter.words === undefined)
+                return true;
+            return filter.words!.every((word) => card.back.text.includes(word) || card.front.text.includes(word))
+        };
+
+        const hasLang = (lang: string[] | undefined, card: Card) => (lang === undefined || lang!.includes(card.front.lang))
+
+        
+
+}
+
 const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
     const hiddenCount = cards.reduce((sum, card) => sum + (card.hidden ? 1 : 0), 0)
+    const filter: Filter[] = (await ChromeStorage.get("filters") as Filter[] ?? []);
     let hidden = hiddenCount < 30 ? Math.random() < 0.5 : false; //set cutoff at 30
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;

@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { ForwardedRef, Ref, SelectHTMLAttributes, forwardRef } from "react";
 import css from "./index.module.scss";
 import classNames from "classnames";
 
@@ -26,16 +26,18 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
 
 export const Select = forwardRef<
   HTMLSelectElement,
-  React.DetailedHTMLProps<
-    React.SelectHTMLAttributes<HTMLSelectElement>,
-    HTMLSelectElement
-  >
->(({ className, ...rest }, ref) => {
-  return (
-    <select
-      ref={ref}
-      {...rest}
-      className={classNames(css.select, className)}
-    ></select>
-  );
-});
+  SelectHTMLAttributes<HTMLSelectElement>
+>(
+  (
+    { className, ...rest }: SelectHTMLAttributes<HTMLSelectElement>,
+    ref: Ref<ForwardedRef>
+  ) => {
+    return (
+      <select
+        ref={ref}
+        {...rest}
+        className={classNames(css.select, className)}
+      ></select>
+    );
+  }
+);

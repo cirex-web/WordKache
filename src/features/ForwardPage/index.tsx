@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { SelectHTMLAttributes, forwardRef, useState } from "react";
 import css from "./index.module.css";
 import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
@@ -12,18 +12,21 @@ import { getFormConfig } from "./formConfig";
 import { Header } from "../../components/Header";
 
 interface IGeneralInputProps {
-  name: string;
   update: (key: string, val: any) => void;
-  defaultValue: string;
   required?: boolean;
   keyInd?: number;
 }
-interface ISelectProps extends IGeneralInputProps {
+interface ISelectProps
+  extends IGeneralInputProps,
+    React.HTMLProps<HTMLSelectElement> {
   options: { value: string; text: string }[];
+  name: string;
 }
-interface IInputProps extends IGeneralInputProps {
+interface IInputProps
+  extends IGeneralInputProps,SelectHTMLAttributes<HTMLSelectElement>{
   parse: (val: string) => any;
   placeholder: string;
+  name: string;
 }
 const FormInput = ({
   name,
@@ -46,12 +49,15 @@ const FormInput = ({
     />
   );
 };
-const FormSelect = ({ options, name, update, defaultValue }: ISelectProps) => {
+
+const FormSelect = forwardRef<HTMLSelectElement,ISelectProps>(({ options, name, update, ...rest },ref) => {
   return (
+    
     <Select
       name={name}
       onChange={(ev) => update(name, ev.target.value)}
-      defaultValue={defaultValue}
+      ref={ref}
+      {...rest}
     >
       {options.map(({ value, text }) => (
         <option key={value} value={value}>
@@ -60,7 +66,7 @@ const FormSelect = ({ options, name, update, defaultValue }: ISelectProps) => {
       ))}
     </Select>
   );
-};
+});
 
 export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
   const { filters, addFilter, deleteFilters } = useFilters();
@@ -96,7 +102,7 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
     });
   };
 
-  const [expand, setExpand] = useState<boolean>(true);
+  const [expand, setExpand] = useState(true);
 
   const createFilter = (): string => {
     const newFilter: Filter = {
@@ -148,13 +154,19 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
               if (!rowConfig.inputs.length) return undefined;
               return (
                 <>
-                  <label htmlFor={rowConfig.displayName}>
+                  <label
+                    htmlFor={rowConfig.displayName}
+                    key={rowConfig.displayName + "_text"}
+                  >
                     {rowConfig.displayName}
                     {rowConfig.required && (
                       <span className={css.required}>*</span>
                     )}
                   </label>
-                  <div style={{ display: "flex", gap: "10px" }}>
+                  <div
+                    style={{ display: "flex", gap: "10px" }}
+                    key={rowConfig.displayName + "_input"}
+                  >
                     {rowConfig.inputs.map((input) => {
                       if (input.type === "select")
                         return (
@@ -162,6 +174,7 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
                             {...input}
                             update={updateInputData}
                             key={i}
+                            id={rowConfig.displayName}
                           />
                         );
                       else
@@ -170,6 +183,7 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
                             {...input}
                             update={updateInputData}
                             key={i}
+                            id={rowConfig.displayName}
                           />
                         );
                     })}
@@ -177,60 +191,6 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
                 </>
               );
             })}
-            {/*<div className={css.smallGrid}>
-              <span className={css.required}>*</span>
-              <span>Destination</span>
-              <select
-                className={css.filterInput}
-                onChange={(ev) => setDestination(ev.target.value)}
-              >
-                <option value="">Select An Option</option>
-                {folders
-                  .filter((folder) => folder.id !== curFolder)
-                  .map((folder) => (
-                    <option key={folder.id} value={folder.id}>
-                      {folder.name}
-                    </option>
-                  ))}
-              </select>
-              <span />
-              Front Language{" "}
-              <input
-                className={css.filterInput}
-                placeholder="ISO6391 2 digit standard"
-                onChange={(ev) => setFrontLang(ev.target.value)}
-              />{" "}
-              <span />
-              Back Language{" "}
-              <input
-                className={css.filterInput}
-                placeholder="ISO6391 2 digit standard"
-                onChange={(ev) => setBackLang(ev.target.value)}
-              />
-              <span />
-              Has The Words{" "}
-              <input
-                className={css.filterInput}
-                placeholder="Separate With Spaces"
-                onChange={(ev) => setWords(" " + ev.target.value)}
-              />
-              
-            </div>
-            <div className={css.bigGrid}>
-              Length
-              <select
-                className={css.filterInput}
-                onChange={(ev) => setComparison(ev.target.value)}
-              >
-                <option value=">">greater than</option>
-                <option value="<">less than</option>
-              </select>
-              <input
-                className={css.filterInput}
-                placeholder="Number of Characters"
-                onChange={(ev) => setSize(ev.target.value)}
-              />
-            </div>*/}
           </Text>
 
           <div className={css.submit}>
