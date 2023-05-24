@@ -36,7 +36,6 @@ export const RecursiveFolder = ({
   const [subfolderHeight, setSubFolderHeight] = useState(0);
   const [subfolderOpen, setSubfolderOpen] = useState(!!folders.open);
 
-  const [mouseOver, setMouseOver] = useState(false);
   const [bottomBorder, setBottomBorder] = React.useState(false);
 
   const active = activeFolderId === folders.id;
@@ -44,7 +43,7 @@ export const RecursiveFolder = ({
   const nameChangeRef = React.useRef(false);
 
   folders.open = subfolderOpen; //TODO: should update the entire folders obj (cuz it's a state a think)
-  useEffect(() => {}, [subfolderOpen]);
+  useEffect(() => { }, [subfolderOpen]);
 
   const updateHeight = useCallback(
     (delta: number) => {
@@ -85,8 +84,6 @@ export const RecursiveFolder = ({
         ev.preventDefault();
         setBottomBorder(false);
       }}
-      onMouseEnter={() => setMouseOver(true)}
-      onMouseLeave={() => setMouseOver(false)}
     >
       <li className={css.folder}>
         <Text
@@ -95,22 +92,22 @@ export const RecursiveFolder = ({
             active
               ? css.activeFolderName
               : selected
-              ? css.selectedFolderName
-              : css.folderName
+                ? css.selectedFolderName
+                : css.folderName
           }
           noSelect
           style={{ paddingLeft: depth * 12 }} //idk who deleted it
           onMouseDown={(ev) => {
-            if((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
+            if ((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
               setActiveFolderId("");
             else
               setActiveFolderId(folders.id);
-            
+
             selectFolders(ev, folders.id);
             nameChangeRef.current =
               ev.detail >= 2 &&
-              folders.id !== "root" &&
-              folders.id !== "defaultFolder"
+                folders.id !== "root" &&
+                folders.id !== "defaultFolder"
                 ? true
                 : nameChangeRef.current;
           }}
@@ -147,20 +144,6 @@ export const RecursiveFolder = ({
             <Text noWrap>{folders.name}</Text>
           )}
           <span className={css.forwardIcon}>
-            {/*<Icon
-              name="forward"
-              style={{
-                opacity:
-                  mouseOver || (forwarding && folders.id === activeFolder.id)
-                    ? "1"
-                    : "0",
-                fontSize:
-                  forwarding && folders.id === activeFolder.id
-                    ? "2rem"
-                    : "1.5rem",
-              }}
-              onClick={() => setForwarding(!forwarding)}
-            /> Will move to own button*/}
           </span>
         </Text>
 
