@@ -72,7 +72,7 @@ function App() {
         />
       </div>
       {!activeFolderId.length ? (
-        <ForwardingPage folders={folders === undefined ? [] : folders} />
+        <ForwardingPage folders={folders === undefined ? [] : folders} key = "filters" />
       ) : (
         cardsUnderCurrentFolder && (
           <WordTable

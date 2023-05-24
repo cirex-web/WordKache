@@ -43,7 +43,7 @@ export const RecursiveFolder = ({
   const nameChangeRef = React.useRef(false);
 
   folders.open = subfolderOpen; //TODO: should update the entire folders obj (cuz it's a state a think)
-  useEffect(() => {}, [subfolderOpen]);
+  useEffect(() => { }, [subfolderOpen]);
 
   const updateHeight = useCallback(
     (delta: number) => {
@@ -92,22 +92,22 @@ export const RecursiveFolder = ({
             active
               ? css.activeFolderName
               : selected
-              ? css.selectedFolderName
-              : css.folderName
+                ? css.selectedFolderName
+                : css.folderName
           }
           noSelect
           style={{ paddingLeft: depth * 12 }} //idk who deleted it
           onMouseDown={(ev) => {
-            if((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
+            if ((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
               setActiveFolderId("");
             else
               setActiveFolderId(folders.id);
-            
+
             selectFolders(ev, folders.id);
             nameChangeRef.current =
               ev.detail >= 2 &&
-              folders.id !== "root" &&
-              folders.id !== "defaultFolder"
+                folders.id !== "root" &&
+                folders.id !== "defaultFolder"
                 ? true
                 : nameChangeRef.current;
           }}
@@ -143,7 +143,6 @@ export const RecursiveFolder = ({
           ) : (
             <Text noWrap>{folders.name}</Text>
           )}
-
         </Text>
 
         {folders.subFolders && (

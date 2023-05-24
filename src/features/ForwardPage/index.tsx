@@ -23,7 +23,7 @@ interface ISelectProps extends IGeneralInputProps {
 interface IInputProps extends IGeneralInputProps {
   parse: (val: string) => any;
 }
-const FormInput = ({ name, update, parse, defaultValue, keyInd }: IInputProps) => {
+const FormInput = ({ name, update, parse, defaultValue }: IInputProps) => {
   return (
     <Input
       name={name}
@@ -34,18 +34,16 @@ const FormInput = ({ name, update, parse, defaultValue, keyInd }: IInputProps) =
         update(name, parsedVal);
       }}
       className ={css.filterInput}
-      key = {keyInd}
     />
   );
 };
-const FormSelect = ({ options, name, update, defaultValue, keyInd }: ISelectProps) => {
+const FormSelect = ({ options, name, update, defaultValue }: ISelectProps) => {
   return (
     <Select
       name={name}
       onChange={(ev) => update(name, ev.target.value)}
       defaultValue={defaultValue}
       className ={css.filterInput}
-      key = {keyInd}
     >
       {options.map(({ value, text }) => (
         <option key={value} value={value}>
@@ -127,20 +125,17 @@ export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
         </Text>
         <div style={{ height: expand ? "100%" : 0 }} className={css.addFilter}>
           <Text type="paragraph">
-            {formConfig.map((inputs) => {
-              if (!inputs.length) return undefined;
+            {formConfig.map((input, ind) => {
               return (
                 <div>
-                  {inputs.map((input, ind) => (
-                    <div className = {css.smallGrid}>
-                    <label htmlFor={input.name} style = {{padding:"5px 0px"}}>{input.display} {input.required && <span className = {css.required}>*</span>}</label>
-                    {input.type === "select" ? (
-                      <FormSelect {...input} update={updateInputData} key = {ind} keyInd={ind}/>
-                    ) : (
-                      <FormInput update={updateInputData} {...input} key = {ind} keyInd={ind}/>
-                    )}
-                    </div>
-              ))}
+                  <div className = {css.smallGrid}>
+                  <label htmlFor={input.name} style = {{padding:"5px 0px"}}>{input.displayName} {input.required && <span className = {css.required}>*</span>}</label>
+                  {input.type === "select" ? (
+                    <FormSelect {...input} update={updateInputData} key = {ind}/>
+                  ) : (
+                    <FormInput update={updateInputData} {...input} key = {ind}/>
+                  )}
+                  </div>
                 </div>
               );
             })}

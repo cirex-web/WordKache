@@ -10,13 +10,14 @@ const verifyLanguage = (lang: string): string[] | undefined => {
             : undefined;
 };
 
-export const getFormConfig = (folders: Folder[]) => [
+export const getFormConfig = (folders: Folder[]) => 
     [
         {
             type: "select",
             name: "destination",
-            display: "Destination",
+            displayName: "Destination",
             defaultValue: "root",
+            childrenOptions?: undefined,
             options: folders
                 //.filter((folder) => folder.id !== "root")
                 .map((folder) => {
@@ -27,7 +28,7 @@ export const getFormConfig = (folders: Folder[]) => [
         {
             type: "input",
             name: "frontLang",
-            display: "Front Language",
+            displayName: "Front Language",
             parse: verifyLanguage,
             defaultValue: "",
             required: false
@@ -35,7 +36,7 @@ export const getFormConfig = (folders: Folder[]) => [
         {
             type: "input",
             name: "backLang",
-            display: "Back Language",
+            displayName: "Back Language",
             parse: verifyLanguage,
             defaultValue: "",
             required: false
@@ -43,7 +44,7 @@ export const getFormConfig = (folders: Folder[]) => [
         {
             type: "input",
             name: "words",
-            display: "Has Words",
+            displayName: "Has Words",
             parse: (text: string): String[] => text.split(" "),
             defaultValue: "",
             required: false
@@ -51,7 +52,7 @@ export const getFormConfig = (folders: Folder[]) => [
         {
             type: "select",
             name: "lengthDirection",
-            display: "Comparison",
+            displayName: "Comparison",
             defaultValue: "greater",
             options: [
                 {
@@ -68,12 +69,11 @@ export const getFormConfig = (folders: Folder[]) => [
         {
             type: "input",
             name: "length",
-            display: "Length",
+            displayName: "Length",
             parse: (text: string) => parseInt(text) || undefined,
             defaultValue: "",
             required: false
         },
-    ],
 ] satisfies ((
     | {
         type: "input";
@@ -85,7 +85,8 @@ export const getFormConfig = (folders: Folder[]) => [
     }
 ) & {
     defaultValue: string;
+    childrenOptions?: [];
     name: string;
-    display: string;
+    displayName: string;
     required?: boolean;
-})[][];
+})[];
