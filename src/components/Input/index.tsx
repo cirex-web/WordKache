@@ -27,17 +27,12 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
 export const Select = forwardRef<
   HTMLSelectElement,
   SelectHTMLAttributes<HTMLSelectElement>
->(
-  (
-    { className, ...rest }: SelectHTMLAttributes<HTMLSelectElement>,
-    ref: Ref<ForwardedRef>
-  ) => {
-    return (
-      <select
-        ref={ref}
-        {...rest}
-        className={classNames(css.select, className)}
-      ></select>
-    );
-  }
-);
+>(({ className, ...rest }: SelectHTMLAttributes<HTMLSelectElement>, ref) => {
+  return (
+    <select
+      ref={ref}
+      {...rest}
+      className={classNames(css.select, className)}
+    ></select>
+  );
+});

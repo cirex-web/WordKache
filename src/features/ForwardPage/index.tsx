@@ -1,4 +1,9 @@
-import React, { SelectHTMLAttributes, forwardRef, useState } from "react";
+import React, {
+  ComponentPropsWithoutRef,
+  SelectHTMLAttributes,
+  forwardRef,
+  useState,
+} from "react";
 import css from "./index.module.css";
 import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
@@ -18,12 +23,13 @@ interface IGeneralInputProps {
 }
 interface ISelectProps
   extends IGeneralInputProps,
-    React.HTMLProps<HTMLSelectElement> {
+    ComponentPropsWithoutRef<"select"> {
   options: { value: string; text: string }[];
   name: string;
 }
 interface IInputProps
-  extends IGeneralInputProps,SelectHTMLAttributes<HTMLSelectElement>{
+  extends IGeneralInputProps,
+    ComponentPropsWithoutRef<"input"> {
   parse: (val: string) => any;
   placeholder: string;
   name: string;
@@ -50,23 +56,24 @@ const FormInput = ({
   );
 };
 
-const FormSelect = forwardRef<HTMLSelectElement,ISelectProps>(({ options, name, update, ...rest },ref) => {
-  return (
-    
-    <Select
-      name={name}
-      onChange={(ev) => update(name, ev.target.value)}
-      ref={ref}
-      {...rest}
-    >
-      {options.map(({ value, text }) => (
-        <option key={value} value={value}>
-          {text}
-        </option>
-      ))}
-    </Select>
-  );
-});
+const FormSelect = forwardRef<HTMLSelectElement, ISelectProps>(
+  ({ options, name, update, ...rest }, ref) => {
+    return (
+      <Select
+        name={name}
+        onChange={(ev) => update(name, ev.target.value)}
+        ref={ref}
+        {...rest}
+      >
+        {options.map(({ value, text }) => (
+          <option key={value} value={value}>
+            {text}
+          </option>
+        ))}
+      </Select>
+    );
+  }
+);
 
 export const ForwardingPage = ({ folders }: { folders: Folder[] }) => {
   const { filters, addFilter, deleteFilters } = useFilters();
