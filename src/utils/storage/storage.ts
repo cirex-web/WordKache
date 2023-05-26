@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fakeData } from "./fakeStorage";
 
 if (!chrome.storage) {
+
     let manualStorage = fakeData;
 
     type EventListener = (changes: {
@@ -10,7 +11,7 @@ if (!chrome.storage) {
     let eventListeners: EventListener[] = [];
 
     const isValidKey = (key: string): key is keyof typeof manualStorage => {
-        const valid = key === "cards" || key === "folders";
+        const valid = key in fakeData; //we're assuming that fakeData contains all possible keys to begin with
         if (!valid) console.warn("Attempted to get data with invalid key", key);
         return valid;
     }
@@ -65,7 +66,7 @@ if (!chrome.storage) {
 }
 
 export const useStorage = <T>(key: string, defaultValue: T) => {
-    const [value, setValue] = useState<T>(defaultValue);
+    const [value, setValue] = useState<T>();
 
     useEffect(() => {
         ChromeStorage.get(key).then((val) => setValue((val ?? defaultValue) as T));

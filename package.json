@@ -58,6 +58,7 @@
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-eslint": "^0.3.6",
     "esbuild-plugin-inline-image": "^0.0.9",
+    "esbuild-plugin-lightningcss-modules": "^0.1.0",
     "esbuild-sass-plugin": "^2.9.0",
     "tslib": "^2.5.0",
     "zip-a-folder": "^1.1.5"

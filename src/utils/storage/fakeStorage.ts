@@ -1,7 +1,7 @@
 import { Card, Folder, Filter } from "../../types/storageTypes";
 
 // just for npm start
-export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Filter[] } = {
+export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Filter[], "debug"?: any, "userId"?: string } = {
     "cards": [
         {
             "back": {
@@ -344,5 +344,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Fil
             "destination": "defaultFolder",
             "id": "1352389",
         },
-    ]
+    ],
+    userId: "AAAAA",
+    debug: false
 }

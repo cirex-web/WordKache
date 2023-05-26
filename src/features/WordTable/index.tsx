@@ -22,7 +22,7 @@ const Placeholder = ({
   className?: string;
 }) => {
   return (
-    <div className={css.placeholder + " " + className}>
+    <div className={classNames(css.placeholder, className)}>
       <img src={image} alt="" height={100} />
       <Text type="heading">{text}</Text>
     </div>
@@ -96,7 +96,10 @@ const WordTable = ({
   return (
     <div className={css.container}>
       <TableHeader
-        folderName={folders.find((folder) => folder.id === activeFolderId)?.name ?? "Error"}
+        folderName={
+          folders.find((folder) => folder.id === activeFolderId)?.name ??
+          "Error"
+        }
         setSearchInput={setInput}
         cards={cards}
         filteredCards={filteredCards}
@@ -176,7 +179,10 @@ const WordTable = ({
           cards={activeCards}
           saveCard={() => {
             selectNewCard();
-            moveCards(activeCardIds, selectedFolderIds.filter((id) => id !== activeFolderId));
+            moveCards(
+              activeCardIds,
+              selectedFolderIds.filter((id) => id !== activeFolderId)
+            );
           }}
           deleteCard={() => {
             selectNewCard();

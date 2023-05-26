@@ -9,22 +9,23 @@ import { useFolders } from "../utils/storage/folders";
 import { UserManual } from "./UserManual";
 import { Folder } from "../types/storageTypes";
 
-export const FolderContext = createContext<{
-  /** The folder you currently are in */
-  folders: Folder[];
-  activeFolderId: string;
-  setActiveFolderId: React.Dispatch<React.SetStateAction<string>>;
-  /** Your range-selected folders */
-  selectedFolderIds: string[];
-  setSelectedFolderIds: React.Dispatch<React.SetStateAction<string[]>>;
-  moveFolder: (sourceId: string, targetId: string) => void;
-} | undefined>(undefined);
+export const FolderContext = createContext<
+  | {
+      /** The folder you currently are in */
+      folders: Folder[];
+      activeFolderId: string;
+      setActiveFolderId: React.Dispatch<React.SetStateAction<string>>;
+      /** Your range-selected folders */
+      selectedFolderIds: string[];
+      setSelectedFolderIds: React.Dispatch<React.SetStateAction<string[]>>;
+      moveFolder: (sourceId: string, targetId: string) => void;
+    }
+  | undefined
+>(undefined);
 
 export const UseFolderContext = () => {
   const context = useContext(FolderContext);
-  if (
-    context === undefined 
-  )
+  if (context === undefined)
     throw new Error(
       "You've used FolderContext outside of its designated scope!"
     );
@@ -72,7 +73,10 @@ function App() {
         />
       </div>
       {!activeFolderId.length ? (
-        <ForwardingPage folders={folders === undefined ? [] : folders} key = "filters" />
+        <ForwardingPage
+          folders={folders === undefined ? [] : folders}
+          key="filters"
+        />
       ) : (
         cardsUnderCurrentFolder && (
           <WordTable

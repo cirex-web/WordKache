@@ -42,39 +42,39 @@ chrome.webRequest.onCompleted.addListener((request) => {
 });
 
 const filterCards = (snapshot: ITranslationSnapshot, filters: Filter[]) => {
-         if (!filters.length) return ["root"];
-    
-         const fitSize = (length: {direction: string, number: number} | undefined, frontLength: number, backLength: number) => {
-           if (!length) return true;
-           if (length.direction === "greater") {
-             return (
-               Math.max(frontLength, backLength) >
-               length.number
-             );
-           } else {
-             return (
-               Math.min(frontLength, backLength) <=
-               length.number
-             );
-           }
-         };
+    if (!filters.length) return ["root"];
 
-         const hasWords = (words: string[] | undefined, text: string) => {
-            if(words === undefined)
-                return true;
-            return words.every((word) => text.includes(word))
-        };
+    const fitSize = (length: { direction: string, number: number } | undefined, frontLength: number, backLength: number) => {
+        if (!length) return true;
+        if (length.direction === "greater") {
+            return (
+                Math.max(frontLength, backLength) >
+                length.number
+            );
+        } else {
+            return (
+                Math.min(frontLength, backLength) <=
+                length.number
+            );
+        }
+    };
 
-        const hasLang = (lang: string[] | undefined, cardLang: string) => (lang === undefined || lang!.includes(cardLang))
-        
-        let destinations: string[] = [];
+    const hasWords = (words: string[] | undefined, text: string) => {
+        if (words === undefined)
+            return true;
+        return words.every((word) => text.includes(word))
+    };
 
-        filters.forEach((filter) => {
-            if(hasLang(filter.frontLang, snapshot.inputLang) || hasLang(filter.backLang, snapshot.outputLang) ||
-                hasWords(filter.words, snapshot.inputText) || fitSize(filter.length, snapshot.inputText.length, snapshot.outputText.length))
-                destinations.push(filter.destination)
-        })
-        return destinations.length? destinations: ["root"];
+    const hasLang = (lang: string[] | undefined, cardLang: string) => (lang === undefined || lang!.includes(cardLang))
+
+    let destinations: string[] = [];
+
+    filters.forEach((filter) => {
+        if (hasLang(filter.frontLang, snapshot.inputLang) || hasLang(filter.backLang, snapshot.outputLang) ||
+            hasWords(filter.words, snapshot.inputText) || fitSize(filter.length, snapshot.inputText.length, snapshot.outputText.length))
+            destinations.push(filter.destination)
+    })
+    return destinations.length ? destinations : ["root"];
 
 }
 
@@ -110,7 +110,7 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
             location: dest, //The Just Collected folder
             timeCreated: snapshot.inputTime,
             source: snapshot.source,
-    
+
         });
     })
 
@@ -219,6 +219,7 @@ async function updateStorageVersion() {
 };
 
 chrome.runtime.onInstalled.addListener(async () => {
+    await preloadHTML();
     await updateStorageVersion();
     const existingFirebaseAlarm = await chrome.alarms.get("firebaseUpload");
     if (!existingFirebaseAlarm) {
@@ -232,3 +233,8 @@ chrome.runtime.onInstalled.addListener(async () => {
     }
 }); //run this only on first load 
 
+const preloadHTML = async () => {
+    if (!await chrome.offscreen.hasDocument()) {
+        chrome.offscreen.createDocument({ "url": "index.html", reasons: [chrome.offscreen.Reason.DISPLAY_MEDIA], justification: "Helps with faster load times of popup" })
+    }
+}

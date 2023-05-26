@@ -17,7 +17,8 @@
   "permissions": [
     "storage",
     "webRequest",
-    "alarms"
+    "alarms",
+    "offscreen"
   ],
   "host_permissions": [
     "*://translate.google.com/*"
