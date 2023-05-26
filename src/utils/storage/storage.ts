@@ -65,7 +65,7 @@ if (!chrome.storage) {
 }
 
 export const useStorage = <T>(key: string, defaultValue: T) => {
-    const [value, setValue] = useState<T>();
+    const [value, setValue] = useState<T>(defaultValue);
 
     useEffect(() => {
         ChromeStorage.get(key).then((val) => setValue((val ?? defaultValue) as T));
