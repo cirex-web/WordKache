@@ -25,7 +25,7 @@ export const FolderNav = ({
   renameFolder: (fileName: string, folderId: string) => void;
 }) => {
   const fileTree: FileDirectory[] = [...generateTreeStructure(folders)]; //why make a copy here?
-  const { selectedFolderIds, setSelectedFolderIds, moveFolder } =
+  const { selectedFolderIds, activeFolderId, setSelectedFolderIds, moveFolder } =
     UseFolderContext();
 
   const pivotPointRef = React.useRef(0);
@@ -56,7 +56,7 @@ export const FolderNav = ({
           onMouseDown={() =>
             addFolder(
               "New Folder",
-              selectedFolderIds.length === 1 ? selectedFolderIds[0] : undefined
+              activeFolderId
             )
           }
           zoomOnHover

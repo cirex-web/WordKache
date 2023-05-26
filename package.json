@@ -59,7 +59,6 @@
     "esbuild-plugin-eslint": "^0.3.6",
     "esbuild-plugin-inline-image": "^0.0.9",
     "esbuild-sass-plugin": "^2.9.0",
-    "esbuild-scss-modules-plugin": "^1.1.1",
     "tslib": "^2.5.0",
     "zip-a-folder": "^1.1.5"
   }

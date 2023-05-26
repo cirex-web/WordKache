@@ -7,10 +7,11 @@ import React, {
 } from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
-import css from "./index.module.css";
+import css from "./index.module.scss";
 import { FileDirectory } from "../../../types/folderTypes";
 import { Input } from "../../../components/Input";
 import { UseFolderContext } from "../../App";
+import classNames from "classnames/bind";
 
 export const RecursiveFolder = ({
   folders,
@@ -36,7 +37,6 @@ export const RecursiveFolder = ({
   const [subfolderHeight, setSubFolderHeight] = useState(0);
   const [subfolderOpen, setSubfolderOpen] = useState(!!folders.open);
 
-  const [mouseOver, setMouseOver] = useState(false);
   const [bottomBorder, setBottomBorder] = React.useState(false);
 
   const active = activeFolderId === folders.id;
@@ -85,28 +85,25 @@ export const RecursiveFolder = ({
         ev.preventDefault();
         setBottomBorder(false);
       }}
-      onMouseEnter={() => setMouseOver(true)}
-      onMouseLeave={() => setMouseOver(false)}
     >
       <li className={css.folder}>
         <Text
           type="subheading"
-          className={
-            active
-              ? css.activeFolderName
-              : selected
-              ? css.selectedFolderName
-              : css.folderName
-          }
+          className={classNames.bind(css)("folderName", {
+            activeFolderName: active,
+            selectedFolderName: selected,
+          })}
           noSelect
+          style={{ paddingLeft: depth * 12 }}
           onMouseDown={(ev) => {
-            setActiveFolderId(folders.id);
+            if ((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
+              setActiveFolderId("");
+            else setActiveFolderId(folders.id);
+
             selectFolders(ev, folders.id);
             nameChangeRef.current =
-              ev.detail >= 2 &&
-              folders.id !== "root" &&
-              folders.id !== "defaultFolder"
-                ? true
+              ev.detail >= 2 && folders.id !== "root"
+                ? true //TODO:
                 : nameChangeRef.current;
           }}
           onMouseLeave={() => {
@@ -141,22 +138,6 @@ export const RecursiveFolder = ({
           ) : (
             <Text noWrap>{folders.name}</Text>
           )}
-          <span className={css.forwardIcon}>
-            {/*<Icon
-              name="forward"
-              style={{
-                opacity:
-                  mouseOver || (forwarding && folders.id === activeFolder.id)
-                    ? "1"
-                    : "0",
-                fontSize:
-                  forwarding && folders.id === activeFolder.id
-                    ? "2rem"
-                    : "1.5rem",
-              }}
-              onClick={() => setForwarding(!forwarding)}
-            /> Will move to own button*/}
-          </span>
         </Text>
 
         {folders.subFolders && (

@@ -2,7 +2,7 @@ import { logger } from "../logger";
 import { ChromeStorage } from "../../utils/storage/storage";
 import { ITranslationSnapshot } from "../types";
 import { requestParsers } from "./requestParser";
-import { Card, Folder } from "../../types/storageTypes";
+import { Card, Folder, Filter } from "../../types/storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
@@ -41,10 +41,48 @@ chrome.webRequest.onCompleted.addListener((request) => {
         "https://*/*"]
 });
 
+const filterCards = (snapshot: ITranslationSnapshot, filters: Filter[]) => {
+         if (!filters.length) return ["root"];
+    
+         const fitSize = (length: {direction: string, number: number} | undefined, frontLength: number, backLength: number) => {
+           if (!length) return true;
+           if (length.direction === "greater") {
+             return (
+               Math.max(frontLength, backLength) >
+               length.number
+             );
+           } else {
+             return (
+               Math.min(frontLength, backLength) <=
+               length.number
+             );
+           }
+         };
+
+         const hasWords = (words: string[] | undefined, text: string) => {
+            if(words === undefined)
+                return true;
+            return words.every((word) => text.includes(word))
+        };
+
+        const hasLang = (lang: string[] | undefined, cardLang: string) => (lang === undefined || lang!.includes(cardLang))
+        
+        let destinations: string[] = [];
+
+        filters.forEach((filter) => {
+            if(hasLang(filter.frontLang, snapshot.inputLang) || hasLang(filter.backLang, snapshot.outputLang) ||
+                hasWords(filter.words, snapshot.inputText) || fitSize(filter.length, snapshot.inputText.length, snapshot.outputText.length))
+                destinations.push(filter.destination)
+        })
+        return destinations.length? destinations: ["root"];
+
+}
+
 const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
     const hiddenCount = cards.reduce((sum, card) => sum + (card.hidden ? 1 : 0), 0)
+    const filters: Filter[] = (await ChromeStorage.get("filters") as Filter[] ?? []);
     let hidden = hiddenCount < 30 ? Math.random() < 0.5 : false; //set cutoff at 30
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;
@@ -57,21 +95,25 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
             break; //why would you want to overwrite anything extra?
         }
     }
-    cards.push({
-        hidden,
-        front: {
-            text: snapshot.inputText,
-            lang: snapshot.inputLang
-        }, back: {
-            text: snapshot.outputText,
-            lang: snapshot.outputLang
-        },
-        id: nanoid(),
-        location: "root", //The Just Collected folder
-        timeCreated: snapshot.inputTime,
-        source: snapshot.source,
 
-    });
+    filterCards(snapshot, filters).forEach((dest) => {
+        cards.push({
+            hidden,
+            front: {
+                text: snapshot.inputText,
+                lang: snapshot.inputLang
+            }, back: {
+                text: snapshot.outputText,
+                lang: snapshot.outputLang
+            },
+            id: nanoid(),
+            location: dest, //The Just Collected folder
+            timeCreated: snapshot.inputTime,
+            source: snapshot.source,
+    
+        });
+    })
+
     logger.info("Adding snapshot", snapshot);
 
     await ChromeStorage.setPair("cards", cards);

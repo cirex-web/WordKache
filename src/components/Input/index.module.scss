@@ -1,0 +1,53 @@
+.input {
+  font-family: inherit;
+  font-size: 1.5rem;
+  padding: 5px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  border: none;
+  background-color: var(--light-1);
+  outline-offset: 2px;
+  outline: 2px solid;
+  &:focus:not(.underline) {
+    outline-color: var(--accent-1);
+    &:active {
+      outline-color: var(--accent-2);
+    }
+  }
+  &.underline {
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+    border-bottom: 1.5px solid var(--light-1);
+    color: var(--light-1);
+    outline: none;
+    &:focus {
+      border-color: var(--accent-1);
+      &:active {
+        border-color: var(--accent-2);
+      }
+    }
+  }
+}
+
+.select {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.5rem;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1.5px solid var(--light-1);
+  color: var(--light-1);
+  &:focus {
+    border-color: var(--accent-1);
+    &:active {
+      border-color: var(--accent-2);
+    }
+  }
+  option {
+    /* Whatever color  you want */
+    background-color: var(--dark-1);
+  }
+}
