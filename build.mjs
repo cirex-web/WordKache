@@ -1,6 +1,6 @@
 
 import esbuild from "esbuild";
-import CssModulesPlugin from "esbuild-css-modules-plugin";
+// import CssModulesPlugin from "esbuild-css-modules-plugin";
 import { copy } from "esbuild-plugin-copy";
 import inlineImage from "esbuild-plugin-inline-image";
 import eslint from 'esbuild-plugin-eslint';
@@ -9,7 +9,7 @@ import { rmSync } from 'node:fs';
 import { postcssModules, sassPlugin } from 'esbuild-sass-plugin'
 
 // import ScssModulesPlugin from "./cssPlugin.mjs";
-import { cssModules } from 'esbuild-plugin-lightningcss-modules';
+// import { cssModules } from 'esbuild-plugin-lightningcss-modules';
 const removeFile = (path) => {
     console.log(`Removing ${path}`)
     rmSync(path, { recursive: true, force: true });
