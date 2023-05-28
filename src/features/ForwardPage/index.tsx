@@ -7,6 +7,7 @@ import { FilterTable } from "./FilterTable";
 import { useFilters } from "../../utils/storage/filters";
 import { Header } from "../../components/Header";
 import { FilterForm } from "./FilterForm";
+import { Button } from "../../components/Button";
 
 const Collapsible = ({
   children,
@@ -16,39 +17,56 @@ const Collapsible = ({
   heading: string;
 }) => {
   const [open, setOpen] = useState(false);
-  const [height, setHeight] = useState(0);
+  const [height, setHeight] = useState<number | "auto">(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  useLayoutEffect(() => {
-    setHeight(containerRef.current?.scrollHeight ?? 0);
-  }, []);
+
   return (
-    <div className={css.dropdown}>
-      <Text
-        type="heading"
-        bold
-        noSelect
-        className={css.dropdownTitle}
-        onMouseDown={() => setOpen(!open)}
+    <>
+      <Button
+        onClick={() => {
+          setOpen(!open);
+          if (open) {
+            //this is the previous state - so we're closing rn
+            containerRef.current?.animate(
+              [
+                { height: containerRef.current.scrollHeight + "px" },
+                { height: 0 },
+              ],
+              { fill: "forwards", duration: 200, easing: "ease-in-out" }
+            );
+          } else {
+            containerRef.current?.animate(
+              [{ height: containerRef.current.scrollHeight + "px" }],
+              { fill: "forwards", duration: 200, easing: "ease-in-out" }
+            );
+          }
+        }}
+        className={css.dropdownButton}
       >
-        <Icon
-          name="expand_more"
-          style={{
-            transform: `rotate(${open ? 0 : -90}deg)`,
-            transition: ".2s transform",
-            verticalAlign: "middle",
-          }}
-        />
-        {heading}
-      </Text>
+        <Text type="heading" bold noSelect className={css.dropdownTitle}>
+          <Icon
+            name="expand_more"
+            style={{
+              transform: `rotate(${open ? 0 : -90}deg)`,
+              transition: ".2s transform",
+              verticalAlign: "text-bottom",
+            }}
+          />
+          {heading}
+        </Text>
+      </Button>
       <div
-        style={{ height: open ? height : 0, transition: ".2s all" }}
+        style={{
+          transition: ".2s all",
+          visibility: open ? "initial" : "hidden",
+        }}
         ref={containerRef}
         className={css.dropdownContent}
-        aria-hidden={!open}
+        onTransitionEnd={() => setHeight(open ? "auto" : 0)}
       >
         {children}
       </div>
-    </div>
+    </>
   );
 };
 
@@ -73,6 +91,7 @@ export const ForwardingPage = () => {
         </Collapsible>
         <Collapsible heading="Active Filters">
           <FilterTable filters={filters === undefined ? [] : filters} />
+          <Collapsible heading="what's up?">Just a test lol</Collapsible>
         </Collapsible>
       </div>
     </div>

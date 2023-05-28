@@ -7,10 +7,12 @@
   padding: 20px;
 }
 
-.dropdown {
-}
 .dropdownContent {
   overflow: hidden;
+}
+.dropdownButton {
+  width: 100%;
+  text-align: left;
 }
 .dropdownTitle {
   cursor: pointer;

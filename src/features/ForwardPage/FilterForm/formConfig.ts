@@ -96,7 +96,7 @@ export const getFormConfig = (folders: Folder[]): {
             {
                 type: "input",
                 name: "length",
-                placeholder: "# Chars",
+                placeholder: "# of Characters",
                 parse: (text: string) => text.match(/^[\d]+$/) ? parseInt(text) : undefined,
                 defaultValue: "",
             },
