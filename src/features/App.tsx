@@ -11,8 +11,8 @@ import { Folder } from "../types/storageTypes";
 
 export const FolderContext = createContext<
   | {
-      /** The folder you currently are in */
       folders: Folder[];
+      /** The folder you currently are in */
       activeFolderId: string;
       setActiveFolderId: React.Dispatch<React.SetStateAction<string>>;
       /** Your range-selected folders */
@@ -36,8 +36,8 @@ function App() {
   const { folders, deleteFolders, addFolder, moveFolder, renameFolder } =
     useFolders();
   const { cards, moveCards, deleteCards } = useCards();
-  const [activeFolderId, setActiveFolderId] = useState("root");
-  const [selectedFolderIds, setSelectedFolderIds] = useState(["root"]);
+  const [activeFolderId, setActiveFolderId] = useState("");
+  const [selectedFolderIds, setSelectedFolderIds] = useState<string[]>([]);
 
   const cardsUnderCurrentFolder = cards?.filter(
     (card) => card.location === activeFolderId && !card.hidden && !card.deleted //top-level filtering
@@ -73,10 +73,7 @@ function App() {
         />
       </div>
       {!activeFolderId.length ? (
-        <ForwardingPage
-          folders={folders === undefined ? [] : folders}
-          key="filters"
-        />
+        <ForwardingPage key="filters" />
       ) : (
         cardsUnderCurrentFolder && (
           <WordTable

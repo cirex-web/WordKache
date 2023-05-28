@@ -4,14 +4,10 @@ import { Folder, Filter } from "../../../types/storageTypes";
 import { handleRowSelect } from "../../../utils/rangeSelect";
 import { Text } from "../../../components/Text";
 import classNames from "classnames";
+import { UseFolderContext } from "../../App";
 
-export const FilterTable = ({
-  filters,
-  folders,
-}: {
-  filters: Filter[];
-  folders: Folder[];
-}) => {
+export const FilterTable = ({ filters }: { filters: Filter[] }) => {
+  const { folders } = UseFolderContext();
   const [selectedFilter, setSelectedFilter] = useState<Filter[]>([]);
   const pivotPointRef = React.useRef(0);
 
@@ -33,14 +29,14 @@ export const FilterTable = ({
 
   return (
     <div className={css.container}>
-      <Text
+      {/* <Text
         type="heading"
         lineHeight={2}
         bold
         style={{ borderBottom: "2px solid var(--light-1)" }}
       >
         Active Filters
-      </Text>
+      </Text> */}
       <div className={css.tableContainer}>
         <table className={css.filterTable}>
           <thead>
@@ -62,35 +58,15 @@ export const FilterTable = ({
                 })}
               >
                 <td className={css.filterBody}>
-                  <div>
-                    Front Lang:{" "}
-                    {filter.frontLang === undefined
-                      ? "No Filter"
-                      : filter.frontLang}
-                  </div>
-                  <div>
-                    Back Lang:{" "}
-                    {filter.backLang === undefined
-                      ? "No Filter"
-                      : filter.backLang}
-                  </div>
-                  <div>
-                    Has Words:{" "}
-                    {filter.words === undefined ? "No Filter" : filter.words}
-                  </div>
-                  <div>
-                    Length:{" "}
-                    {filter.length === undefined
-                      ? "No Filter"
-                      : filter.length.number}
-                  </div>
+                  <div>Front Lang: {filter.frontLang ?? "No filter"}</div>
+                  <div>Back Lang: {filter.backLang ?? "No filter"}</div>
+                  <div>Has Words: {filter.words ?? "No filter"}</div>
+                  <div>Length: {filter.length?.number ?? "No filter"}</div>
                 </td>
 
                 <td>
-                  {
-                    folders.find((folder) => folder.id === filter.destination)!
-                      .name
-                  }
+                  {folders.find((folder) => folder.id === filter.destination)
+                    ?.name ?? "This folder no longer exists"}
                 </td>
               </tr>
             ))}

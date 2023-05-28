@@ -1,0 +1,14 @@
+.formGrid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  row-gap: 10px;
+  padding-top: 10px;
+}
+
+.required {
+  color: var(--red-2);
+}
+.submitButton {
+  border: 1px solid var(--dark-2);
+  border-radius: 2px;
+}

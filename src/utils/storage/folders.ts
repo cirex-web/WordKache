@@ -44,7 +44,7 @@ export const getOrderedFolderIds = (
     return foldersCopy;
 };
 
-
+/** If you want folder info, don't use this function - use the context hook useFolderContext() instead */
 export const useFolders = () => {
     const folders = useStorage<Folder[]>("folders", defaultArray);
     const updateStorage = (newFolders: Folder[]) => {
@@ -127,7 +127,7 @@ export const useFolders = () => {
         const targetIndex = folderCopy.indexOf(targetFolder);
 
         sourceFolder.parentId = targetFolder.parentId;
-        folderCopy.splice(targetIndex+1, 0, ...folderCopy.splice(sourceIndex, 1)) // Move source folder to after target folder
+        folderCopy.splice(targetIndex + 1, 0, ...folderCopy.splice(sourceIndex, 1)) // Move source folder to after target folder
         updateStorage(folderCopy);
     };
     return { deleteFolders, moveFolder, renameFolder, folders, addFolder }

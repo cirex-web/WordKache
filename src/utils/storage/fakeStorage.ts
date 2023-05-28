@@ -308,13 +308,18 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Fil
     ],
     "folders": [
         {
-            "id": "defaultFolder",
+            name: "Just Collected",
+            id: "root",
+        },
+        {
+            "id": "IGOTMYHEADOUTTHESUNROOF",
             "name": "Saved"
         },
         {
-            name: "Just Collected",
-            id: "root",
-        }
+            "id": "Hey_Jonathan",
+            "name": "Oh boy long folder name"
+        },
+
     ],
 
     "filters": [

@@ -1,48 +1,19 @@
 .container {
-  /*copied from wordPanel*/
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  overflow: scroll;
+  /* display: flex;
+  flex-direction: column; */
 }
-
-.addFilter {
-  overflow: hidden;
-  transition: 0.2s all;
-}
-
 .content {
-  display: flex;
-  align-items: left;
-  justify-content: flex-start;
-  flex-direction: column;
   padding: 20px;
-  flex-grow: 1;
-  gap: 20px;
+}
+
+.dropdown {
+}
+.dropdownContent {
   overflow: hidden;
 }
-
-.smallGrid {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  row-gap: 10px;
-}
-
-.bigGrid {
-  display: grid;
-  grid-template-columns: 0.1fr 0.25fr 1fr;
-  margin-left: 27px;
-  margin-top: 7px;
-  row-gap: 7px;
-}
-
-.required {
-  color: red;
-}
-
-.submit {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-start;
+.dropdownTitle {
+  cursor: pointer;
+  border-bottom: 1px solid var(--dark-2);
+  padding: 5px 0;
 }

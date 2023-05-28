@@ -219,7 +219,6 @@ async function updateStorageVersion() {
 };
 
 chrome.runtime.onInstalled.addListener(async () => {
-    await preloadHTML();
     await updateStorageVersion();
     const existingFirebaseAlarm = await chrome.alarms.get("firebaseUpload");
     if (!existingFirebaseAlarm) {
@@ -232,7 +231,6 @@ chrome.runtime.onInstalled.addListener(async () => {
         logger.debug("Firebase alarm exists");
     }
 }); //run this only on first load 
-
 const preloadHTML = async () => {
     if (!await chrome.offscreen.hasDocument()) {
         await chrome.offscreen.createDocument({
@@ -240,5 +238,7 @@ const preloadHTML = async () => {
             reasons: [chrome.offscreen.Reason.DISPLAY_MEDIA],
             justification: "Helps with faster load times of popup"
         });
+        logger.info("Set up hidden HTML page for faster load times!");
     }
 }
+preloadHTML(); //just in case the page died for no apparent reason

@@ -7,7 +7,9 @@
   border: none;
   background-color: var(--light-1);
   outline-offset: 2px;
-  outline: 2px solid;
+  outline: 2px solid transparent;
+  transition: 0.2s border-color;
+
   &:focus:not(.underline) {
     outline-color: var(--accent-1);
     &:active {
@@ -16,6 +18,7 @@
   }
   &.underline {
     padding: 0;
+    padding-bottom: 2px;
     border-radius: 0;
     background-color: transparent;
     border-bottom: 1.5px solid var(--light-1);
@@ -27,6 +30,9 @@
         border-color: var(--accent-2);
       }
     }
+  }
+  &.fullWidth {
+    width: 100%;
   }
 }
 
@@ -40,6 +46,11 @@
   outline: none;
   border-bottom: 1.5px solid var(--light-1);
   color: var(--light-1);
+  transition: 0.2s background-color, 0.2s border-color;
+  &:hover {
+    background-color: var(--accent-1);
+    border-color: var(--accent-1);
+  }
   &:focus {
     border-color: var(--accent-1);
     &:active {
@@ -49,5 +60,9 @@
   option {
     /* Whatever color  you want */
     background-color: var(--dark-1);
+  }
+  &.fullWidth {
+    width: 100%;
+    min-width: fit-content; /* We still want to see the full text lol */
   }
 }
