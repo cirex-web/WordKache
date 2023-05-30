@@ -9,6 +9,7 @@
 
 .dropdownContent {
   overflow: hidden;
+  height: 0;
 }
 .dropdownButton {
   width: 100%;

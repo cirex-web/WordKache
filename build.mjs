@@ -8,8 +8,6 @@ import { zip } from 'zip-a-folder';
 import { rmSync } from 'node:fs';
 import { postcssModules, sassPlugin } from 'esbuild-sass-plugin'
 
-// import ScssModulesPlugin from "./cssPlugin.mjs";
-// import { cssModules } from 'esbuild-plugin-lightningcss-modules';
 const removeFile = (path) => {
     console.log(`Removing ${path}`)
     rmSync(path, { recursive: true, force: true });

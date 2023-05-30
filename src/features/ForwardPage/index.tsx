@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useReducer, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import css from "./index.module.css";
 import { Text } from "../../components/Text";
 import { Filter } from "../../types/storageTypes";
@@ -12,34 +12,47 @@ import { Button } from "../../components/Button";
 const Collapsible = ({
   children,
   heading,
+  defaultOpen,
 }: {
   children: React.ReactNode;
   heading: string;
+  defaultOpen?: boolean;
 }) => {
-  const [open, setOpen] = useState(false);
-  const [height, setHeight] = useState<number | "auto">(0);
+  const [open, setOpen] = useState(defaultOpen);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const animateHeight = useCallback(async (open: boolean) => {
+    if (!containerRef.current) return;
+
+    const animation = containerRef.current.animate(
+      [
+        { height: 0, visibility: "hidden" },
+        {
+          height: containerRef.current.scrollHeight + "px",
+          visibility: "visible",
+        },
+      ],
+      {
+        duration: 200,
+        easing: "ease-in-out",
+        direction: open ? "normal" : "reverse",
+        fill: "forwards",
+      }
+    );
+    await animation.finished;
+    animation.commitStyles();
+    if (open) {
+      containerRef.current.style.height = "auto"; //we set it to auto so the height can adjust to children height changes
+    }
+    animation.cancel();
+  }, []);
 
   return (
     <>
       <Button
-        onClick={() => {
+        onClick={async () => {
           setOpen(!open);
-          if (open) {
-            //this is the previous state - so we're closing rn
-            containerRef.current?.animate(
-              [
-                { height: containerRef.current.scrollHeight + "px" },
-                { height: 0 },
-              ],
-              { fill: "forwards", duration: 200, easing: "ease-in-out" }
-            );
-          } else {
-            containerRef.current?.animate(
-              [{ height: containerRef.current.scrollHeight + "px" }],
-              { fill: "forwards", duration: 200, easing: "ease-in-out" }
-            );
-          }
+          await animateHeight(!open);
         }}
         className={css.dropdownButton}
       >
@@ -57,12 +70,11 @@ const Collapsible = ({
       </Button>
       <div
         style={{
-          transition: ".2s all",
-          visibility: open ? "initial" : "hidden",
+          visibility: defaultOpen ? "initial" : "hidden",
+          height: defaultOpen ? "auto" : 0,
         }}
         ref={containerRef}
         className={css.dropdownContent}
-        onTransitionEnd={() => setHeight(open ? "auto" : 0)}
       >
         {children}
       </div>
@@ -86,7 +98,7 @@ export const ForwardingPage = () => {
     <div className={css.container} onKeyDown={handleBackspace}>
       <Header headingText="Filters" />
       <div className={css.content}>
-        <Collapsible heading="Create Filter">
+        <Collapsible heading="Create Filter" defaultOpen={true}>
           <FilterForm addFilter={addFilter} />
         </Collapsible>
         <Collapsible heading="Active Filters">
