@@ -310,14 +310,21 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Fil
         {
             name: "Just Collected",
             id: "root",
+            open: true
+        },
+        {
+            name: "Sub collection",
+            parentId: "root",
+            id: "hey there"
         },
         {
             "id": "IGOTMYHEADOUTTHESUNROOF",
-            "name": "Saved"
+            "name": "Saved",
         },
         {
             "id": "Hey_Jonathan",
-            "name": "Oh boy long folder name"
+            "name": "Oh boy long folder name",
+            parentId: "IGOTMYHEADOUTTHESUNROOF"
         },
 
     ],

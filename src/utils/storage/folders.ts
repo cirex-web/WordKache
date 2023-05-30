@@ -2,29 +2,32 @@ import { nanoid } from "nanoid";
 import { AllFolders, FileDirectory } from "../../types/folderTypes";
 import { Folder } from "../../types/storageTypes";
 import { ChromeStorage, useStorage } from "./storage";
+import { wait } from "..";
 
 const defaultArray: any[] = [];
 
 export const generateTreeStructure = (folders: Folder[]) => {
-    const children = new Map<string, Folder[]>();
-    const res: AllFolders = [];
+    console.log(folders);
+    const graph = new Map<string, Folder[]>();
+    const finalTree: AllFolders = [];
     for (const folder of folders) {
         if (folder.parentId) {
-            if (!children.has(folder.parentId)) children.set(folder.parentId, []);
-            children.get(folder.parentId)?.push(folder);
+            if (!graph.has(folder.parentId)) graph.set(folder.parentId, []);
+            graph.get(folder.parentId)?.push(folder);
         } else {
-            res.push({ ...folder });
+            finalTree.push({ ...folder });
         }
     }
     const dfs = (fileDir: FileDirectory) => {
-        if (children.has(fileDir.id)) {
-            fileDir.subFolders = children
+        if (graph.has(fileDir.id)) {
+            fileDir.subFolders = graph
                 .get(fileDir.id)!
-                .map((folder) => dfs({ id: folder.id, name: folder.name }));
+                .map((folder) => dfs({ ...folder }));
         }
         return fileDir;
     };
-    return res.map((fileDir: FileDirectory) => dfs(fileDir));
+    console.log(finalTree.map((fileDir: FileDirectory) => dfs(fileDir)));
+    return finalTree.map((fileDir: FileDirectory) => dfs(fileDir));
 };
 
 export const getOrderedFolderIds = (
@@ -47,8 +50,8 @@ export const getOrderedFolderIds = (
 /** If you want folder info, don't use this function - use the context hook useFolderContext() instead */
 export const useFolders = () => {
     const folders = useStorage<Folder[]>("folders", defaultArray);
-    const updateStorage = (newFolders: Folder[]) => {
-        ChromeStorage.setPair("folders", newFolders);
+    const updateStorage = async (newFolders: Folder[]) => {
+        await ChromeStorage.setPair("folders", newFolders);
     }
     const deleteFolders = (selectedFolderIds: string[]) => {
         if (!folders) return;
@@ -87,6 +90,12 @@ export const useFolders = () => {
             })
         );
     };
+    const toggleFolderOpen = async (folderId: string) => {
+        if (!folders) return;
+        await updateStorage(folders?.map(folder => {
+            return { ...folder, open: folder.id === folderId ? !folder.open : folder.open }
+        }));
+    }
     const addFolder = (folderName: string, parentFolderId?: string) => {
         updateStorage([
             ...(folders ?? []),
@@ -130,6 +139,6 @@ export const useFolders = () => {
         folderCopy.splice(targetIndex + 1, 0, ...folderCopy.splice(sourceIndex, 1)) // Move source folder to after target folder
         updateStorage(folderCopy);
     };
-    return { deleteFolders, moveFolder, renameFolder, folders, addFolder }
+    return { deleteFolders, moveFolder, renameFolder, folders, addFolder, toggleFolderOpen }
 
 }

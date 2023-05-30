@@ -1,8 +1,9 @@
-type Lang = 'en' | 'es' | string;
+//WARNING: Changing any of these types will require a database update in the backend for existing users
 
-export interface Word {
+
+interface Word {
     text: string,
-    lang: Lang
+    lang: string
 }
 
 /** Official Storage Type */
@@ -23,7 +24,9 @@ export interface Card {
 export interface Folder {
     parentId?: string, //undefined means that it's top-level
     name: string,
-    id: string
+    id: string,
+    /** Whether or not it should be open on initial load */
+    open?: boolean,
 }
 
 /** Official Storage Type */

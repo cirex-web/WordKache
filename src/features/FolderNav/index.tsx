@@ -7,7 +7,7 @@ import { FileDirectory } from "../../types/folderTypes";
 import { Button } from "../../components/Button";
 import { handleRowSelect } from "../../utils/rangeSelect";
 import { UseFolderContext } from "../App";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   generateTreeStructure,
   getOrderedFolderIds,
@@ -24,9 +24,16 @@ export const FolderNav = ({
   deleteFolder: () => void;
   renameFolder: (fileName: string, folderId: string) => void;
 }) => {
-  const fileTree: FileDirectory[] = [...generateTreeStructure(folders)]; //why make a copy here?
-  const { selectedFolderIds, activeFolderId, setSelectedFolderIds, moveFolder } =
-    UseFolderContext();
+  const fileTree: FileDirectory[] = useMemo(
+    () => generateTreeStructure(folders),
+    [folders]
+  ); //don't regenerate the tree unless folders changes
+  const {
+    selectedFolderIds,
+    activeFolderId,
+    setSelectedFolderIds,
+    moveFolder,
+  } = UseFolderContext();
 
   const pivotPointRef = React.useRef(0);
 
@@ -53,12 +60,7 @@ export const FolderNav = ({
         <Icon name="folder" />
         Folders
         <Button
-          onMouseDown={() =>
-            addFolder(
-              "New Folder",
-              activeFolderId
-            )
-          }
+          onMouseDown={() => addFolder("New Folder", activeFolderId)}
           zoomOnHover
           style={{
             display: "flex",
@@ -84,7 +86,7 @@ export const FolderNav = ({
       </Text>
       {fileTree.map((folders) => (
         <RecursiveFolder
-          folders={folders}
+          folder={folders}
           setSelectedFolders={handleFolderSelect} //folders does not include nestedFolders
           changeFolderName={renameFolder}
           moveFolder={(src: string, dest: string) => moveFolder(src, dest)}

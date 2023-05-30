@@ -6,8 +6,9 @@ import css from "./index.module.css";
 import { saveFlashcards, copyFlashcards } from "../../../utils/file";
 import { Card } from "../../../types/storageTypes";
 import { Button } from "../../../components/Button";
-import { useFocus } from "../../../utils/useFocus";
 import { Header } from "../../../components/Header";
+import { useFocus } from "../../../utils";
+
 export const TableHeader = ({
   folderName,
   setSearchInput,

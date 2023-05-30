@@ -1,16 +1,10 @@
 .container {
   overflow: scroll;
-  /* display: flex;
-  flex-direction: column; */
 }
 .content {
   padding: 20px;
 }
 
-.dropdownContent {
-  overflow: hidden;
-  height: 0;
-}
 .dropdownButton {
   width: 100%;
   text-align: left;

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import css from "./index.module.css";
 import { Text } from "../../components/Text";
 import { Filter } from "../../types/storageTypes";
@@ -8,6 +8,7 @@ import { useFilters } from "../../utils/storage/filters";
 import { Header } from "../../components/Header";
 import { FilterForm } from "./FilterForm";
 import { Button } from "../../components/Button";
+import { Collapse } from "../../components/Collapse";
 
 const Collapsible = ({
   children,
@@ -18,41 +19,13 @@ const Collapsible = ({
   heading: string;
   defaultOpen?: boolean;
 }) => {
-  const [open, setOpen] = useState(defaultOpen);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const animateHeight = useCallback(async (open: boolean) => {
-    if (!containerRef.current) return;
-
-    const animation = containerRef.current.animate(
-      [
-        { height: 0, visibility: "hidden" },
-        {
-          height: containerRef.current.scrollHeight + "px",
-          visibility: "visible",
-        },
-      ],
-      {
-        duration: 200,
-        easing: "ease-in-out",
-        direction: open ? "normal" : "reverse",
-        fill: "forwards",
-      }
-    );
-    await animation.finished;
-    animation.commitStyles();
-    if (open) {
-      containerRef.current.style.height = "auto"; //we set it to auto so the height can adjust to children height changes
-    }
-    animation.cancel();
-  }, []);
+  const [open, setOpen] = useState(!!defaultOpen);
 
   return (
     <>
       <Button
-        onClick={async () => {
+        onClick={() => {
           setOpen(!open);
-          await animateHeight(!open);
         }}
         className={css.dropdownButton}
       >
@@ -68,16 +41,7 @@ const Collapsible = ({
           {heading}
         </Text>
       </Button>
-      <div
-        style={{
-          visibility: defaultOpen ? "initial" : "hidden",
-          height: defaultOpen ? "auto" : 0,
-        }}
-        ref={containerRef}
-        className={css.dropdownContent}
-      >
-        {children}
-      </div>
+      <Collapse open={open}>{children}</Collapse>
     </>
   );
 };

@@ -19,6 +19,7 @@ export const FolderContext = createContext<
       selectedFolderIds: string[];
       setSelectedFolderIds: React.Dispatch<React.SetStateAction<string[]>>;
       moveFolder: (sourceId: string, targetId: string) => void;
+      toggleFolderOpen: (folderId: string) => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -33,8 +34,14 @@ export const UseFolderContext = () => {
 };
 
 function App() {
-  const { folders, deleteFolders, addFolder, moveFolder, renameFolder } =
-    useFolders();
+  const {
+    folders,
+    deleteFolders,
+    addFolder,
+    moveFolder,
+    renameFolder,
+    toggleFolderOpen,
+  } = useFolders();
   const { cards, moveCards, deleteCards } = useCards();
   const [activeFolderId, setActiveFolderId] = useState("");
   const [selectedFolderIds, setSelectedFolderIds] = useState<string[]>([]);
@@ -52,6 +59,7 @@ function App() {
         selectedFolderIds,
         setSelectedFolderIds,
         moveFolder,
+        toggleFolderOpen,
       }}
     >
       <div className={css.menu}>

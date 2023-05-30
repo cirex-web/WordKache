@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useRef, useState } from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
 import css from "./index.module.scss";
@@ -12,16 +6,16 @@ import { FileDirectory } from "../../../types/folderTypes";
 import { Input } from "../../../components/Input";
 import { UseFolderContext } from "../../App";
 import classNames from "classnames/bind";
+import { Collapse } from "../../../components/Collapse";
 
 export const RecursiveFolder = ({
-  folders,
+  folder,
   setSelectedFolders: selectFolders,
   changeFolderName: changeName,
   moveFolder,
   depth = 0,
-  onHeightChange,
 }: {
-  folders: FileDirectory;
+  folder: FileDirectory;
   setSelectedFolders: (
     ev: React.MouseEvent<HTMLSpanElement, MouseEvent>,
     folder: string
@@ -29,50 +23,27 @@ export const RecursiveFolder = ({
   changeFolderName: (fileName: string, folderId: string) => void;
   moveFolder: (src: string, dest: string) => void;
   depth?: number;
-  onHeightChange?: (delta: number) => void;
 }) => {
-  const subfolderRef = useRef<HTMLUListElement>(null);
-  const { selectedFolderIds, activeFolderId, setActiveFolderId } =
-    UseFolderContext();
-  const [subfolderHeight, setSubFolderHeight] = useState(0);
-  const [subfolderOpen, setSubfolderOpen] = useState(!!folders.open);
+  const {
+    selectedFolderIds,
+    activeFolderId,
+    setActiveFolderId,
+    toggleFolderOpen,
+  } = UseFolderContext();
 
-  const [bottomBorder, setBottomBorder] = React.useState(false);
-
-  const active = activeFolderId === folders.id;
-  const selected = selectedFolderIds?.includes(folders.id);
+  const [bottomBorder, setBottomBorder] = useState(false);
+  const subfolderOpen = !!folder.open;
+  const active = activeFolderId === folder.id;
+  const selected = selectedFolderIds?.includes(folder.id);
   const nameChangeRef = React.useRef(false);
-
-  folders.open = subfolderOpen; //TODO: should update the entire folders obj (cuz it's a state a think)
-  useEffect(() => {}, [subfolderOpen]);
-
-  const updateHeight = useCallback(
-    (delta: number) => {
-      // console.log("Updating height for", folder.name, delta);
-      setSubFolderHeight((prevHeight) => prevHeight + delta);
-      if (onHeightChange) onHeightChange(delta); //propagate upwards
-    },
-    [onHeightChange]
-  );
-
-  useLayoutEffect(() => {
-    setTimeout(() => {
-      const subfolder = subfolderRef.current;
-      if (subfolder) {
-        // console.log("init height!", subfolder.scrollHeight);
-        setSubFolderHeight(subfolder.scrollHeight);
-      }
-    }, 500); //wait for font loading/dimension final updates
-  }, [subfolderRef]);
 
   return (
     <div
-      className="droppable"
       onDrop={(ev) => {
         ev.stopPropagation();
         ev.preventDefault();
         setBottomBorder(false);
-        moveFolder(ev.dataTransfer.getData("source"), folders.id);
+        moveFolder(ev.dataTransfer.getData("source"), folder.id);
       }}
       onDragOver={(ev) => {
         ev.stopPropagation();
@@ -86,7 +57,7 @@ export const RecursiveFolder = ({
         setBottomBorder(false);
       }}
     >
-      <li className={css.folder}>
+      <li>
         <Text
           type="subheading"
           className={classNames.bind(css)("folderName", {
@@ -96,13 +67,13 @@ export const RecursiveFolder = ({
           noSelect
           style={{ paddingLeft: depth * 12 }}
           onMouseDown={(ev) => {
-            if ((ev.ctrlKey || ev.metaKey) && activeFolderId === folders.id)
+            if ((ev.ctrlKey || ev.metaKey) && activeFolderId === folder.id)
               setActiveFolderId("");
-            else setActiveFolderId(folders.id);
+            else setActiveFolderId(folder.id);
 
-            selectFolders(ev, folders.id);
+            selectFolders(ev, folder.id);
             nameChangeRef.current =
-              ev.detail >= 2 && folders.id !== "root"
+              ev.detail >= 2 && folder.id !== "root"
                 ? true //TODO:
                 : nameChangeRef.current;
           }}
@@ -111,59 +82,46 @@ export const RecursiveFolder = ({
           }}
           draggable="true"
           disabled={nameChangeRef.current}
-          onDragStart={(ev) => ev.dataTransfer.setData("source", folders.id)}
+          onDragStart={(ev) => ev.dataTransfer.setData("source", folder.id)}
         >
           <Icon
             name="expand_more"
             style={{
-              opacity: folders.subFolders?.length ? 1 : 0,
+              opacity: folder.subFolders?.length ? 1 : 0,
+              pointerEvents: folder.subFolders?.length ? "auto" : "none",
               transform: `rotate(${subfolderOpen ? 0 : -90}deg)`,
               transition: ".2s transform",
-              pointerEvents: folders.subFolders?.length ? "auto" : "none",
             }}
-            onMouseDown={(ev) => {
-              const newActive = !subfolderOpen; //setActive doesn't update active in this loop
-              setSubfolderOpen(newActive);
-              if (onHeightChange)
-                onHeightChange((newActive ? 1 : -1) * subfolderHeight); //call parent folder to notify height change
-              ev.stopPropagation();
+            onMouseDown={() => {
+              toggleFolderOpen(folder.id);
             }}
           />
           {nameChangeRef.current ? (
             <Input
-              placeholder={folders.name}
+              placeholder={folder.name}
               className={css.input}
-              onChange={(ev) => changeName(ev.currentTarget.value, folders.id)}
+              onChange={(ev) => changeName(ev.currentTarget.value, folder.id)}
             />
           ) : (
-            <Text noWrap>{folders.name}</Text>
+            <Text noWrap>{folder.name}</Text>
           )}
         </Text>
 
-        {folders.subFolders && (
-          <ul
-            ref={subfolderRef}
-            style={{
-              height: subfolderOpen
-                ? subfolderHeight === 0 //first height run-through hasn't started yet...
-                  ? "auto"
-                  : subfolderHeight
-                : 0,
-            }}
-            className={css.children}
-          >
-            {folders.subFolders.map((folder, i) => (
-              <RecursiveFolder
-                folders={folder}
-                setSelectedFolders={selectFolders}
-                changeFolderName={changeName}
-                moveFolder={moveFolder}
-                key={folder.id}
-                depth={depth + 1}
-                onHeightChange={updateHeight}
-              />
-            ))}
-          </ul>
+        {folder.subFolders && (
+          <Collapse open={subfolderOpen}>
+            <ul>
+              {folder.subFolders.map((folder, i) => (
+                <RecursiveFolder
+                  folder={folder}
+                  setSelectedFolders={selectFolders}
+                  changeFolderName={changeName}
+                  moveFolder={moveFolder}
+                  key={folder.id}
+                  depth={depth + 1}
+                />
+              ))}
+            </ul>
+          </Collapse>
         )}
       </li>
     </div>
