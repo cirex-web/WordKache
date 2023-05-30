@@ -2,12 +2,10 @@ import { nanoid } from "nanoid";
 import { AllFolders, FileDirectory } from "../../types/folderTypes";
 import { Folder } from "../../types/storageTypes";
 import { ChromeStorage, useStorage } from "./storage";
-import { wait } from "..";
 
 const defaultArray: any[] = [];
 
 export const generateTreeStructure = (folders: Folder[]) => {
-    console.log(folders);
     const graph = new Map<string, Folder[]>();
     const finalTree: AllFolders = [];
     for (const folder of folders) {
@@ -26,7 +24,7 @@ export const generateTreeStructure = (folders: Folder[]) => {
         }
         return fileDir;
     };
-    console.log(finalTree.map((fileDir: FileDirectory) => dfs(fileDir)));
+
     return finalTree.map((fileDir: FileDirectory) => dfs(fileDir));
 };
 

@@ -2,7 +2,7 @@ import { Icon } from "../../components/Icon";
 import { Text } from "../../components/Text";
 import { Folder } from "../../types/storageTypes";
 import { RecursiveFolder } from "./RecursiveFolder";
-import css from "./folderNav.module.css";
+import css from "./index.module.css";
 import { FileDirectory } from "../../types/folderTypes";
 import { Button } from "../../components/Button";
 import { handleRowSelect } from "../../utils/rangeSelect";
@@ -59,30 +59,17 @@ export const FolderNav = ({
       <Text type="heading" bold className={css.title}>
         <Icon name="folder" />
         Folders
-        <Button
-          onMouseDown={() => addFolder("New Folder", activeFolderId)}
-          zoomOnHover
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: "transparent",
-            height: "10px",
-          }} //For some reason I can't make it the same using class and css file
-        >
-          <Icon name="Add" />
-        </Button>
-        <Button
-          onMouseDown={deleteFolder}
-          zoomOnHover
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: "transparent",
-            height: "10px",
-          }}
-        >
-          <Icon name="Remove" />
-        </Button>
+        <Text type="xLargeHeading" className={css.buttonContainer}>
+          <Button
+            onMouseDown={() => addFolder("New Folder", activeFolderId)}
+            zoomOnHover
+          >
+            <Icon name="Add" />
+          </Button>
+          <Button onMouseDown={deleteFolder} zoomOnHover>
+            <Icon name="Remove" />
+          </Button>
+        </Text>
       </Text>
       {fileTree.map((folders) => (
         <RecursiveFolder

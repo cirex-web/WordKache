@@ -79,6 +79,7 @@ const WordTable = ({
       setActiveCardsIds([]);
     }
   };
+
   const handleKeyboardShortcuts = (
     event: React.KeyboardEvent<HTMLTableRowElement>
   ) => {
@@ -86,11 +87,11 @@ const WordTable = ({
       setActiveCardsIds([]);
       event.preventDefault();
     }
-    if (event.key === "a" && (event.metaKey || event.ctrlKey)) {
+    if ((event.metaKey || event.ctrlKey) && event.key === "a") {
       setActiveCardsIds(filteredCards.map((card) => card.id));
       event.preventDefault();
     }
-    if (event.key === "c" && (event.metaKey || event.ctrlKey))
+    if ((event.metaKey || event.ctrlKey) && event.key === "c")
       copyFlashcards(activeCards);
   };
   return (
