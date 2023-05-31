@@ -2,31 +2,38 @@ import { nanoid } from "nanoid";
 import { AllFolders, FileDirectory } from "../../types/folderTypes";
 import { Folder } from "../../types/storageTypes";
 import { ChromeStorage, useStorage } from "./storage";
+import { createContext } from "vm";
 
 const defaultArray: any[] = [];
 
-export const generateTreeStructure = (folders: Folder[]) => {
-    const graph = new Map<string, Folder[]>();
+const generateTreeStructure = (graph: Map<string, Folder[]>) => {
+    
     const finalTree: AllFolders = [];
-    for (const folder of folders) {
-        if (folder.parentId) {
-            if (!graph.has(folder.parentId)) graph.set(folder.parentId, []);
-            graph.get(folder.parentId)?.push(folder);
-        } else {
-            finalTree.push({ ...folder });
-        }
-    }
     const dfs = (fileDir: FileDirectory) => {
         if (graph.has(fileDir.id)) {
             fileDir.subFolders = graph
                 .get(fileDir.id)!
                 .map((folder) => dfs({ ...folder }));
         }
+        else {
+            finalTree.push({ ...fileDir }); //it's a top-level folder
+        }
         return fileDir;
     };
 
     return finalTree.map((fileDir: FileDirectory) => dfs(fileDir));
 };
+
+const generateAdjacencyMapFromArray = (folders: Folder[]) => {
+    const graph = new Map<string, Folder[]>();
+    for (const folder of folders) {
+        if (folder.parentId) {
+            if (!graph.has(folder.parentId)) graph.set(folder.parentId, []);
+            graph.get(folder.parentId)?.push(folder);
+        }
+    }
+    return graph;
+}
 
 export const getOrderedFolderIds = (
 
@@ -45,9 +52,30 @@ export const getOrderedFolderIds = (
     return foldersCopy;
 };
 
+const buildEulerTourMap = (tree: FileDirectory[]) => {
+    const idToEulerRange:{[id:string]:{ start: number, end: number }} =  {};
+    let counter = 0;
+    const dfs = (a: FileDirectory) => {
+        idToEulerRange[a.id] = { start: counter++, end: -1 };
+        a.subFolders?.forEach((b) => {
+            dfs(b);
+        });
+        idToEulerRange[a.id].end = counter;
+    }
+    tree.forEach(root => dfs(root));
+    console.log(idToEulerRange);
+    return idToEulerRange;
+}
+
 /** If you want folder info, don't use this function - use the context hook useFolderContext() instead */
 export const useFolders = () => {
     const folders = useStorage<Folder[]>("folders", defaultArray);
+    const folderIdToFolder = {...(folders?.map((folder) => ({key: folder.id, value: folder})))};
+    console.log(folderIdToFolder);
+    const folderGraph = generateAdjacencyMapFromArray(folders ?? []);
+    const tree = generateTreeStructure(folderGraph);
+    const eulerIntervals = buildEulerTourMap(tree);
+
     const updateStorage = async (newFolders: Folder[]) => {
         await ChromeStorage.setPair("folders", newFolders);
     }
@@ -79,6 +107,11 @@ export const useFolders = () => {
         // }
         updateStorage(folders.filter(folder => folder.id === "root" || !selectedFolderIds.includes(folder.id)));
     };
+
+    // const getFolderPath = (folderId: string) => {
+    //     folderGraph.g
+    // }
+
     const renameFolder = (folderName: string, folderId: string) => {
         if (!folders) return;
         updateStorage(
@@ -94,7 +127,11 @@ export const useFolders = () => {
             return { ...folder, open: folder.id === folderId ? !folder.open : folder.open }
         }));
     }
+
+    // const getPath = ()
+
     const addFolder = (folderName: string, parentFolderId?: string) => {
+
         updateStorage([
             ...(folders ?? []),
             {
@@ -112,10 +149,17 @@ export const useFolders = () => {
     /**
      * Make the folder parent ID = target parent ID
      * Source ID placed after target ID
-     * @param sourceId
-     * @param targetId
+     * @param sourceId (the folder that you want to move)
+     * @param targetId (the reference folder)
      * @returns Nothing
      */
+    /** Returns if parentId is a parent of childId. Should also return true if the ids are equivalent */
+    const _isParent = (parentId: string, childId: string) => {
+        const parentInterval = eulerIntervals[parentId];
+        const childInterval = eulerIntervals[childId];
+        if (!parentInterval || !childInterval) throw new Error("Your Euler tree is broken. Plz fix");
+        return parentInterval.start <= childInterval.start && childInterval.end <= parentInterval.end;
+    }
     const moveFolder = (sourceId: string, targetId: string) => {
         if (!folders) return;
         let folderCopy = [...folders];
@@ -126,17 +170,18 @@ export const useFolders = () => {
         const targetFolder = folderCopy.find(
             (folder) => folder.id === targetId
         );
-
         console.assert(sourceFolder && targetFolder);
         if (!sourceFolder || !targetFolder) return;
+        if (targetFolder.parentId && _isParent(sourceFolder.id, targetFolder.parentId)) return;
 
         const sourceIndex = folderCopy.indexOf(sourceFolder);
         const targetIndex = folderCopy.indexOf(targetFolder);
 
         sourceFolder.parentId = targetFolder.parentId;
-        folderCopy.splice(targetIndex + 1, 0, ...folderCopy.splice(sourceIndex, 1)) // Move source folder to after target folder
+        folderCopy.splice(targetIndex + 1, 0, ...folderCopy.splice(sourceIndex, 1)) // Move source folder to right after target folder
         updateStorage(folderCopy);
     };
-    return { deleteFolders, moveFolder, renameFolder, folders, addFolder, toggleFolderOpen }
+    return { deleteFolders, moveFolder, renameFolder, folders, addFolder, toggleFolderOpen ,tree}
 
 }
+

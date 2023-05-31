@@ -1,20 +1,22 @@
 import { useContext, createContext, useState } from "react";
 import { useFolders } from "../utils/storage/folders";
+import { Folder } from "../types/storageTypes";
+import { FileDirectory } from "../types/folderTypes";
 
-const FolderContext = createContext<
+export const FolderContext = createContext<
   | {
-      /** The folder you currently are in */
-      activeFolderId: string;
-      setActiveFolderId: React.Dispatch<React.SetStateAction<string>>;
-      /** Your range-selected folders */
-      selectedFolderIds: string[];
-      setSelectedFolderIds: React.Dispatch<React.SetStateAction<string[]>>;
+      folders: Folder[];
       moveFolder: (sourceId: string, targetId: string) => void;
+      toggleFolderOpen: (folderId: string) => Promise<void>;
+      tree: FileDirectory[];
+      addFolder:(folderName: string, parentFolderId?: string | undefined) => void,
+      deleteFolders: (selectedFolderIds: string[]) => void,
+      renameFolder: (folderName: string, folderId: string) => void,
     }
   | undefined
 >(undefined);
 
-export const UseFolderContext = () => {
+export const useFolderContext = () => {
   const context = useContext(FolderContext);
   if (context === undefined)
     throw new Error(
@@ -22,25 +24,32 @@ export const UseFolderContext = () => {
     );
   return context;
 };
-
 export const FolderContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const { folders, deleteFolders, addFolder, moveFolder, renameFolder } =
-    useFolders();
-  const [selectedFolderIds, setSelectedFolderIds] = useState(["root"]);
-  const [activeFolderId, setActiveFolderId] = useState("root");
+  const {
+    folders,
+    deleteFolders,
+    addFolder,
+    moveFolder,
+    renameFolder,
+    toggleFolderOpen,
+    tree,
+  } = useFolders();
+
 
   return (
     <FolderContext.Provider
       value={{
-        activeFolderId,
-        setActiveFolderId,
-        selectedFolderIds,
-        setSelectedFolderIds,
+        folders: folders ?? [],
         moveFolder,
+        toggleFolderOpen,
+        tree,
+        deleteFolders,
+        addFolder,
+        renameFolder
       }}
     >
       {children}

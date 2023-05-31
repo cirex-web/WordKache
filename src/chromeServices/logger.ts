@@ -5,9 +5,9 @@ const COLORS = {
     "WARN": "yellow"
 } as const
 let existingLogs: any[] = []
-ChromeStorage.get("logs").then((logs) => {
-    if (logs) existingLogs = logs as any[];
-});
+// ChromeStorage.get("logs").then((logs) => {
+//     if (logs) existingLogs = logs as any[];
+// });
 let shouldLog: boolean;
 ChromeStorage.get("debug").then((data) => shouldLog = !!data);
 

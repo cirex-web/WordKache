@@ -1,35 +1,28 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Icon } from "../../../components/Icon";
 import { Text } from "../../../components/Text";
 import css from "./index.module.scss";
 import { FileDirectory } from "../../../types/folderTypes";
 import { Input } from "../../../components/Input";
-import { UseFolderContext } from "../../App";
 import classNames from "classnames/bind";
 import { Collapse } from "../../../components/Collapse";
+import { useFolderContext } from "../../../contexts/FolderProvider";
+import { useFolderNavContext } from "../../../contexts/FolderNavProvider";
 
 export const RecursiveFolder = ({
   folder,
-  setSelectedFolders: selectFolders,
-  changeFolderName: changeName,
-  moveFolder,
   depth = 0,
 }: {
   folder: FileDirectory;
-  setSelectedFolders: (
-    ev: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-    folder: string
-  ) => void;
-  changeFolderName: (fileName: string, folderId: string) => void;
-  moveFolder: (src: string, dest: string) => void;
   depth?: number;
 }) => {
+  const { toggleFolderOpen, renameFolder, moveFolder } = useFolderContext();
   const {
-    selectedFolderIds,
+    handleFolderSelect,
     activeFolderId,
+    selectedFolderIds,
     setActiveFolderId,
-    toggleFolderOpen,
-  } = UseFolderContext();
+  } = useFolderNavContext();
 
   const [bottomBorder, setBottomBorder] = useState(false);
   const subfolderOpen = !!folder.open;
@@ -71,7 +64,7 @@ export const RecursiveFolder = ({
               setActiveFolderId("");
             else setActiveFolderId(folder.id);
 
-            selectFolders(ev, folder.id);
+            handleFolderSelect(ev, folder.id);
             nameChangeRef.current =
               ev.detail >= 2 && folder.id !== "root"
                 ? true //TODO:
@@ -100,7 +93,7 @@ export const RecursiveFolder = ({
             <Input
               placeholder={folder.name}
               className={css.input}
-              onChange={(ev) => changeName(ev.currentTarget.value, folder.id)}
+              onChange={(ev) => renameFolder(ev.currentTarget.value, folder.id)}
             />
           ) : (
             <Text noWrap>{folder.name}</Text>
@@ -110,12 +103,9 @@ export const RecursiveFolder = ({
         {folder.subFolders && (
           <Collapse open={subfolderOpen}>
             <ul>
-              {folder.subFolders.map((folder, i) => (
+              {folder.subFolders.map((folder) => (
                 <RecursiveFolder
                   folder={folder}
-                  setSelectedFolders={selectFolders}
-                  changeFolderName={changeName}
-                  moveFolder={moveFolder}
                   key={folder.id}
                   depth={depth + 1}
                 />

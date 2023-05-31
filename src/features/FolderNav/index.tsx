@@ -6,53 +6,22 @@ import css from "./index.module.css";
 import { FileDirectory } from "../../types/folderTypes";
 import { Button } from "../../components/Button";
 import { handleRowSelect } from "../../utils/rangeSelect";
-import { UseFolderContext } from "../App";
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
+import { getOrderedFolderIds } from "../../utils/storage/folders";
+import { useFolderContext } from "../../contexts/FolderProvider";
 import {
-  generateTreeStructure,
-  getOrderedFolderIds,
-} from "../../utils/storage/folders";
+  FolderNavContextProvider,
+  useFolderNavContext,
+} from "../../contexts/FolderNavProvider";
 
-export const FolderNav = ({
-  folders,
-  addFolder,
-  deleteFolder,
-  renameFolder,
-}: {
-  folders: Folder[];
-  addFolder: (fileName: string, parentFolderId?: string) => void;
-  deleteFolder: () => void;
-  renameFolder: (fileName: string, folderId: string) => void;
-}) => {
-  const fileTree: FileDirectory[] = useMemo(
-    () => generateTreeStructure(folders),
-    [folders]
-  ); //don't regenerate the tree unless folders changes
+export const FolderNav = () => {
   const {
-    selectedFolderIds,
-    activeFolderId,
-    setSelectedFolderIds,
-    moveFolder,
-  } = UseFolderContext();
-
-  const pivotPointRef = React.useRef(0);
-
-  const handleFolderSelect = (
-    ev: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-    folder: string
-  ) => {
-    const folderIds = getOrderedFolderIds(fileTree);
-    const selectedIds = handleRowSelect(
-      ev,
-      folder,
-      folderIds,
-      selectedFolderIds,
-      pivotPointRef
-    );
-    setSelectedFolderIds(
-      folderIds.filter((folderId) => selectedIds.includes(folderId))
-    );
-  };
+    tree: fileTree,
+    addFolder,
+    deleteFolders,
+  } = useFolderContext();
+  const {selectedFolderIds,activeFolderId} = useFolderNavContext();
+  
 
   return (
     <div className={css.container}>
@@ -66,7 +35,7 @@ export const FolderNav = ({
           >
             <Icon name="Add" />
           </Button>
-          <Button onMouseDown={deleteFolder} zoomOnHover>
+          <Button onMouseDown={()=>deleteFolders(selectedFolderIds)} zoomOnHover>
             <Icon name="Remove" />
           </Button>
         </Text>
@@ -74,9 +43,6 @@ export const FolderNav = ({
       {fileTree.map((folders) => (
         <RecursiveFolder
           folder={folders}
-          setSelectedFolders={handleFolderSelect} //folders does not include nestedFolders
-          changeFolderName={renameFolder}
-          moveFolder={(src: string, dest: string) => moveFolder(src, dest)}
           key={folders.id}
         />
       ))}
