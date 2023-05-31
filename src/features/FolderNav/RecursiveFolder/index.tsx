@@ -29,7 +29,6 @@ export const RecursiveFolder = ({
     activeFolderId,
     setActiveFolderId,
     toggleFolderOpen,
-    setSelectedFolderIds,
   } = UseFolderContext();
 
   const [bottomBorder, setBottomBorder] = useState(false);

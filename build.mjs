@@ -1,6 +1,5 @@
 
 import esbuild from "esbuild";
-// import CssModulesPlugin from "esbuild-css-modules-plugin";
 import { copy } from "esbuild-plugin-copy";
 import inlineImage from "esbuild-plugin-inline-image";
 import eslint from 'esbuild-plugin-eslint';
