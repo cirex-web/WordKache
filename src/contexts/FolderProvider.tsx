@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext } from "react";
 import { useFolders } from "../utils/storage/folders";
 import { Folder } from "../types/storageTypes";
 import { FileDirectory } from "../types/folderTypes";
@@ -9,9 +9,12 @@ export const FolderContext = createContext<
       moveFolder: (sourceId: string, targetId: string) => void;
       toggleFolderOpen: (folderId: string) => Promise<void>;
       tree: FileDirectory[];
-      addFolder:(folderName: string, parentFolderId?: string | undefined) => void,
-      deleteFolders: (selectedFolderIds: string[]) => void,
-      renameFolder: (folderName: string, folderId: string) => void,
+      addFolder: (
+        folderName: string,
+        parentFolderId?: string | undefined
+      ) => void;
+      deleteFolders: (selectedFolderIds: string[]) => void;
+      renameFolder: (folderName: string, folderId: string) => void;
     }
   | undefined
 >(undefined);
@@ -39,7 +42,6 @@ export const FolderContextProvider = ({
     tree,
   } = useFolders();
 
-
   return (
     <FolderContext.Provider
       value={{
@@ -49,7 +51,7 @@ export const FolderContextProvider = ({
         tree,
         deleteFolders,
         addFolder,
-        renameFolder
+        renameFolder,
       }}
     >
       {children}

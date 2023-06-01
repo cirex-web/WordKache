@@ -5,24 +5,17 @@ import { ForwardingPage } from "./ForwardPage";
 import logo from "../assets/logo.svg";
 import { useCards } from "../utils/storage/cards";
 import { UserManual } from "./UserManual";
-import {
-  useFolderContext,
-} from "../contexts/FolderProvider";
-import { FolderNavContextProvider } from "../contexts/FolderNavProvider";
+import { useFolderNavContext } from "../contexts/FolderNavProvider";
 
 function App() {
   const { cards, moveCards, deleteCards } = useCards();
-  const cardsUnderCurrentFolder = cards?.filter(
-    (card) => card.location === activeFolderId && !card.hidden && !card.deleted //top-level filtering
-  );
-
+  const { activeFolderId } = useFolderNavContext();
   return (
     <>
       <div className={css.menu}>
         <img src={logo} className={css.logo} alt="logo" />
-        <FolderNavContextProvider>
-          <FolderNav />
-        </FolderNavContextProvider>
+
+        <FolderNav />
 
         <UserManual
           numCardsHidden={
@@ -35,12 +28,12 @@ function App() {
       {!activeFolderId.length ? (
         <ForwardingPage key="filters" />
       ) : (
-        cardsUnderCurrentFolder && (
+        cards && (
           <WordTable
-            cards={cardsUnderCurrentFolder}
-            moveCards={moveCards}
-            key={activeFolderId}
+            key={activeFolderId} /* So it re-renders everything */
             deleteCards={deleteCards}
+            moveCards={moveCards}
+            cards={cards}
           />
         )
       )}

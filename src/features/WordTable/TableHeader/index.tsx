@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Icon } from "../../../components/Icon";
 import { Input } from "../../../components/Input";
-import { Text } from "../../../components/Text";
 import css from "./index.module.css";
 import { saveFlashcards, copyFlashcards } from "../../../utils/file";
 import { Card } from "../../../types/storageTypes";

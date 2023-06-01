@@ -2,7 +2,6 @@ import Fuse from "fuse.js";
 import React, { useEffect, useState } from "react";
 import { Card } from "../../types/storageTypes";
 import { Text } from "../../components/Text";
-import { UseFolderContext } from "../App";
 import { TableHeader } from "./TableHeader";
 import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
@@ -11,6 +10,8 @@ import folderEmpty from "../../assets/folderEmpty.svg";
 import classNames from "classnames";
 import { handleRowSelect } from "../../utils/rangeSelect";
 import { copyFlashcards } from "../../utils/file";
+import { useFolderContext } from "../../contexts/FolderProvider";
+import { useFolderNavContext } from "../../contexts/FolderNavProvider";
 
 const Placeholder = ({
   image,
@@ -34,23 +35,30 @@ const WordTable = ({
   moveCards,
   deleteCards,
 }: {
-  /** Most recent cards are at the end, so this is reversed when displaying the table */
-  cards: Card[];
   moveCards: (cardIds: string[], folderIds: string[]) => void;
   deleteCards: (cardIds: string[]) => void;
+  cards: Card[];
 }) => {
-  const { activeFolderId, selectedFolderIds, folders } = UseFolderContext();
+  const { folders } = useFolderContext();
+  const { activeFolderId, selectedFolderIds } = useFolderNavContext();
+
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
   const pivotIndexRef = React.useRef(0); //I know this should be ideally in the search util
 
+  const cardsUnderCurrentFolder = cards
+    ?.filter(
+      (card) =>
+        card.location === activeFolderId && !card.hidden && !card.deleted //top-level filtering
+    )
+    .reverse();
   //Search
-  const fuse = new Fuse(cards, {
+  const fuse = new Fuse(cardsUnderCurrentFolder, {
     keys: ["front.text", "back.text"],
   });
 
   const filteredCards = !searchInput.length
-    ? [...cards].reverse() //don't mutate the original array or bad things will happen...
+    ? cardsUnderCurrentFolder //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
 
   const activeCards = filteredCards.filter((card) =>
@@ -102,7 +110,7 @@ const WordTable = ({
           "Error"
         }
         setSearchInput={setInput}
-        cards={cards}
+        cards={cardsUnderCurrentFolder}
         filteredCards={filteredCards}
       />
       {filteredCards.length ? (
@@ -167,7 +175,7 @@ const WordTable = ({
             </tbody>
           </table>
         </div>
-      ) : cards.length ? (
+      ) : cardsUnderCurrentFolder.length ? (
         <Placeholder image={searchEmpty} text="No cards match your search" />
       ) : (
         <Placeholder

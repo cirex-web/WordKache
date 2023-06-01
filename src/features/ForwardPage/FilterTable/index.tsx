@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import css from "./index.module.css";
-import { Folder, Filter } from "../../../types/storageTypes";
+import { Filter } from "../../../types/storageTypes";
 import { handleRowSelect } from "../../../utils/rangeSelect";
-import { Text } from "../../../components/Text";
 import classNames from "classnames";
-import { UseFolderContext } from "../../App";
+import { useFolderContext } from "../../../contexts/FolderProvider";
 
 export const FilterTable = ({ filters }: { filters: Filter[] }) => {
-  const { folders } = UseFolderContext();
+  const { folders } = useFolderContext();
   const [selectedFilter, setSelectedFilter] = useState<Filter[]>([]);
   const pivotPointRef = React.useRef(0);
 

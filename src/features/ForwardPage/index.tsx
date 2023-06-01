@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, {  useState } from "react";
 import css from "./index.module.css";
 import { Text } from "../../components/Text";
 import { Filter } from "../../types/storageTypes";

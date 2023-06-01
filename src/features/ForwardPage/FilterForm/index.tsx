@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { Text } from "../../../components/Text";
 import css from "./index.module.scss";
 import { Button } from "../../../components/Button";
-import { UseFolderContext } from "../../App";
+import { useFolderContext } from "../../../contexts/FolderProvider";
 
 interface IGeneralInputProps {
   update: (key: string, val: any) => void;
@@ -77,7 +77,7 @@ export const FilterForm = ({
 }: {
   addFilter: (newFilter: Filter) => void;
 }) => {
-  const { folders } = UseFolderContext();
+  const { folders } = useFolderContext();
   const formConfig = getFormConfig(folders ?? []);
 
   const [inputData, setInputData] = useState<{

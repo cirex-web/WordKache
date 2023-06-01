@@ -2,13 +2,12 @@ import { nanoid } from "nanoid";
 import { AllFolders, FileDirectory } from "../../types/folderTypes";
 import { Folder } from "../../types/storageTypes";
 import { ChromeStorage, useStorage } from "./storage";
-import { createContext } from "vm";
 
-const defaultArray: any[] = [];
+const defaultArray: Folder[] = [];
 
-const generateTreeStructure = (graph: Map<string, Folder[]>) => {
-    
-    const finalTree: AllFolders = [];
+const generateTreeStructure = (rootNodes: Folder[], graph: Map<string, Folder[]>) => {
+
+    const finalTree: AllFolders = rootNodes;
     const dfs = (fileDir: FileDirectory) => {
         if (graph.has(fileDir.id)) {
             fileDir.subFolders = graph
@@ -26,13 +25,16 @@ const generateTreeStructure = (graph: Map<string, Folder[]>) => {
 
 const generateAdjacencyMapFromArray = (folders: Folder[]) => {
     const graph = new Map<string, Folder[]>();
+    const rootNodes: Folder[] = [];
     for (const folder of folders) {
         if (folder.parentId) {
             if (!graph.has(folder.parentId)) graph.set(folder.parentId, []);
             graph.get(folder.parentId)?.push(folder);
+        } else {
+            rootNodes.push(folder);
         }
     }
-    return graph;
+    return [rootNodes, graph] as const;
 }
 
 export const getOrderedFolderIds = (
@@ -53,7 +55,7 @@ export const getOrderedFolderIds = (
 };
 
 const buildEulerTourMap = (tree: FileDirectory[]) => {
-    const idToEulerRange:{[id:string]:{ start: number, end: number }} =  {};
+    const idToEulerRange: { [id: string]: { start: number, end: number } } = {};
     let counter = 0;
     const dfs = (a: FileDirectory) => {
         idToEulerRange[a.id] = { start: counter++, end: -1 };
@@ -63,17 +65,19 @@ const buildEulerTourMap = (tree: FileDirectory[]) => {
         idToEulerRange[a.id].end = counter;
     }
     tree.forEach(root => dfs(root));
-    console.log(idToEulerRange);
+    // console.log(idToEulerRange);
     return idToEulerRange;
 }
 
 /** If you want folder info, don't use this function - use the context hook useFolderContext() instead */
 export const useFolders = () => {
     const folders = useStorage<Folder[]>("folders", defaultArray);
-    const folderIdToFolder = {...(folders?.map((folder) => ({key: folder.id, value: folder})))};
-    console.log(folderIdToFolder);
-    const folderGraph = generateAdjacencyMapFromArray(folders ?? []);
-    const tree = generateTreeStructure(folderGraph);
+    const folderIdToFolder = folders?.reduce<{ [folderId: string]: Folder }>((obj, folder) => ({ ...obj, [folder.id]: folder }), {});
+
+
+    const [rootNodes, folderGraph] = generateAdjacencyMapFromArray(folders ?? []);
+    const tree = generateTreeStructure(rootNodes, folderGraph);
+
     const eulerIntervals = buildEulerTourMap(tree);
 
     const updateStorage = async (newFolders: Folder[]) => {
@@ -181,7 +185,7 @@ export const useFolders = () => {
         folderCopy.splice(targetIndex + 1, 0, ...folderCopy.splice(sourceIndex, 1)) // Move source folder to right after target folder
         updateStorage(folderCopy);
     };
-    return { deleteFolders, moveFolder, renameFolder, folders, addFolder, toggleFolderOpen ,tree}
+    return { deleteFolders, moveFolder, renameFolder, folders, addFolder, toggleFolderOpen, tree }
 
 }
 
