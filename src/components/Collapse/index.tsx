@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { usePrev } from "../../utils";
 import css from "./index.module.css";
 const animateHeight = async (
@@ -39,7 +39,7 @@ export const Collapse = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const prevOpen = usePrev(open);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!containerRef.current) return;
     if (prevOpen !== open) {
       animateHeight(open, containerRef);

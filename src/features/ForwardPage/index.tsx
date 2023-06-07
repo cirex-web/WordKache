@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import css from "./index.module.css";
 import { Text } from "../../components/Text";
 import { Filter } from "../../types/storageTypes";
@@ -65,10 +65,7 @@ export const ForwardingPage = () => {
         <Collapsible heading="Create Filter" defaultOpen={true}>
           <FilterForm addFilter={addFilter} />
         </Collapsible>
-        <Collapsible heading="Active Filters">
-          <FilterTable filters={filters === undefined ? [] : filters} />
-          <Collapsible heading="what's up?">Just a test lol</Collapsible>
-        </Collapsible>
+        <FilterTable filters={filters === undefined ? [] : filters} />
       </div>
     </div>
   );

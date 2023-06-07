@@ -4,6 +4,7 @@ import { Text } from "../../../components/Text";
 import { Card } from "../../../types/storageTypes";
 import css from "./index.module.css";
 import React, { useLayoutEffect, useRef, useState } from "react";
+import { useFolderNavContext } from "../../../contexts/FolderNavProvider";
 
 interface ITextAreaProps extends React.HTMLProps<HTMLTextAreaElement> {
   language: string;
@@ -47,6 +48,7 @@ export const WordPanel = ({
   deleteCard: () => void;
 }) => {
   const singleCard = cards[0];
+  const { selectedFolderIds, activeFolderId } = useFolderNavContext();
   return (
     <div className={css.container}>
       {cards.length === 1 && (
@@ -70,7 +72,12 @@ export const WordPanel = ({
         </div>
       )}
       <div className={css.buttonRow}>
-        <Button onClick={saveCard}>
+        <Button
+          onClick={saveCard}
+          disabled={
+            selectedFolderIds.filter((id) => id !== activeFolderId).length === 0
+          }
+        >
           <Text type="subheading">Save</Text>
         </Button>
         <Button onClick={deleteCard}>

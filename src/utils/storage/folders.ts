@@ -74,8 +74,8 @@ export const useFolders = () => {
     const folders = useStorage<Folder[]>("folders", defaultArray);
     const folderIdToFolder = folders?.reduce<{ [folderId: string]: Folder }>((obj, folder) => ({ ...obj, [folder.id]: folder }), {});
 
-
-    const [rootNodes, folderGraph] = generateAdjacencyMapFromArray(folders ?? []);
+    console.log(folders);
+    const [rootNodes, folderGraph] = generateAdjacencyMapFromArray([...folders ?? []]); //don't modify original cuz that would be bad
     const tree = generateTreeStructure(rootNodes, folderGraph);
 
     const eulerIntervals = buildEulerTourMap(tree);
@@ -135,7 +135,7 @@ export const useFolders = () => {
     // const getPath = ()
 
     const addFolder = (folderName: string, parentFolderId?: string) => {
-
+        console.log("add", folders);
         updateStorage([
             ...(folders ?? []),
             {

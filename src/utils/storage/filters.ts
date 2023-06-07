@@ -14,8 +14,8 @@ export const useFilters = () => {
     };
 
     const addFilter = (newFilter: Filter) => {
-        const assertFilters = filters === undefined ? [] : filters;
-        ChromeStorage.setPair("filters", [...assertFilters, newFilter]);
+        console.log(newFilter);
+        ChromeStorage.setPair("filters", [...filters ?? [], newFilter]);
     };
     return { filters, deleteFilters, addFilter };
 }

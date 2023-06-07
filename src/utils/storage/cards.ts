@@ -16,7 +16,7 @@ export const useCards = () => {
      */
     const moveCards = (cardIds: string[], folderIds: string[]) => {
         if (!cards) return;
-        let newCards: Card[] = [];
+        const newCards: Card[] = [];
         for (const card of cards) {
             if (cardIds.includes(card.id)) {
                 for (const folderId of folderIds) {

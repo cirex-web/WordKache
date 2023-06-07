@@ -51,7 +51,7 @@ const WordTable = ({
       (card) =>
         card.location === activeFolderId && !card.hidden && !card.deleted //top-level filtering
     )
-    .reverse();
+    .sort((a, b) => b.timeCreated - a.timeCreated); //TODO: should this really be here
   //Search
   const fuse = new Fuse(cardsUnderCurrentFolder, {
     keys: ["front.text", "back.text"],
@@ -89,7 +89,7 @@ const WordTable = ({
   };
 
   const handleKeyboardShortcuts = (
-    event: React.KeyboardEvent<HTMLTableRowElement>
+    event: React.KeyboardEvent<HTMLTableElement>
   ) => {
     if (event.key === "Escape") {
       setActiveCardsIds([]);
@@ -114,9 +114,10 @@ const WordTable = ({
         filteredCards={filteredCards}
       />
       {filteredCards.length ? (
-        <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>
-          <table>
-            <thead>
+        <div style={{ flexGrow: 1 }}>
+          <table onKeyDown={handleKeyboardShortcuts}>
+            <thead style={{ top: "46.5px" }}>
+              {/* TODO: Seriously hacky fix cuz I'm sleep deprived */}
               <tr>
                 <th>
                   <Text type="subheading">Original</Text>
@@ -183,6 +184,7 @@ const WordTable = ({
           text="This folder is currently empty"
         />
       )}
+
       {activeCards.length > 0 && (
         <WordPanel
           cards={activeCards}

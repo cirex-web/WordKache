@@ -15,6 +15,9 @@
   &:disabled {
     color: var(--light-2);
     pointer-events: none;
+    &:hover {
+      cursor: not-allowed;
+    }
   }
 }
 .zoomButton {

@@ -7,6 +7,7 @@ import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
 import { addData } from "../../utils/firebase";
+import { getDestinationFolders } from "./filter";
 
 
 
@@ -41,49 +42,16 @@ chrome.webRequest.onCompleted.addListener((request) => {
         "https://*/*"]
 });
 
-const filterCards = (snapshot: ITranslationSnapshot, filters: Filter[]) => {
-    if (!filters.length) return ["root"];
-
-    const fitSize = (length: { direction: string, number: number } | undefined, frontLength: number, backLength: number) => {
-        if (!length) return true;
-        if (length.direction === "greater") {
-            return (
-                Math.max(frontLength, backLength) >
-                length.number
-            );
-        } else {
-            return (
-                Math.min(frontLength, backLength) <=
-                length.number
-            );
-        }
-    };
-
-    const hasWords = (words: string[] | undefined, text: string) => {
-        if (words === undefined)
-            return true;
-        return words.every((word) => text.includes(word))
-    };
-
-    const hasLang = (lang: string[] | undefined, cardLang: string) => (lang === undefined || lang!.includes(cardLang))
-
-    let destinations: string[] = [];
-
-    filters.forEach((filter) => {
-        if (hasLang(filter.frontLang, snapshot.inputLang) || hasLang(filter.backLang, snapshot.outputLang) ||
-            hasWords(filter.words, snapshot.inputText) || fitSize(filter.length, snapshot.inputText.length, snapshot.outputText.length))
-            destinations.push(filter.destination)
-    })
-    return destinations.length ? destinations : ["root"];
-
-}
 
 const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
     const hiddenCount = cards.reduce((sum, card) => sum + (card.hidden ? 1 : 0), 0)
     const filters: Filter[] = (await ChromeStorage.get("filters") as Filter[] ?? []);
+
     let hidden = hiddenCount < 30 ? Math.random() < 0.5 : false; //set cutoff at 30
+
+
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;
         const isOldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
@@ -96,7 +64,7 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
         }
     }
 
-    filterCards(snapshot, filters).forEach((dest) => {
+    getDestinationFolders(snapshot, filters).forEach((dest) => {
         cards.push({
             hidden,
             front: {
@@ -107,10 +75,9 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
                 lang: snapshot.outputLang
             },
             id: nanoid(),
-            location: dest, //The Just Collected folder
+            location: dest,
             timeCreated: snapshot.inputTime,
             source: snapshot.source,
-
         });
     })
 
@@ -171,6 +138,17 @@ chrome.runtime.onConnect.addListener(
  * 2 - Saved Languages are now normalized to the ISO-639-1 standard
  * 3 - User ID (for Firebase)
  */
+async function cleanDatabase() {
+    const folders = ((await ChromeStorage.get("folders")) ?? []) as Folder[];
+    if (!folders.some(folder => folder.id === "root")) {
+        await ChromeStorage.setPair("folders", [...folders,
+        {
+            name: "Just Collected",
+            id: "root",
+        },
+        ]);
+    }
+}
 async function updateStorageVersion() {
     const currentVersion = await ChromeStorage.get("storageVersion") as number | undefined;
     logger.debug(`Current storage version: ${currentVersion}`);
@@ -193,20 +171,7 @@ async function updateStorageVersion() {
         /*@ts-ignore*/
         // eslint-disable-next-line no-fallthrough
         case 3:
-            const folders = ((await ChromeStorage.get("folders")) ?? []) as Folder[];
-            if (!folders.length) {
-                await ChromeStorage.setPair("folders", [
-                    //move the folder creation to backend
-                    {
-                        name: "Saved",
-                        id: nanoid(),
-                    },
-                    {
-                        name: "Just Collected",
-                        id: "root",
-                    },
-                ]);
-            }
+        //this was from before but we don't need it anymore
         /*@ts-ignore*/
         // eslint-disable-next-line no-fallthrough
         case 4:
@@ -216,10 +181,12 @@ async function updateStorageVersion() {
         default:
             throw new Error(`Invalid storage version ${currentVersion}`);
     }
+    await cleanDatabase();
+
 };
 
+updateStorageVersion();
 chrome.runtime.onInstalled.addListener(async () => {
-    await updateStorageVersion();
     const existingFirebaseAlarm = await chrome.alarms.get("firebaseUpload");
     if (!existingFirebaseAlarm) {
         logger.debug("Setting Firebase alarm");

@@ -18,15 +18,15 @@ interface IFormStatus {
 const useFormData = () => {
   const [formStatus, setFormStatus] = useState<IFormStatus>();
   const userId = useStorage("userId", undefined);
-  useEffect(() => {
-    if (userId) {
-      fetchData("forms", userId).then((formData) => {
-        if (formData) {
-          setFormStatus(formData as IFormStatus);
-        }
-      });
-    }
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId) {
+  //     fetchData("forms", userId).then((formData) => {
+  //       if (formData) {
+  //         setFormStatus(formData as IFormStatus);
+  //       }
+  //     });
+  //   }
+  // }, [userId]);
   return { formStatus };
 };
 

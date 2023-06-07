@@ -8,10 +8,13 @@ const FolderNavContext = createContext<
       /** Your range-selected folders */
       selectedFolderIds: string[];
       setSelectedFolderIds: React.Dispatch<React.SetStateAction<string[]>>;
-      handleFolderSelect: (ev: React.MouseEvent<HTMLSpanElement, MouseEvent>, folder: string) => void
+      handleFolderSelect: (
+        ev: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+        folder: string
+      ) => void;
       /** The current (aka "active") folder id */
-      activeFolderId: string,
-      setActiveFolderId: React.Dispatch<React.SetStateAction<string>>
+      activeFolderId: string;
+      setActiveFolderId: React.Dispatch<React.SetStateAction<string>>;
     }
   | undefined
 >(undefined);
@@ -28,8 +31,8 @@ export const FolderNavContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [selectedFolderIds, setSelectedFolderIds] = useState(["root"]);
-  const [activeFolderId,setActiveFolderId] = useState("root");
-  const {tree:fileTree} = useFolderContext();
+  const [activeFolderId, setActiveFolderId] = useState("root");
+  const { tree: fileTree } = useFolderContext();
   const pivotPointRef = useRef(0); //TODO:
 
   const handleFolderSelect = (
@@ -55,7 +58,7 @@ export const FolderNavContextProvider = ({
         setSelectedFolderIds,
         handleFolderSelect,
         setActiveFolderId,
-        activeFolderId
+        activeFolderId,
       }}
     >
       {children}

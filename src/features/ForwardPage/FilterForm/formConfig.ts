@@ -1,26 +1,31 @@
 import { Folder } from "../../../types/storageTypes";
 import ISO6391 from "iso-639-1";
 
-const verifyLanguage = (lang: string) => {
-
-    const matches = [...lang.match(/[\w]+/g) ?? []]; //the result returned from match has some extra things attached
-    return matches?.every((match) => ISO6391.validate(match)) ? matches : undefined;
-}
 
 type ISingleInput = (
     | {
         type: "input";
+        /** Should return either the parsed result or null (if failed parsing). */
         parse: (text: string) => unknown;
         placeholder: string;
+        /** Must be a valid result that can be directly stored in storage */
+        defaultValue?: string;
     }
     | {
         type: "select";
         options: { value: string; text: string }[];
     }
 ) & {
-    defaultValue: string;
     name: string;
 }
+
+const verifyLanguage = (lang: string) => {
+    const matches = [...lang.match(/[\w]+/g) ?? []].map(lang => { const code = ISO6391.getCode(lang.toLowerCase()); return code.length === 0 ? lang : code });
+
+    return matches?.every((match) => ISO6391.validate(match)) ? matches : null;
+}
+
+
 export const getFormConfig = (folders: Folder[]): {
     inputs: ISingleInput[],
     displayName: string,
@@ -31,12 +36,9 @@ export const getFormConfig = (folders: Folder[]): {
             inputs: [{
                 type: "select",
                 name: "destination",
-                defaultValue: "root",
-                options: folders
-                    //.filter((folder) => folder.id !== "root")
-                    .map((folder) => {
-                        return { value: folder.id, text: folder.name };
-                    })
+                options: folders.map((folder) => {
+                    return { value: folder.id, text: folder.name };
+                })
             }],
             displayName: "Destination",
             required: true
@@ -47,7 +49,6 @@ export const getFormConfig = (folders: Folder[]): {
                 name: "frontLang",
                 placeholder: "Example: en/es",
                 parse: verifyLanguage,
-                defaultValue: ""
             }],
             displayName: "Front Language(s)",
             required: false
@@ -59,7 +60,6 @@ export const getFormConfig = (folders: Folder[]): {
                 name: "backLang",
                 placeholder: "Example: en/es",
                 parse: verifyLanguage,
-                defaultValue: "",
             }],
             displayName: "Back Language(s)",
             required: false
@@ -70,8 +70,7 @@ export const getFormConfig = (folders: Folder[]): {
                 type: "input",
                 name: "words",
                 placeholder: "Separate With Spaces",
-                parse: (text: string): String[] => text.split(" "),
-                defaultValue: "",
+                parse: (text: string): String[] => text.trim().split(" ").filter(word => word.length > 0),
             }],
             displayName: "Has Words",
             required: false
@@ -80,7 +79,6 @@ export const getFormConfig = (folders: Folder[]): {
             inputs: [{
                 type: "select",
                 name: "lengthDirection",
-                defaultValue: "greater",
                 options: [
                     {
                         value: "greater",
@@ -96,9 +94,8 @@ export const getFormConfig = (folders: Folder[]): {
             {
                 type: "input",
                 name: "length",
-                placeholder: "# of Characters",
-                parse: (text: string) => text.match(/^[\d]+$/) ? parseInt(text) : undefined,
-                defaultValue: "",
+                placeholder: "# of Chars",
+                parse: (text: string) => text.match(/^[\d]+$/) ? parseInt(text) : null,
             },
             ],
             displayName: "Length",

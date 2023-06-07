@@ -53,8 +53,6 @@ table {
   border-collapse: collapse;
   width: 100%;
   text-align: left;
-  flex-grow: 1;
-  overflow: scroll;
   font-size: 1.2rem;
   border-spacing: 5px;
   table-layout: fixed;
@@ -75,7 +73,7 @@ thead th {
   padding: 5px;
 }
 td {
-  padding: 3px 12px;
+  padding: 5px 12px;
   width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;

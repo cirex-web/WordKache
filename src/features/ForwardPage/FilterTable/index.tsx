@@ -4,6 +4,7 @@ import { Filter } from "../../../types/storageTypes";
 import { handleRowSelect } from "../../../utils/rangeSelect";
 import classNames from "classnames";
 import { useFolderContext } from "../../../contexts/FolderProvider";
+import { Text } from "../../../components/Text";
 
 export const FilterTable = ({ filters }: { filters: Filter[] }) => {
   const { folders } = useFolderContext();
@@ -27,21 +28,17 @@ export const FilterTable = ({ filters }: { filters: Filter[] }) => {
   };
 
   return (
-    <div className={css.container}>
-      {/* <Text
-        type="heading"
-        lineHeight={2}
-        bold
-        style={{ borderBottom: "2px solid var(--light-1)" }}
-      >
-        Active Filters
-      </Text> */}
-      <div className={css.tableContainer}>
+    <div className={css.tableContainer}>
+      {filters.length > 0 ? (
         <table className={css.filterTable}>
           <thead>
             <tr className={css.filterHeader}>
-              <th>Conditions</th>
-              <th>Destination</th>
+              <th>
+                <Text type="subheading">Conditions</Text>
+              </th>
+              <th>
+                <Text type="subheading">Destination</Text>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -57,21 +54,46 @@ export const FilterTable = ({ filters }: { filters: Filter[] }) => {
                 })}
               >
                 <td className={css.filterBody}>
-                  <div>Front Lang: {filter.frontLang ?? "No filter"}</div>
-                  <div>Back Lang: {filter.backLang ?? "No filter"}</div>
-                  <div>Has Words: {filter.words ?? "No filter"}</div>
-                  <div>Length: {filter.length?.number ?? "No filter"}</div>
+                  <Text type="paragraph">
+                    {filter.frontLang && (
+                      <div>
+                        <b>Front Lang:</b> {filter.frontLang.join(" ")}
+                      </div>
+                    )}
+                    {filter.backLang && (
+                      <div>
+                        <b>Back Lang:</b> {filter.backLang.join(" ")}
+                      </div>
+                    )}
+                    {filter.words && (
+                      <div>
+                        <b>Has Words:</b> {filter.words.join(" ")}
+                      </div>
+                    )}
+                    {filter.length && (
+                      <div>
+                        <b>Length:</b> {filter.length.direction} than{" "}
+                        {filter.length.number}
+                      </div>
+                    )}
+                  </Text>
                 </td>
 
                 <td>
-                  {folders.find((folder) => folder.id === filter.destination)
-                    ?.name ?? "This folder no longer exists"}
+                  <Text type="paragraph">
+                    {folders.find((folder) => folder.id === filter.destination)
+                      ?.name ?? "This folder no longer exists"}
+                  </Text>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      ) : (
+        <Text type="subheading" style={{ padding: "10px" }}>
+          No filters yet!
+        </Text>
+      )}
     </div>
   );
 };

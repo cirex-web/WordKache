@@ -30,9 +30,11 @@ export const FolderNav = () => {
           </Button>
         </Text>
       </Text>
-      {fileTree.map((folders) => (
-        <RecursiveFolder folder={folders} key={folders.id} />
-      ))}
+      <div className={css.folders}>
+        {fileTree.map((folders) => (
+          <RecursiveFolder folder={folders} key={folders.id} />
+        ))}
+      </div>
     </div>
   );
 };
