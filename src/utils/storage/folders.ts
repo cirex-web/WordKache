@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { AllFolders, FileDirectory } from "../../types/folderTypes";
 import { Folder } from "../../types/storageTypes";
 import { ChromeStorage, useStorage } from "./storage";
+import { cloneObj } from "..";
 
 const defaultArray: Folder[] = [];
 
@@ -23,7 +24,8 @@ const generateTreeStructure = (rootNodes: Folder[], graph: Map<string, Folder[]>
     return finalTree.map((fileDir: FileDirectory) => dfs(fileDir));
 };
 
-const generateAdjacencyMapFromArray = (folders: Folder[]) => {
+const generateAdjacencyMapFromArray = (_folders: Folder[]) => {
+    const folders = cloneObj(_folders); //we don't want to modify the original/return values by reference only
     const graph = new Map<string, Folder[]>();
     const rootNodes: Folder[] = [];
     for (const folder of folders) {
@@ -73,6 +75,7 @@ const buildEulerTourMap = (tree: FileDirectory[]) => {
 export const useFolders = () => {
     const folders = useStorage<Folder[]>("folders", defaultArray);
     const folderIdToFolder = folders?.reduce<{ [folderId: string]: Folder }>((obj, folder) => ({ ...obj, [folder.id]: folder }), {});
+    //^ make sure this obj contains no reference to the original folder obj
 
     console.log(folders);
     const [rootNodes, folderGraph] = generateAdjacencyMapFromArray([...folders ?? []]); //don't modify original cuz that would be bad

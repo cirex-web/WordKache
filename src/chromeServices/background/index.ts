@@ -8,7 +8,7 @@ import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
 import { addData } from "../../utils/firebase";
 import { getDestinationFolders } from "./filter";
-
+import { addAlarm } from "./alarms";
 
 
 logger.info("WordKache background script init!")
@@ -94,17 +94,8 @@ const getLangCode = (lang: string) => {
     }
     return langCode;
 }
-const uploadStorage = async () => {
-    const allData = await ChromeStorage.getAll();
-    logger.info("Uploading to firebase...");
-    if ("userId" in allData && typeof allData.userId === "string") {
-        logger.info("Found userId", allData.userId);
-        await addData(allData.userId, allData);
-    }
-}
 
 
-chrome.alarms.onAlarm.addListener(uploadStorage);
 chrome.runtime.onConnect.addListener(
     function (port) {
         if (port.name === "snapshot") {
@@ -140,13 +131,16 @@ chrome.runtime.onConnect.addListener(
  */
 async function cleanDatabase() {
     const folders = ((await ChromeStorage.get("folders")) ?? []) as Folder[];
+
     if (!folders.some(folder => folder.id === "root")) {
-        await ChromeStorage.setPair("folders", [...folders,
+        const newFolders = [...folders,
         {
             name: "Just Collected",
             id: "root",
         },
-        ]);
+        ];
+        if (!folders.length) newFolders.push({ name: "Saved", id: nanoid() }); //add in additional folder upon initialization
+        await ChromeStorage.setPair("folders", newFolders);
     }
 }
 async function updateStorageVersion() {
@@ -186,26 +180,12 @@ async function updateStorageVersion() {
 };
 
 updateStorageVersion();
+
+
 chrome.runtime.onInstalled.addListener(async () => {
-    const existingFirebaseAlarm = await chrome.alarms.get("firebaseUpload");
-    if (!existingFirebaseAlarm) {
-        logger.debug("Setting Firebase alarm");
-        chrome.alarms.create("firebaseUpload", {
-            periodInMinutes: 60,
-            delayInMinutes: 0,
-        });
-    } else {
-        logger.debug("Firebase alarm exists");
-    }
+    await addAlarm("firebaseUpload", {
+        periodInMinutes: 60,
+        delayInMinutes: 0,
+    });
+    await addAlarm("preloadHTML", { periodInMinutes: 1, delayInMinutes: 0 });
 }); //run this only on first load 
-const preloadHTML = async () => {
-    if (!await chrome.offscreen.hasDocument()) {
-        await chrome.offscreen.createDocument({
-            url: "index.html",
-            reasons: [chrome.offscreen.Reason.DISPLAY_MEDIA],
-            justification: "Helps with faster load times of popup"
-        });
-        logger.info("Set up hidden HTML page for faster load times!");
-    }
-}
-preloadHTML(); //just in case the page died for no apparent reason
