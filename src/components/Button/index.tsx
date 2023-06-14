@@ -4,11 +4,7 @@ interface IButtonProps extends React.ComponentProps<"button"> {
   zoomOnHover?: boolean;
 }
 
-export const Button = ({
-  className,
-  zoomOnHover,
-  ...rest
-}: IButtonProps) => {
+export const Button = ({ className, zoomOnHover, ...rest }: IButtonProps) => {
   return (
     <button
       {...rest}

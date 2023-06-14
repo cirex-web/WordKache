@@ -1,13 +1,13 @@
 import { logger } from "../logger";
-import { ChromeStorage } from "../../utils/storage";
+import { ChromeStorage } from "../../utils/storage/storage";
 import { ITranslationSnapshot } from "../types";
 import { requestParsers } from "./requestParser";
-import { Card } from "../../storageTypes";
+import { Card, Folder, Filter } from "../../types/storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
-import { addData } from "../../utils/firebase";
-
+import { getDestinationFolders } from "./filter";
+import { addAlarm } from "./alarms";
 
 
 logger.info("WordKache background script init!")
@@ -41,37 +41,41 @@ chrome.webRequest.onCompleted.addListener((request) => {
         "https://*/*"]
 });
 
+
 const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
-    const hiddenCount = cards.reduce((sum, card) => sum + (card.hidden ? 1 : 0), 0)
-    let hidden = hiddenCount < 30 ? Math.random() < 0.5 : false; //set cutoff at 30
+    const filters: Filter[] = (await ChromeStorage.get("filters") as Filter[] ?? []);
+
+
+
     for (let i = cards.length - 1; i >= 0; i--) {
         if (cards[i].location !== "root") continue;
         const isOldCard = snapshot.inputTime - cards[i].timeCreated >= 30 * 1000; //some arbitrary cutoff point for similarity checking
 
         //exact match? definitely don't need it
         if (cards[i].front.text === snapshot.inputText || (!isOldCard && similar(cards[i].front.text, snapshot.inputText))) {
-            hidden = !!cards[i].hidden; //if visible property is undefined, it's also visible (!! converts undefined to false)
             cards.splice(i, 1);
             break; //why would you want to overwrite anything extra?
         }
     }
-    cards.push({
-        hidden,
-        front: {
-            text: snapshot.inputText,
-            lang: snapshot.inputLang
-        }, back: {
-            text: snapshot.outputText,
-            lang: snapshot.outputLang
-        },
-        id: nanoid(),
-        location: "root", //The Just Collected folder
-        timeCreated: snapshot.inputTime,
-        source: snapshot.source,
 
-    });
+    getDestinationFolders(snapshot, filters).forEach((dest) => {
+        cards.push({
+            front: {
+                text: snapshot.inputText,
+                lang: snapshot.inputLang
+            }, back: {
+                text: snapshot.outputText,
+                lang: snapshot.outputLang
+            },
+            id: nanoid(),
+            location: dest,
+            timeCreated: snapshot.inputTime,
+            source: snapshot.source,
+        });
+    })
+
     logger.info("Adding snapshot", snapshot);
 
     await ChromeStorage.setPair("cards", cards);
@@ -85,17 +89,8 @@ const getLangCode = (lang: string) => {
     }
     return langCode;
 }
-const uploadStorage = async () => {
-    const allData = await ChromeStorage.getAll();
-    logger.info("Uploading to firebase...");
-    if ("userId" in allData && typeof allData.userId === "string") {
-        logger.info("Found userId", allData.userId);
-        await addData(allData.userId, allData);
-    }
-}
 
 
-chrome.alarms.onAlarm.addListener(uploadStorage);
 chrome.runtime.onConnect.addListener(
     function (port) {
         if (port.name === "snapshot") {
@@ -129,6 +124,20 @@ chrome.runtime.onConnect.addListener(
  * 2 - Saved Languages are now normalized to the ISO-639-1 standard
  * 3 - User ID (for Firebase)
  */
+async function cleanDatabase() {
+    const folders = ((await ChromeStorage.get("folders")) ?? []) as Folder[];
+
+    if (!folders.some(folder => folder.id === "root")) {
+        const newFolders = [...folders,
+        {
+            name: "Just Collected",
+            id: "root",
+        },
+        ];
+        if (!folders.length) newFolders.push({ name: "Saved", id: nanoid() }); //add in additional folder upon initialization
+        await ChromeStorage.setPair("folders", newFolders);
+    }
+}
 async function updateStorageVersion() {
     const currentVersion = await ChromeStorage.get("storageVersion") as number | undefined;
     logger.debug(`Current storage version: ${currentVersion}`);
@@ -148,27 +157,30 @@ async function updateStorageVersion() {
         // eslint-disable-next-line no-fallthrough
         case 2:
             await ChromeStorage.setPair("userId", nanoid(5));
+        /*@ts-ignore*/
         // eslint-disable-next-line no-fallthrough
         case 3:
-            logger.info("Updated to storage version 3");
-            await ChromeStorage.setPair("storageVersion", 3);
+        //this was from before but we don't need it anymore
+        /*@ts-ignore*/
+        // eslint-disable-next-line no-fallthrough
+        case 4:
+            logger.info("Updated to storage version 4");
+            await ChromeStorage.setPair("storageVersion", 4);
             break;
         default:
             throw new Error(`Invalid storage version ${currentVersion}`);
     }
+    await cleanDatabase();
+
 };
 
-chrome.runtime.onInstalled.addListener(async () => {
-    await updateStorageVersion();
-    const existingFirebaseAlarm = await chrome.alarms.get("firebaseUpload");
-    if (!existingFirebaseAlarm) {
-        logger.debug("Setting Firebase alarm");
-        chrome.alarms.create("firebaseUpload", {
-            periodInMinutes: 60,
-            delayInMinutes: 0,
-        });
-    } else {
-        logger.debug("Firebase alarm exists");
-    }
-}); //run this only on first load 
+updateStorageVersion();
 
+
+chrome.runtime.onInstalled.addListener(async () => {
+    await addAlarm("firebaseUpload", {
+        periodInMinutes: 60,
+        delayInMinutes: 0,
+    });
+    await addAlarm("preloadHTML", { periodInMinutes: 1, delayInMinutes: 0 });
+}); //run this only on first load 

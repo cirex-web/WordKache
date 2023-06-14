@@ -25,7 +25,6 @@ export const siteConfigs: ISiteConfig[] = [
                         return (matches[0].textContent ?? "").split(" - ")[0];
                     }
             }
-
         },
         "output": {
             "lang": {

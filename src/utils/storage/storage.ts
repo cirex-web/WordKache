@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fakeData } from "./fakeStorage";
 
 if (!chrome.storage) {
+
     let manualStorage = fakeData;
 
     type EventListener = (changes: {
@@ -10,7 +11,7 @@ if (!chrome.storage) {
     let eventListeners: EventListener[] = [];
 
     const isValidKey = (key: string): key is keyof typeof manualStorage => {
-        const valid = key === "cards" || key === "folders";
+        const valid = key in fakeData; //we're assuming that fakeData contains all possible keys to begin with
         if (!valid) console.warn("Attempted to get data with invalid key", key);
         return valid;
     }
@@ -81,6 +82,7 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
     }, [key, defaultValue]);
     return value;
 }
+
 export const ChromeStorage = {
     "get": (key: string) => {
         return new Promise((re) => {
@@ -88,8 +90,8 @@ export const ChromeStorage = {
         });
     },
     "getAll": () => {
-        return new Promise<{[k:string]:any}>(re => {
-            chrome.storage.local.get(null).then((obj)=>re(obj));
+        return new Promise<{ [k: string]: any }>(re => {
+            chrome.storage.local.get(null).then((obj) => re(obj));
         });
     },
     "set": (items: {

@@ -1,12 +1,11 @@
 
 import esbuild from "esbuild";
-import CssModulesPlugin from "esbuild-css-modules-plugin";
 import { copy } from "esbuild-plugin-copy";
 import inlineImage from "esbuild-plugin-inline-image";
-import { ScssModulesPlugin } from "esbuild-scss-modules-plugin";
 import eslint from 'esbuild-plugin-eslint';
 import { zip } from 'zip-a-folder';
 import { rmSync } from 'node:fs';
+import { postcssModules, sassPlugin } from 'esbuild-sass-plugin'
 
 const removeFile = (path) => {
     console.log(`Removing ${path}`)
@@ -15,7 +14,10 @@ const removeFile = (path) => {
 const args = process.argv.slice(2);
 const PROD = args.includes("prod");
 const WATCH = args.includes("watch");
-const esbuildPlugins = [inlineImage(), ScssModulesPlugin({}), CssModulesPlugin(), copy({
+const esbuildPlugins = [inlineImage(), sassPlugin({
+    filter: /\.module\.s?css$/,
+    transform: postcssModules({})
+}), sassPlugin(), copy({
     // this is equal to process.cwd(), which means we use cwd path as base path to resolve `to` path
     // if not specified, this plugin uses ESBuild.build outdir/outfile options as base path.
     resolveFrom: 'cwd',
