@@ -68,7 +68,7 @@ const WordTable = ({
   });
 
   let filteredCards = !searchInput.length
-    ? [...cardsUnderCurrentFolder].reverse() //don't mutate the original array or bad things will happen...
+    ? cardsUnderCurrentFolder   //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
 
   const activeCards = filteredCards.filter((card) =>
