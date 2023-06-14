@@ -114,9 +114,9 @@ const WordTable = ({
         filteredCards={filteredCards}
       />
       {filteredCards.length ? (
-        <div style={{ flexGrow: 1 }}>
+        <div className={css.tableContainer}>
           <table onKeyDown={handleKeyboardShortcuts}>
-            <thead style={{ top: "46.5px" }}>
+            <thead style={{ top: 0 }}>
               {/* TODO: Seriously hacky fix cuz I'm sleep deprived */}
               <tr>
                 <th>

@@ -1,3 +1,6 @@
+#root {
+  height: 100%; /* Just so styling doesn't break for the entire React app */
+}
 :root {
   font-size: 62.5%;
   --dark-1: #0d0a0b;
@@ -10,7 +13,10 @@
   --red-2: hsl(0, 64%, 55%);
 }
 ::-webkit-scrollbar {
-  display: none;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--light-2);
 }
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 48;

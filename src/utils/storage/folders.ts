@@ -77,7 +77,7 @@ export const useFolders = () => {
     // const folderIdToFolder = folders?.reduce<{ [folderId: string]: Folder }>((obj, folder) => ({ ...obj, [folder.id]: folder }), {});
     //^ make sure this obj contains no reference to the original folder obj
 
-    console.log(folders);
+    // console.log(folders);
     const [rootNodes, folderGraph] = generateAdjacencyMapFromArray([...folders ?? []]); //don't modify original cuz that would be bad
     const tree = generateTreeStructure(rootNodes, folderGraph);
 

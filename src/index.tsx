@@ -6,7 +6,7 @@ import { FolderContextProvider } from "./contexts/FolderProvider";
 import { FolderNavContextProvider } from "./contexts/FolderNavProvider";
 
 const root = ReactDOM.createRoot(
-  document.getElementsByTagName("body")[0] as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 
 root.render(

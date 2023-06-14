@@ -1,9 +1,10 @@
 .container {
-  overflow: scroll;
   display: flex;
   flex-direction: column;
 }
-
+.tableContainer {
+  overflow-y: auto;
+}
 tr.selected {
   background-color: var(--dark-2);
   font-weight: bold;

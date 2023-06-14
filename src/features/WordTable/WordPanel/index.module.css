@@ -1,6 +1,4 @@
 .container {
-  position: sticky;
-  bottom: 0;
   background-color: var(--dark-1);
 }
 .textBoxContainer {
