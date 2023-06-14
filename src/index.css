@@ -13,7 +13,6 @@
   --red-2: hsl(0, 64%, 55%);
 }
 ::-webkit-scrollbar {
-  background-color: transparent;
   width: 15px;
 }
 ::-webkit-scrollbar-thumb {
