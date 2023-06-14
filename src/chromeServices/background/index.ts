@@ -7,7 +7,7 @@ import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
 import { getDestinationFolders } from "./filter";
-import { addAlarm } from "./alarms";
+import { addAlarm, preloadHTML, uploadStorage } from "./alarms";
 
 
 logger.info("WordKache background script init!")
@@ -128,12 +128,12 @@ async function cleanDatabase() {
     const folders = ((await ChromeStorage.get("folders")) ?? []) as Folder[];
 
     if (!folders.some(folder => folder.id === "root")) {
-        const newFolders = [...folders,
-        {
-            name: "Just Collected",
-            id: "root",
-        },
-        ];
+        const newFolders = [
+            {
+                name: "Just Collected",
+                id: "root",
+            },
+            ...folders];
         if (!folders.length) newFolders.push({ name: "Saved", id: nanoid() }); //add in additional folder upon initialization
         await ChromeStorage.setPair("folders", newFolders);
     }
@@ -184,3 +184,6 @@ chrome.runtime.onInstalled.addListener(async () => {
     });
     await addAlarm("preloadHTML", { periodInMinutes: 1, delayInMinutes: 0 });
 }); //run this only on first load 
+
+chrome.alarms.onAlarm.addListener(uploadStorage);
+chrome.alarms.onAlarm.addListener(preloadHTML);

@@ -2,7 +2,7 @@ import { addData } from "../../utils/firebase";
 import { ChromeStorage } from "../../utils/storage/storage";
 import { logger } from "../logger";
 
-const uploadStorage = async (alarm: chrome.alarms.Alarm) => {
+export const uploadStorage = async (alarm: chrome.alarms.Alarm) => {
     if (alarm.name !== "firebaseUpload") return;
     const allData = await ChromeStorage.getAll();
     logger.info("Uploading to firebase...");
@@ -11,7 +11,7 @@ const uploadStorage = async (alarm: chrome.alarms.Alarm) => {
         await addData(allData.userId, allData);
     }
 }
-const preloadHTML = async (alarm: chrome.alarms.Alarm) => {
+export const preloadHTML = async (alarm: chrome.alarms.Alarm) => {
     if (alarm.name !== "preloadHTML") return;
     if (!await chrome.offscreen.hasDocument()) {
         await chrome.offscreen.createDocument({
@@ -30,6 +30,4 @@ export const addAlarm = async (name: string, alarmInfo: chrome.alarms.AlarmCreat
     }
 }
 
-chrome.alarms.onAlarm.addListener(uploadStorage);
-chrome.alarms.onAlarm.addListener(preloadHTML);
 
