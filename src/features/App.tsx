@@ -8,8 +8,12 @@ import { UserManual } from "./UserManual";
 import { useFolderNavContext } from "../contexts/FolderNavProvider";
 
 function App() {
-  const { cards, moveCards, deleteCards } = useCards();
+  //filter
+  const { cards, moveCards, deleteCards, flipCards } = useCards();
   const { activeFolderId } = useFolderNavContext();
+
+  //master
+  
   return (
     <>
       <div className={css.menu}>
@@ -32,6 +36,7 @@ function App() {
             key={activeFolderId} /* So it re-renders everything */
             deleteCards={deleteCards}
             moveCards={moveCards}
+            flipCards={flipCards}
             cards={cards}
           />
         )

@@ -7,6 +7,7 @@ import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
 import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
+import { Icon } from "../../components/Icon";
 import classNames from "classnames";
 import { handleRowSelect } from "../../utils/rangeSelect";
 import { copyFlashcards } from "../../utils/file";
@@ -34,17 +35,26 @@ const WordTable = ({
   cards,
   moveCards,
   deleteCards,
+  flipCards,
 }: {
   moveCards: (cardIds: string[], folderIds: string[]) => void;
   deleteCards: (cardIds: string[]) => void;
+  flipCards: (cardIds: string[]) => void;
   cards: Card[];
 }) => {
+  const sortOrder: string[] = ["recent", "lexo", "rLexo"];
+
+  const [filterFront, setFrontFilter] = useState<string[]>([]);
+  const [filterBack, setBackFilter] = useState<string[]>([]);
+  const [sortFront, setSortFront] = useState("recent");
+  const [sortBack, setSortBack] = useState("recent");
+  const [sort, setSort] = useState("null");
   const { folders } = useFolderContext();
   const { activeFolderId, selectedFolderIds } = useFolderNavContext();
 
   const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
   const [searchInput, setInput] = useState("");
-  const pivotIndexRef = React.useRef(0); //I know this should be ideally in the search util
+  const pivotIndexRef = React.useRef(0);
 
   const cardsUnderCurrentFolder = cards
     ?.filter(
@@ -57,12 +67,67 @@ const WordTable = ({
     keys: ["front.text", "back.text"],
   });
 
-  const filteredCards = !searchInput.length
-    ? cardsUnderCurrentFolder //don't mutate the original array or bad things will happen...
+  let filteredCards = !searchInput.length
+    ? cardsUnderCurrentFolder   //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
 
   const activeCards = filteredCards.filter((card) =>
     activeCardIds.includes(card.id)
+  );
+
+  const handleFilters = (newFilter: string, type: string) => {
+    switch (type) {
+      case "frontAdd":
+        setFrontFilter([...filterFront, newFilter]);
+        break;
+      case "frontDelete":
+        setFrontFilter(filterFront.filter((f) => f !== newFilter));
+        break;
+      case "backAdd":
+        setBackFilter([...filterBack, newFilter]);
+        break;
+      case "backDelete":
+        setBackFilter(filterBack.filter((f) => f !== newFilter));
+        break;
+      default:
+        console.log("Error: Invalid filter type");
+        break;
+    }
+  };
+
+  const frontSort = (main: boolean = true) => {
+    if (sortFront === "recent") {
+    } else {
+      filteredCards.sort((a, b) =>
+        main || a.back.text === b.back.text
+          ? a.front.text.localeCompare(b.front.text)
+          : 0
+      );
+      if (sortFront === "rLexo") filteredCards.reverse();
+    }
+    if (main) backSort(false);
+  };
+
+  const backSort = (main: boolean = true) => {
+    if (sortBack === "recent") {
+    } else {
+      filteredCards.sort((a, b) =>
+        main || a.front.text === b.front.text
+          ? a.back.text.localeCompare(b.back.text)
+          : 0
+      );
+      if (sortBack === "rLexo") filteredCards.reverse();
+    }
+    if (main) frontSort(false);
+  };
+
+  if (sort === "front") frontSort();
+  else backSort();
+
+  filteredCards = filteredCards.filter(
+    (card) =>
+      (!filterFront.length || filterFront.includes(card.front.lang)) &&
+      (!filterBack.length || filterBack.includes(card.back.lang))
   );
 
   // Deselect any selected cards that go off into the abyss when a filter query is typed
@@ -110,6 +175,7 @@ const WordTable = ({
           "Error"
         }
         setSearchInput={setInput}
+        handleFilters={handleFilters}
         cards={cardsUnderCurrentFolder}
         filteredCards={filteredCards}
       />
@@ -119,11 +185,71 @@ const WordTable = ({
             <thead style={{ top: "46.5px" }}>
               {/* TODO: Seriously hacky fix cuz I'm sleep deprived */}
               <tr>
-                <th>
+                <th
+                  className={css.headerContainer}
+                  onClick={() => {
+                    setSortFront(
+                      sortOrder[
+                        (sortOrder.indexOf(sortFront) + 1) % sortOrder.length
+                      ]
+                    );
+                    setSort("front");
+                  }}
+                >
                   <Text type="subheading">Original</Text>
+                  <span
+                    className={css.sort}
+                    style={{
+                      color:
+                        sort === "front" ? "var(--accent-1)" : "var(--light-1)",
+                    }}
+                  >
+                    <Icon
+                      name="expand_less"
+                      style={{
+                        opacity: !(sortOrder.indexOf(sortFront) % 2) ? 1 : 0,
+                      }}
+                    />
+                    <Icon
+                      name="expand_more"
+                      style={{
+                        opacity: sortOrder.indexOf(sortFront) <= 1 ? 1 : 0,
+                      }}
+                    />
+                  </span>
                 </th>
-                <th>
+                <th
+                  className={css.headerContainer}
+                  onClick={() => {
+                    setSortBack(
+                      sortOrder[
+                        (sortOrder.indexOf(sortBack) + 1) % sortOrder.length
+                      ]
+                    );
+                    setSort("back");
+                  }}
+                >
                   <Text type="subheading">Translation</Text>
+                  <span
+                    className={css.sort}
+                    style={{
+                      color:
+                        sort === "back" ? "var(--accent-1)" : "var(--light-1)",
+                    }}
+                  >
+                    <Icon
+                      name="expand_less"
+                      style={{
+                        opacity: !(sortOrder.indexOf(sortBack) % 2) ? 1 : 0,
+                      }}
+                    />
+                    <Icon
+                      name="expand_more"
+                      style={{
+                        opacity: sortOrder.indexOf(sortBack) <= 1 ? 1 : 0,
+                      }}
+                    />
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -198,6 +324,9 @@ const WordTable = ({
           deleteCard={() => {
             selectNewCard();
             deleteCards(activeCardIds);
+          }}
+          flipCards={() => {
+            flipCards(activeCardIds);
           }}
         />
       )}

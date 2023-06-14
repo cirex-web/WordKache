@@ -26,6 +26,17 @@ export const useCards = () => {
         }
         updateStorage(newCards);
     };
+
+    const flipCards = (cardIds: string[]) => {
+        if (!cards) return;
+        const cardsClone = [...cards];
+        for (const card of cardsClone) {
+          if (cardIds.includes(card.id))
+            [card.front, card.back] = [card.back, card.front];
+        }
+        updateStorage(cardsClone);
+      }
+
     const deleteCards = (cardIds: string[]) => {
         if (!cards) return;
         const cardsClone = [...cards];
@@ -35,5 +46,5 @@ export const useCards = () => {
         updateStorage(cardsClone);
 
     };
-    return { cards, moveCards, deleteCards };
+    return { cards, moveCards, deleteCards, flipCards };
 }
