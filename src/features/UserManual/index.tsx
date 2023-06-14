@@ -1,40 +1,34 @@
-import { useState, useEffect, useRef } from "react";
-import { Icon } from "../../components/Icon";
 import css from "./index.module.css";
-import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
-import classNames from "classnames";
-import { fetchData } from "../../utils/firebase";
-import { useStorage } from "../../utils/storage/storage";
 import { Header } from "../../components/Header";
 
 const HotKey = ({ children }: { children: string }) => {
   return <div className={css.hotKeyContainer}>{children}</div>;
 };
 
-interface IFormStatus {
-  url: string;
-  done: boolean;
-}
-const useFormData = () => {
-  const [formStatus, setFormStatus] = useState<IFormStatus>();
-  const userId = useStorage("userId", undefined);
-  useEffect(() => {
-    if (userId) {
-      fetchData("forms", userId).then((formData) => {
-        if (formData) {
-          setFormStatus(formData as IFormStatus);
-        }
-      });
-    }
-  }, [userId]);
-  return { formStatus };
-};
+// interface IFormStatus {
+//   url: string;
+//   done: boolean;
+// }
+// const useFormData = () => {
+//   const [formStatus, setFormStatus] = useState<IFormStatus>();
+//   const userId = useStorage("userId", undefined);
+//   useEffect(() => {
+//     if (userId) {
+//       fetchData("forms", userId).then((formData) => {
+//         if (formData) {
+//           setFormStatus(formData as IFormStatus);
+//         }
+//       });
+//     }
+//   }, [userId]);
+//   return { formStatus };
+// };
 
-export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
+export const UserManual = () => {
   // const [boxOpen, setBoxOpen] = useState(false);
-  const { formStatus } = useFormData();
-  const popupRef = useRef<HTMLDivElement>(null);
+  // const { formStatus } = useFormData();
+  // const popupRef = useRef<HTMLDivElement>(null);
   // useEffect(() => {
   //   if (!boxOpen) return;
   //   const closeBox = (ev: MouseEvent) => {
@@ -46,7 +40,7 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
   //   return () => window.removeEventListener("click", closeBox);
   // }, [boxOpen]);
 
-  const HIDDEN_CARD_THRESHOLD_NUMBER = 30;
+  // const HIDDEN_CARD_THRESHOLD_NUMBER = 30;
 
   return (
     <div className={css.container}>

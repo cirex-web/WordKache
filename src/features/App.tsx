@@ -1,7 +1,7 @@
 import css from "./App.module.scss";
 import WordTable from "./WordTable";
 import { FolderNav } from "./FolderNav";
-import { ForwardingPage } from "./ForwardPage";
+// import { ForwardingPage } from "./ForwardPage";
 import logo from "../assets/logo.svg";
 import { useCards } from "../utils/storage/cards";
 import { UserManual } from "./UserManual";
@@ -20,11 +20,11 @@ function App() {
       {!activeFolderId.length ? (
         // <ForwardingPage key="filters" />
         <UserManual
-          numCardsHidden={
-            cards
-              ? cards.reduce<number>((sum, card) => sum + +!!card.hidden, 0)
-              : 0
-          }
+          // numCardsHidden={
+          //   cards
+          //     ? cards.reduce<number>((sum, card) => sum + +!!card.hidden, 0)
+          //     : 0
+          // }
         />
       ) : (
         cards && (

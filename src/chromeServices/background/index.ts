@@ -6,7 +6,6 @@ import { Card, Folder, Filter } from "../../types/storageTypes";
 import { similar } from "../../utils/strings";
 import { nanoid } from "nanoid";
 import ISO6391 from 'iso-639-1';
-import { addData } from "../../utils/firebase";
 import { getDestinationFolders } from "./filter";
 import { addAlarm } from "./alarms";
 

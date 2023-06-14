@@ -74,7 +74,7 @@ const buildEulerTourMap = (tree: FileDirectory[]) => {
 /** If you want folder info, don't use this function - use the context hook useFolderContext() instead */
 export const useFolders = () => {
     const folders = useStorage<Folder[]>("folders", defaultArray);
-    const folderIdToFolder = folders?.reduce<{ [folderId: string]: Folder }>((obj, folder) => ({ ...obj, [folder.id]: folder }), {});
+    // const folderIdToFolder = folders?.reduce<{ [folderId: string]: Folder }>((obj, folder) => ({ ...obj, [folder.id]: folder }), {});
     //^ make sure this obj contains no reference to the original folder obj
 
     console.log(folders);
