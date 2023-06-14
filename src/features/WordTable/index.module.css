@@ -46,5 +46,6 @@
     flex-direction: column;
     position: absolute;
     right: 5px;
+    top: 2px;
     gap: -5px;
   }
