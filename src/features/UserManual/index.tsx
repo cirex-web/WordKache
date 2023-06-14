@@ -180,6 +180,19 @@ export const UserManual = () => {
             <div>Cancel Card Selection</div>
           </div>
         </Text>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          <input type="checkbox" id="doNotShowAgain" />
+          <Text type="paragraph">
+            <label htmlFor="doNotShowAgain">Do not show this page again</label>
+          </Text>
+        </div>
       </div>
     </div>
   );

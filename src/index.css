@@ -28,7 +28,15 @@
   line-height: inherit; /* Google defaults this to 1 for some reason */
   vertical-align: bottom; /* NOTE: idk why this works in making the icon container not have any extra space on the top or bottom, but it does.. */
 }
-
+a:link {
+  color: hsl(198, 50%, 58%);
+}
+a:visited {
+  color: hsl(198, 77%, 50%);
+}
+label {
+  cursor: pointer;
+}
 html {
   height: 100vh;
   display: flex;
