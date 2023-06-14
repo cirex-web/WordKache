@@ -30,8 +30,8 @@ export const FolderNavContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [selectedFolderIds, setSelectedFolderIds] = useState(["root"]);
-  const [activeFolderId, setActiveFolderId] = useState("root");
+  const [selectedFolderIds, setSelectedFolderIds] = useState([""]);
+  const [activeFolderId, setActiveFolderId] = useState("");
   const { tree: fileTree } = useFolderContext();
   const pivotPointRef = useRef(0); //TODO:
 

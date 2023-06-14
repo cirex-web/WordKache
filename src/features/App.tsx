@@ -16,7 +16,9 @@ function App() {
         <img src={logo} className={css.logo} alt="logo" />
 
         <FolderNav />
-
+      </div>
+      {!activeFolderId.length ? (
+        // <ForwardingPage key="filters" />
         <UserManual
           numCardsHidden={
             cards
@@ -24,9 +26,6 @@ function App() {
               : 0
           }
         />
-      </div>
-      {!activeFolderId.length ? (
-        <ForwardingPage key="filters" />
       ) : (
         cards && (
           <WordTable

@@ -46,10 +46,8 @@ chrome.webRequest.onCompleted.addListener((request) => {
 const addFlashcard = async (snapshot: ITranslationSnapshot) => {
     // NOTE: most recent cards are at the end of the array (it is assumed for now)
     const cards: Card[] = (await ChromeStorage.get("cards") as Card[] ?? []);
-    const hiddenCount = cards.reduce((sum, card) => sum + (card.hidden ? 1 : 0), 0)
     const filters: Filter[] = (await ChromeStorage.get("filters") as Filter[] ?? []);
 
-    let hidden = hiddenCount < 30 ? Math.random() < 0.5 : false; //set cutoff at 30
 
 
     for (let i = cards.length - 1; i >= 0; i--) {
@@ -58,7 +56,6 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
 
         //exact match? definitely don't need it
         if (cards[i].front.text === snapshot.inputText || (!isOldCard && similar(cards[i].front.text, snapshot.inputText))) {
-            hidden = !!cards[i].hidden; //if visible property is undefined, it's also visible (!! converts undefined to false)
             cards.splice(i, 1);
             break; //why would you want to overwrite anything extra?
         }
@@ -66,7 +63,6 @@ const addFlashcard = async (snapshot: ITranslationSnapshot) => {
 
     getDestinationFolders(snapshot, filters).forEach((dest) => {
         cards.push({
-            hidden,
             front: {
                 text: snapshot.inputText,
                 lang: snapshot.inputLang
