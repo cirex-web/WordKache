@@ -172,7 +172,9 @@ export const UserManual = () => {
         >
           <input type="checkbox" id="doNotShowAgain" />
           <Text type="paragraph">
-            <label htmlFor="doNotShowAgain">Do not show this page again</label>
+            <label htmlFor="doNotShowAgain">
+              Do not show this page on startup
+            </label>
           </Text>
         </div>
       </div>
