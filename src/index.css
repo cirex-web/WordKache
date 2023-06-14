@@ -13,11 +13,11 @@
   --red-2: hsl(0, 64%, 55%);
 }
 ::-webkit-scrollbar {
-  width: 15px;
+  width: 16px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: var(--light-2);
-  border-radius: 7px;
+  border-radius: 50px;
   border: 4px solid var(--dark-1);
 }
 ::-webkit-scrollbar-thumb:hover {
