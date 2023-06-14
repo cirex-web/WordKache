@@ -1,8 +1,7 @@
 import Fuse from "fuse.js";
 import React, { useEffect, useState } from "react";
-import { Card } from "../../storageTypes";
+import { Card } from "../../types/storageTypes";
 import { Text } from "../../components/Text";
-import { UseFolderContext } from "../App";
 import { TableHeader } from "./TableHeader";
 import { WordPanel } from "./WordPanel";
 import css from "./index.module.css";
@@ -10,7 +9,10 @@ import searchEmpty from "../../assets/searchEmpty.svg";
 import folderEmpty from "../../assets/folderEmpty.svg";
 import { Icon } from "../../components/Icon";
 import classNames from "classnames";
+import { handleRowSelect } from "../../utils/rangeSelect";
 import { copyFlashcards } from "../../utils/file";
+import { useFolderContext } from "../../contexts/FolderProvider";
+import { useFolderNavContext } from "../../contexts/FolderNavProvider";
 
 const Placeholder = ({
   image,
@@ -22,7 +24,7 @@ const Placeholder = ({
   className?: string;
 }) => {
   return (
-    <div className={css.placeholder + " " + className}>
+    <div className={classNames(css.placeholder, className)}>
       <img src={image} alt="" height={100} />
       <Text type="heading">{text}</Text>
     </div>
@@ -35,31 +37,38 @@ const WordTable = ({
   deleteCards,
   flipCards,
 }: {
-  /** Most recent cards are at the end, so this is reversed when displaying the table */
-  cards: Card[];
-  moveCards: (cardIds: string[], folderId?: string) => void;
+  moveCards: (cardIds: string[], folderIds: string[]) => void;
   deleteCards: (cardIds: string[]) => void;
   flipCards: (cardIds: string[]) => void;
+  cards: Card[];
 }) => {
   const sortOrder: string[] = ["recent", "lexo", "rLexo"];
-  const { activeFolder } = UseFolderContext();
-  const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
-  const [searchInput, setInput] = useState("");
 
   const [filterFront, setFrontFilter] = useState<string[]>([]);
   const [filterBack, setBackFilter] = useState<string[]>([]);
   const [sortFront, setSortFront] = useState("recent");
   const [sortBack, setSortBack] = useState("recent");
   const [sort, setSort] = useState("null");
+  const { folders } = useFolderContext();
+  const { activeFolderId, selectedFolderIds } = useFolderNavContext();
+
+  const [activeCardIds, setActiveCardsIds] = useState<string[]>([]);
+  const [searchInput, setInput] = useState("");
   const pivotIndexRef = React.useRef(0);
 
+  const cardsUnderCurrentFolder = cards
+    ?.filter(
+      (card) =>
+        card.location === activeFolderId && !card.hidden && !card.deleted //top-level filtering
+    )
+    .sort((a, b) => b.timeCreated - a.timeCreated); //TODO: should this really be here
   //Search
-  const fuse = new Fuse(cards, {
+  const fuse = new Fuse(cardsUnderCurrentFolder, {
     keys: ["front.text", "back.text"],
   });
 
   let filteredCards = !searchInput.length
-    ? [...cards].reverse() //don't mutate the original array or bad things will happen...
+    ? [...cardsUnderCurrentFolder].reverse() //don't mutate the original array or bad things will happen...
     : fuse.search(searchInput).map((result) => result.item);
 
   const activeCards = filteredCards.filter((card) =>
@@ -121,73 +130,6 @@ const WordTable = ({
       (!filterBack.length || filterBack.includes(card.back.lang))
   );
 
-  const getRangeEndpoint = (startIndex: number, direction: number) => {
-    if (direction === 0) return startIndex;
-    const cardIds = filteredCards.map((card) => card.id);
-    let returnI = -1;
-    for (let i = startIndex; i < cardIds.length && i >= 0; i += direction) {
-      if (activeCardIds.includes(cardIds[i])) {
-        returnI = i;
-      } else {
-        break;
-      }
-    }
-    return returnI;
-  };
-  const inRange = (i: number, start: number, end: number) =>
-    Math.sign(i - start) * Math.sign(i - end) <= 0;
-  const handleRowSelect = (
-    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    cardId: string
-  ) => {
-    if (event.shiftKey) {
-      const cardIds = filteredCards.map((card) => card.id);
-      const pivotIndex = pivotIndexRef.current;
-      const targetIndex = cardIds.indexOf(cardId);
-
-      const leftIndex = getRangeEndpoint(pivotIndex, 1);
-      const rightIndex = getRangeEndpoint(pivotIndex, -1); //not really left or right, but bear with me (non-inclusive filled segment)
-
-      setActiveCardsIds(
-        cardIds.filter(
-          (cardId, i) =>
-            (activeCardIds.includes(cardId) &&
-              !inRange(i, rightIndex, leftIndex)) ||
-            inRange(i, pivotIndex, targetIndex)
-        )
-      );
-    } else {
-      const activeCardIdsCopy =
-        event.ctrlKey || event.metaKey ? [...activeCardIds] : [];
-
-      if (activeCardIdsCopy.includes(cardId)) {
-        setActiveCardsIds(
-          activeCardIdsCopy.filter((activeCardId) => activeCardId !== cardId)
-        );
-      } else {
-        setActiveCardsIds([...activeCardIdsCopy, cardId]);
-      }
-      pivotIndexRef.current = filteredCards.findIndex(
-        (card) => card.id === cardId
-      );
-    }
-  };
-
-  const handleKeyboardShortcuts = (
-    event: React.KeyboardEvent<HTMLTableRowElement>
-  ) => {
-    if (event.key === "Escape") {
-      setActiveCardsIds([]);
-      event.preventDefault();
-    }
-    if (event.key === "a" && (event.metaKey || event.ctrlKey)) {
-      setActiveCardsIds(filteredCards.map((card) => card.id));
-      event.preventDefault();
-    }
-    if (event.key === "c" && (event.metaKey || event.ctrlKey)) copyFlashcards(activeCards);
-
-  };
-
   // Deselect any selected cards that go off into the abyss when a filter query is typed
   useEffect(() => {
     const newActiveCardsIds = activeCardIds.filter((cardId) =>
@@ -211,19 +153,37 @@ const WordTable = ({
     }
   };
 
+  const handleKeyboardShortcuts = (
+    event: React.KeyboardEvent<HTMLTableElement>
+  ) => {
+    if (event.key === "Escape") {
+      setActiveCardsIds([]);
+      event.preventDefault();
+    }
+    if ((event.metaKey || event.ctrlKey) && event.key === "a") {
+      setActiveCardsIds(filteredCards.map((card) => card.id));
+      event.preventDefault();
+    }
+    if ((event.metaKey || event.ctrlKey) && event.key === "c")
+      copyFlashcards(activeCards);
+  };
   return (
     <div className={css.container}>
       <TableHeader
-        folderName={activeFolder.name}
+        folderName={
+          folders.find((folder) => folder.id === activeFolderId)?.name ??
+          "Error"
+        }
         setSearchInput={setInput}
         handleFilters={handleFilters}
+        cards={cardsUnderCurrentFolder}
         filteredCards={filteredCards}
-        cards={cards}
       />
       {filteredCards.length ? (
-        <div className={css.tableContainer} onKeyDown={handleKeyboardShortcuts}>
-          <table className={css.table}>
-            <thead>
+        <div style={{ flexGrow: 1 }}>
+          <table onKeyDown={handleKeyboardShortcuts}>
+            <thead style={{ top: "46.5px" }}>
+              {/* TODO: Seriously hacky fix cuz I'm sleep deprived */}
               <tr>
                 <th
                   className={css.headerContainer}
@@ -297,8 +257,18 @@ const WordTable = ({
               {filteredCards.map((card) => (
                 <tr
                   key={card.id}
+                  onMouseDown={(ev) =>
+                    setActiveCardsIds(
+                      handleRowSelect(
+                        ev,
+                        card.id,
+                        filteredCards.map((card) => card.id),
+                        activeCardIds,
+                        pivotIndexRef
+                      )
+                    )
+                  }
                   tabIndex={0}
-                  onMouseDown={(ev) => handleRowSelect(ev, card.id)}
                   className={classNames({
                     [css.selected]: activeCardIds.includes(card.id),
                   })}
@@ -332,7 +302,7 @@ const WordTable = ({
             </tbody>
           </table>
         </div>
-      ) : cards.length ? (
+      ) : cardsUnderCurrentFolder.length ? (
         <Placeholder image={searchEmpty} text="No cards match your search" />
       ) : (
         <Placeholder
@@ -340,12 +310,16 @@ const WordTable = ({
           text="This folder is currently empty"
         />
       )}
+
       {activeCards.length > 0 && (
         <WordPanel
           cards={activeCards}
           saveCard={() => {
             selectNewCard();
-            moveCards(activeCardIds);
+            moveCards(
+              activeCardIds,
+              selectedFolderIds.filter((id) => id !== activeFolderId)
+            );
           }}
           deleteCard={() => {
             selectNewCard();

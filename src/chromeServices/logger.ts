@@ -1,15 +1,15 @@
-import { ChromeStorage } from "../utils/storage";
+import { ChromeStorage } from "../utils/storage/storage";
 const COLORS = {
     "DEBUG": "gray",
     "INFO": "lightblue",
     "WARN": "yellow"
 } as const
 let existingLogs: any[] = []
-ChromeStorage.get("logs").then((logs) => {
-    if (logs) existingLogs = logs as any[];
-});
+// ChromeStorage.get("logs").then((logs) => {
+//     if (logs) existingLogs = logs as any[];
+// });
 let shouldLog: boolean;
-ChromeStorage.get("debug").then((data)=>shouldLog = !!data);
+ChromeStorage.get("debug").then((data) => shouldLog = !!data);
 
 export const logger = {
     print: (type: "DEBUG" | "INFO" | "WARN", ...args: any[]) => {

@@ -1,82 +1,157 @@
-import { useState, useEffect, useRef } from "react";
-import { Icon } from "../../components/Icon";
 import css from "./index.module.css";
-import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
-import classNames from "classnames";
+import { Header } from "../../components/Header";
 
 const HotKey = ({ children }: { children: string }) => {
   return <div className={css.hotKeyContainer}>{children}</div>;
 };
 
-export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
-  const [boxOpen, setBoxOpen] = useState(false);
-  const popupRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!boxOpen) return;
-    const closeBox = (ev: MouseEvent) => {
-      if (!popupRef.current?.contains(ev.target as HTMLElement)) {
-        setBoxOpen(false);
-      }
-    };
-    window.addEventListener("click", closeBox);
-    return () => window.removeEventListener("click", closeBox);
-  }, [boxOpen]);
-  const HIDDEN_CARD_THRESHOLD_NUMBER = 30;
+// interface IFormStatus {
+//   url: string;
+//   done: boolean;
+// }
+// const useFormData = () => {
+//   const [formStatus, setFormStatus] = useState<IFormStatus>();
+//   const userId = useStorage("userId", undefined);
+//   useEffect(() => {
+//     if (userId) {
+//       fetchData("forms", userId).then((formData) => {
+//         if (formData) {
+//           setFormStatus(formData as IFormStatus);
+//         }
+//       });
+//     }
+//   }, [userId]);
+//   return { formStatus };
+// };
+
+export const UserManual = () => {
+  // const [boxOpen, setBoxOpen] = useState(false);
+  // const { formStatus } = useFormData();
+  // const popupRef = useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   if (!boxOpen) return;
+  //   const closeBox = (ev: MouseEvent) => {
+  //     if (!popupRef.current?.contains(ev.target as HTMLElement)) {
+  //       setBoxOpen(false);
+  //     }
+  //   };
+  //   window.addEventListener("click", closeBox);
+  //   return () => window.removeEventListener("click", closeBox);
+  // }, [boxOpen]);
+
+  // const HIDDEN_CARD_THRESHOLD_NUMBER = 30;
+
   return (
-    <Text type="subheading" className={css.container}>
-      <Button
-        onClick={(ev) => {
-          setBoxOpen(!boxOpen);
-          ev.stopPropagation();
-        }}
-        style={{ padding: "10px", width: "100%" }}
-      >
-        <Icon name="help" />{" "}
-        {numCardsHidden > 0 ? `${numCardsHidden} Card${numCardsHidden !== 1? 's' : ''} Hidden` : "Info"}
-      </Button>
-      <div
-        className={classNames(css.textBox, boxOpen ? css.open : css.closed)}
-        ref={popupRef}
-      >
-        <Text type="heading" lineHeight={2} bold>
-          You're using a Beta version!
-        </Text>
-        <Text type="paragraph">
-          For statistical analysis, around 50% of your collected cards will be
-          temporarily hidden. However, once you've accumulated 30 hidden cards,
-          you'll be able to see all subsequent translations. (
-          {numCardsHidden >= HIDDEN_CARD_THRESHOLD_NUMBER ? (
-            <>You've reached it!</>
+    <div className={css.container}>
+      {/* {formStatus && (
+        <Text type="paragraph" style={{ padding: "10px" }}>
+          {formStatus.done ? (
+            "Thanks for completing the form! You'll be able to see your hidden cards soon."
           ) : (
             <>
-              You're currently{" "}
-              <b>
-                {Math.round(
-                  (numCardsHidden / HIDDEN_CARD_THRESHOLD_NUMBER) * 100
-                )}
-                %
-              </b>{" "}
-              of the way there.
+              You have{" "}
+              <a
+                href={formStatus.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: "lightblue" }}
+              >
+                a form
+              </a>{" "}
+              available! It should only take 5 minutes to complete, and you'll
+              get to see your hidden cards afterwards!
             </>
           )}
-          )
         </Text>
+      )} */}
+      <Header headingText="Welcome to WordKache!" />
+      {/* <Text type="subheading" className={css.container}>
+        <Button
+          onClick={(ev) => {
+            setBoxOpen(!boxOpen);
+            ev.stopPropagation();
+          }}
+          style={{ padding: "10px", width: "100%" }}
+        >
+          <Icon name="help" />{" "}
+          {numCardsHidden > 0
+            ? `${numCardsHidden} Card${numCardsHidden !== 1 ? "s" : ""} Hidden`
+            : "Info"}
+        </Button>
+        
+      </Text> */}
+      <div className={css.textContainer}>
+        <Text type="subheading">
+          To use WordKache, simply go to either Google Translate or DeepL,
+          translate some words, and check the <b>Just Collected</b> folder for
+          your translations! To view this page again, simply unselect the active
+          folder.
+        </Text>
+        <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
+          Saving your cards
+        </Text>
+        <Text type="paragraph">
+          To save your words into a specific folder, just shift click on the
+          folder(s) you wish to add it to and press Move! To add/remove folders,
+          use the +/- buttons on the top left. To rename a folder, double click
+          on the folder name in the left panel. As of now, in order to add a
+          folder to the top level, you'll need to unselect the current folder
+          (like how it is right now) before clicking '+'.
+        </Text>
+        {/* <Text type="paragraph">
+            Inactive: For statistical analysis, around 50% of your collected cards will be
+            temporarily hidden. However, once you've accumulated 30 hidden
+            cards, you'll be able to see all subsequent translations. (
+            {numCardsHidden >= HIDDEN_CARD_THRESHOLD_NUMBER ? (
+              <>You've reached it!</>
+            ) : (
+              <>
+                You're currently{" "}
+                <b>
+                  {Math.round(
+                    (numCardsHidden / HIDDEN_CARD_THRESHOLD_NUMBER) * 100
+                  )}
+                  %
+                </b>{" "}
+                of the way there.
+              </>
+            )}
+            )
+          </Text> */}
 
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Why aren't my translations being saved?
         </Text>
         <Text type="paragraph">
           We currently only support Google Translate and DeepL. Make sure that
-          if you're using Google Translate, you're on
-          translate.google.com and not the embedded Google Search one. If it's still not working, leave a comment in our feedback form.
+          if you're using Google Translate, you're on translate.google.com and
+          not the embedded Google Search one. If it's still not working, leave a
+          comment in our feedback form.
         </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           I have feedback/questions!
         </Text>
         <Text type="paragraph">
           We're actively monitoring all responses on{" "}
-          <a href="https://forms.gle/bkos6SGzr6Jeo33n6" target="_blank" rel='noreferrer'>this form</a>.
+          <a
+            href="https://forms.gle/bkos6SGzr6Jeo33n6"
+            target="_blank"
+            rel="noreferrer"
+          >
+            this form
+          </a>
+          .
+        </Text>
+        <Text type="heading" style={{ marginTop: "15px" }} bold>
+          I've completed the beta testing form! Where are my hidden cards?
+        </Text>
+        <Text
+          type="paragraph"
+          style={{ marginTop: "10px" }}
+          //TODO: The jank is real
+        >
+          You'll see them very soon, we promise.
         </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Hotkeys
@@ -86,15 +161,15 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
             <div>
               <HotKey>Shift</HotKey> + <HotKey>Click</HotKey>
             </div>
-            <div>Range Selection</div>
+            <div>Range Select Cards/Folders</div>
             <div>
               <HotKey>^|⌘</HotKey> + <HotKey>Click</HotKey>
             </div>
-            <div>Select Card</div>
+            <div>Select/Deselect Card/Folder</div>
             <div>
               <HotKey>^|⌘</HotKey> + <HotKey>A</HotKey>
             </div>
-            <div>Select All</div>
+            <div>Select All Cards</div>
             <div>
               <HotKey>^|⌘</HotKey> + <HotKey>C</HotKey>
             </div>
@@ -102,10 +177,10 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
             <div>
               <HotKey>esc</HotKey>
             </div>
-            <div>Cancel Selection</div>
+            <div>Cancel Card Selection</div>
           </div>
         </Text>
       </div>
-    </Text>
+    </div>
   );
 };

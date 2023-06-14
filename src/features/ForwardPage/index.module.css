@@ -1,0 +1,16 @@
+.container {
+  overflow: scroll;
+}
+.content {
+  padding: 20px;
+}
+
+.dropdownButton {
+  width: 100%;
+  text-align: left;
+}
+.dropdownTitle {
+  cursor: pointer;
+  border-bottom: 1px solid var(--dark-2);
+  padding: 5px 0;
+}

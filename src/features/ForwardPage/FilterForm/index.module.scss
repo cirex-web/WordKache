@@ -1,0 +1,24 @@
+.formContainer {
+  border: 1px solid var(--dark-2);
+  padding: 10px;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  row-gap: 10px;
+  padding-top: 10px;
+}
+
+.required {
+  color: var(--red-2);
+}
+.submitButton {
+  border: 1px solid var(--light-1);
+  border-radius: 2px;
+  padding: 5px 10px;
+}
+.submitButtonContainer {
+  margin: 20px 0 5px;
+  display: flex;
+  flex-direction: row-reverse;
+}

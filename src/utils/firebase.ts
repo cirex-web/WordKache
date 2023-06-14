@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
-import { logger } from "../logger";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { logger } from "../chromeServices/logger";
 
 // this is public but that's fine
 const firebaseConfig = {
@@ -13,13 +13,18 @@ const firebaseConfig = {
     appId: "1:673136087991:web:31bc60b43177f991c64e32",
     measurementId: "G-FL6DD4ZEQZ"
 };
-
 // Initialize Firebase
 const db = getFirestore(initializeApp(firebaseConfig));
 export const addData = async (id: string, content: any) => {
+    logger.debug(id, content);
     try {
         await setDoc(doc(db, "users", id), { ...content, lastUpdated: +new Date() });
     } catch (e) {
         logger.warn(e);
     }
+}
+
+export const fetchData = async (subfolder: string, id: string) => {
+    const document = await getDoc(doc(db, subfolder, id));
+    return document.exists() ? document.data() : undefined;
 }

@@ -1,9 +1,10 @@
 .container {
-  position: relative;
-  border-top: 2px solid var(--light-1);
+  overflow: scroll;
 }
-
-.textBox {
+.textContainer {
+  padding: 20px;
+}
+/* .textBox {
   position: absolute;
   left: 10px;
   bottom: 100%;
@@ -19,8 +20,8 @@
   transition: 0.3s all;
   max-height: 300px;
   overflow: scroll;
-}
-.open {
+} */
+/* .open {
   transform: translate(0);
   opacity: 1;
 }
@@ -28,14 +29,15 @@
   transform: translate(0, -10px);
   opacity: 0;
   visibility: hidden;
-}
+} */
 
 .hotKeyContainer {
-  border: 1px solid var(--dark-1);
+  background-color: var(--light-1);
   border-radius: 5px;
   width: fit-content;
   padding: 2px 5px;
   display: inline-block;
+  color: var(--dark-1);
 }
 
 .shortcutTable {

@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^7.1.0",
     "@simbathesailor/use-what-changed": "^2.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -27,7 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env INLINE_RUNTIME_CHUNK=false craco build",
+    "build": "node build.mjs",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -49,11 +48,20 @@
       "last 1 safari version"
     ]
   },
-  "cracoConfig": "./craco.config.js",
   "devDependencies": {
     "@types/chrome": "^0.0.226",
     "@types/node": "^18.15.11",
     "cross-env": "^7.0.3",
-    "tslib": "^2.5.0"
+    "css-tree": "^2.3.1",
+    "esbuild": "^0.17.19",
+    "esbuild-css-modules-plugin": "^2.7.1",
+    "esbuild-plugin-copy": "^2.1.1",
+    "esbuild-plugin-eslint": "^0.3.6",
+    "esbuild-plugin-inline-image": "^0.0.9",
+    "esbuild-plugin-lightningcss-modules": "^0.1.0",
+    "esbuild-sass-plugin": "^2.9.0",
+    "esbuild-scss-modules-plugin": "^1.1.1",
+    "tslib": "^2.5.0",
+    "zip-a-folder": "^1.1.5"
   }
 }

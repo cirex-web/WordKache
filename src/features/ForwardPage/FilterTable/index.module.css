@@ -1,0 +1,13 @@
+.tableContainer {
+  overflow: scroll;
+}
+
+.filterTable {
+  overflow: scroll;
+  flex-grow: 1;
+}
+
+tr.selected {
+  background-color: var(--dark-2);
+  font-weight: bold;
+}

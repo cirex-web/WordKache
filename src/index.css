@@ -4,8 +4,10 @@
   --dark-2: #454955;
   --light-1: #f3eff5;
   --light-2: #f3eff59c;
-  --accent-1: #72b01d;
-  --accent-2: #3f7d20;
+  --accent-1: hsl(198, 39%, 47%);
+  --accent-2: hsl(198, 60%, 51%);
+  --red-1: hsl(0, 39%, 47%);
+  --red-2: hsl(0, 64%, 55%);
 }
 ::-webkit-scrollbar {
   display: none;
@@ -19,7 +21,6 @@
 
 html {
   height: 100vh;
-  min-width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +32,7 @@ body {
   font-family: "Open Sans", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 600px;
+  width: 700px;
   height: 450px;
 }
 #root {
@@ -53,8 +54,6 @@ table {
   border-collapse: collapse;
   width: 100%;
   text-align: left;
-  flex-grow: 1;
-  overflow: scroll;
   font-size: 1.2rem;
   border-spacing: 5px;
   table-layout: fixed;
@@ -75,7 +74,7 @@ thead th {
   padding: 5px;
 }
 td {
-  padding: 3px 12px;
+  padding: 5px 12px;
   width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;

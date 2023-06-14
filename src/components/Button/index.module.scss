@@ -1,11 +1,11 @@
 .button {
   background-color: transparent;
-  outline: none;
   color: var(--light-1);
   font-size: inherit;
   cursor: pointer;
-  transition: 0.15s all;
+  transition: 0.15s background-color, 0.15s transform;
   border: 0;
+  padding: 0;
   &:hover {
     background-color: var(--dark-2);
     &:active {
@@ -15,6 +15,9 @@
   &:disabled {
     color: var(--light-2);
     pointer-events: none;
+    &:hover {
+      cursor: not-allowed;
+    }
   }
 }
 .zoomButton {

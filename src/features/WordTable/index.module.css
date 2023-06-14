@@ -1,14 +1,15 @@
+
   .textBox {
     position: sticky;
     bottom: 0;
   }
 
   .container {
-    position: relative;
-    overflow: hidden;
+    overflow: scroll;
     display: flex;
     flex-direction: column;
   }
+
   tr.selected {
     background-color: var(--dark-2);
     font-weight: bold;
@@ -27,8 +28,8 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    flex-grow: 1;
     gap: 20px;
+    flex-grow: 1;
   }
 
 

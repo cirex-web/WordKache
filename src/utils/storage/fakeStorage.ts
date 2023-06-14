@@ -1,7 +1,7 @@
-import { Card, Folder } from "../storageTypes";
+import { Card, Folder, Filter } from "../../types/storageTypes";
 
 // just for npm start
-export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
+export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Filter[], "debug"?: any, "userId"?: string } = {
     "cards": [
         {
             "back": {
@@ -308,8 +308,175 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[] } = {
     ],
     "folders": [
         {
-            "id": "tchYdlZkZyp76HO2CsL7o",
-            "name": "Saved"
+            "id": "root",
+            "name": "Just Collected",
+            "open": true
+        },
+        {
+            "id": "_5W9exnt-t3PxTNO-Oj7S",
+            "name": "New Folder"
+        },
+        {
+            "id": "bdP52oUTsE5ANM4laIls3",
+            "name": "New Folder",
+            "parentId": "5L4sKT94z0YYTvhg8w9NI"
+        },
+        {
+            "id": "9Zzb3-Vmzsomn6KoFsWIg",
+            "name": "New Folder",
+            "parentId": "5L4sKT94z0YYTvhg8w9NI"
+        },
+        {
+            "id": "5L4sKT94z0YYTvhg8w9NI",
+            "name": "jhkhkj",
+            "open": true,
+            "parentId": "5L4sKT94z0YYTvhg8w9NI"
+        },
+        {
+            "id": "wfYhr92BND_NH9Xa_tChp",
+            "name": "New Folder",
+            "parentId": "JS-HdQWVvw2oskmF3TiCl"
+        },
+        {
+            "id": "LGUr7yYK55AD94xLrT6DR",
+            "name": "New Folder",
+            "parentId": "JS-HdQWVvw2oskmF3TiCl"
+        },
+        {
+            "id": "JS-HdQWVvw2oskmF3TiCl",
+            "name": "New Folder",
+            "open": true,
+            "parentId": "JS-HdQWVvw2oskmF3TiCl"
+        },
+        {
+            "id": "SYwKRD1_Q7gIlP3J5w7Rl",
+            "name": "New Folder",
+            "open": true,
+            "parentId": "5m17PYCSbFsID3FZFAK31"
+        },
+        {
+            "id": "fUD5z5r95mYuQh8gRCSq5",
+            "name": "New Folder",
+            "open": false,
+            "parentId": "5m17PYCSbFsID3FZFAK31"
+        },
+        {
+            "id": "xIMi87mJ-P9VqPiOvU6w0",
+            "name": "New Folder",
+            "parentId": "fUD5z5r95mYuQh8gRCSq5"
+        },
+        {
+            "id": "9eVtS6Hb3YxXJTCR8CARf",
+            "name": "New Folder",
+            "parentId": "5m17PYCSbFsID3FZFAK31"
+        },
+        {
+            "id": "PN51gTCInRDPYCfdylTJm",
+            "name": "New Folder",
+            "parentId": "5m17PYCSbFsID3FZFAK31"
+        },
+        {
+            "id": "ulG-Gl6Rd7zlIt6KzXjhD",
+            "name": "New Folder",
+            "parentId": "5m17PYCSbFsID3FZFAK31"
+        },
+        {
+            "id": "8o_u834RiHuPNNEV4Xa7K",
+            "name": "New Folder",
+            "parentId": "5m17PYCSbFsID3FZFAK31"
+        },
+        {
+            "id": "cRooVxg0o2EBq-Sgi9_yN",
+            "name": "New Folder",
+            "parentId": "ygBCUJCcGTnRCHDXzdPsc"
+        },
+        {
+            "id": "48tLAEaCBC5XN1iyteck7",
+            "name": "New Folder",
+            "parentId": "ygBCUJCcGTnRCHDXzdPsc"
+        },
+        {
+            "id": "LefEgk4-_2-iClULN_zQg",
+            "name": "New Folder",
+            "open": false,
+            "parentId": "ygBCUJCcGTnRCHDXzdPsc"
+        },
+        {
+            "id": "k8kMIyYTfVAnB0i-KNN0W",
+            "name": "New Folder",
+            "parentId": "ygBCUJCcGTnRCHDXzdPsc"
+        },
+        {
+            "id": "SinR5ncRspyERcRpelotZ",
+            "name": "New Folder",
+            "parentId": "ygBCUJCcGTnRCHDXzdPsc"
+        },
+        {
+            "id": "svz48X9J08XP9duoJxXx6",
+            "name": "sdfsdfwefweoifjwefoiwej!?!?!!?;;;;][][]",
+            "parentId": "ygBCUJCcGTnRCHDXzdPsc"
+        },
+        {
+            "id": "wxzsHECHq5o8K_8zgsklJ",
+            "name": "New Folder",
+            "parentId": "ygBCUJCcGTnRCHDXzdPsc"
+        },
+        {
+            "id": "Gz5CNXq6XOC9JFPi-0Wig",
+            "name": "New Folder",
+            "open": true,
+            "parentId": "LefEgk4-_2-iClULN_zQg"
+        },
+        {
+            "id": "bFZrptEv4dM6H28iBw30i",
+            "name": "New Folder",
+            "parentId": "LefEgk4-_2-iClULN_zQg"
+        },
+        {
+            "id": "k_oc2v4V2tUw7jymxRVXs",
+            "name": "New Folder",
+            "parentId": "Gz5CNXq6XOC9JFPi-0Wig"
+        },
+        {
+            "id": "mxGr282KifnRXTDCQojr8",
+            "name": "New Folder",
+            "parentId": "Gz5CNXq6XOC9JFPi-0Wig"
+        },
+        {
+            "id": "St-_UAes0tZZCJbHb5VP9",
+            "name": "ijij",
+            "parentId": "Gz5CNXq6XOC9JFPi-0Wig"
         }
-    ]
+    ],
+
+    "filters": [
+        {
+            "frontLang": ["en"],
+            "backLang": ["es"],
+            "words": ["hello", "world"],
+
+            "destination": "defaultFolder",
+            "id": "12412421",
+        },
+        {
+            "frontLang": ["es"],
+            "backLang": ["en"],
+            "words": ["hello", "world"],
+            "destination": "defaultFolder",
+            "id": "5325742",
+        },
+        {
+            "frontLang": ["es"],
+            "backLang": ["fr"],
+            "words": ["hello", "world"],
+            "length": {
+                "number": 10,
+                "direction": "greater",
+            },
+            "destination": "defaultFolder",
+            "id": "1352389",
+        },
+    ],
+    userId: "AAAAA",
+    debug: false
 }
