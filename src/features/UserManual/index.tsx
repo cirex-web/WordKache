@@ -1,6 +1,7 @@
 import css from "./index.module.css";
 import { Text } from "../../components/Text";
 import { Header } from "../../components/Header";
+import { useStorage } from "../../utils/storage/storage";
 
 const HotKey = ({ children }: { children: string }) => {
   return <div className={css.hotKeyContainer}>{children}</div>;
@@ -26,6 +27,7 @@ const HotKey = ({ children }: { children: string }) => {
 // };
 
 export const UserManual = () => {
+  const introPopupOpen = useStorage("introPopupOpen", false);
   // const [boxOpen, setBoxOpen] = useState(false);
   // const { formStatus } = useFormData();
   // const popupRef = useRef<HTMLDivElement>(null);
@@ -99,26 +101,6 @@ export const UserManual = () => {
           folder to the top level, you'll need to unselect the current folder
           (like how it is right now) before clicking '+'.
         </Text>
-        {/* <Text type="paragraph">
-            Inactive: For statistical analysis, around 50% of your collected cards will be
-            temporarily hidden. However, once you've accumulated 30 hidden
-            cards, you'll be able to see all subsequent translations. (
-            {numCardsHidden >= HIDDEN_CARD_THRESHOLD_NUMBER ? (
-              <>You've reached it!</>
-            ) : (
-              <>
-                You're currently{" "}
-                <b>
-                  {Math.round(
-                    (numCardsHidden / HIDDEN_CARD_THRESHOLD_NUMBER) * 100
-                  )}
-                  %
-                </b>{" "}
-                of the way there.
-              </>
-            )}
-            )
-          </Text> */}
 
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Why aren't my translations being saved?
