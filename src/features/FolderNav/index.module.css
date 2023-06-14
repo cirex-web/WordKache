@@ -6,6 +6,7 @@
   flex-direction: column;
 }
 .folders {
+  padding-top: 5px;
   overflow-y: auto;
 }
 .title {
@@ -13,7 +14,6 @@
   align-items: center;
   gap: 5px;
   border-bottom: 2px solid var(--light-1);
-  margin-bottom: 5px;
   padding-right: 10px;
   margin-left: 10px;
 }

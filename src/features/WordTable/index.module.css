@@ -4,6 +4,7 @@
 }
 .tableContainer {
   overflow-y: auto;
+  flex-grow: 1;
 }
 tr.selected {
   background-color: var(--dark-2);
