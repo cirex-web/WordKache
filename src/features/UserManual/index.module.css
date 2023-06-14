@@ -2,7 +2,7 @@
   overflow: scroll;
 }
 .textContainer {
-  padding: 10px;
+  padding: 20px;
 }
 /* .textBox {
   position: absolute;
@@ -32,11 +32,12 @@
 } */
 
 .hotKeyContainer {
-  border: 1px solid var(--dark-1);
+  background-color: var(--light-1);
   border-radius: 5px;
   width: fit-content;
   padding: 2px 5px;
   display: inline-block;
+  color: var(--dark-1);
 }
 
 .shortcutTable {

@@ -78,7 +78,7 @@ export const WordPanel = ({
             selectedFolderIds.filter((id) => id !== activeFolderId).length === 0
           }
         >
-          <Text type="subheading">Save</Text>
+          <Text type="subheading">Move</Text>
         </Button>
         <Button onClick={deleteCard}>
           <Text type="subheading">Delete</Text>

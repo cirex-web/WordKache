@@ -50,7 +50,7 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
 
   return (
     <div className={css.container}>
-      {formStatus && (
+      {/* {formStatus && (
         <Text type="paragraph" style={{ padding: "10px" }}>
           {formStatus.done ? (
             "Thanks for completing the form! You'll be able to see your hidden cards soon."
@@ -70,7 +70,7 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
             </>
           )}
         </Text>
-      )}
+      )} */}
       <Header headingText="Welcome to WordKache!" />
       {/* <Text type="subheading" className={css.container}>
         <Button
@@ -88,12 +88,22 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
         
       </Text> */}
       <div className={css.textContainer}>
-        <Text type="paragraph">
+        <Text type="subheading">
           To use WordKache, simply go to either Google Translate or DeepL,
-          translate some words, and check the Just Collected folder for your
-          translations! To save your words into a specific folder, just shift
-          click on the folder you wish to add it to, (can be multiple) and press
-          Save!
+          translate some words, and check the <b>Just Collected</b> folder for
+          your translations! To view this page again, simply unselect the active
+          folder.
+        </Text>
+        <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
+          Saving your cards
+        </Text>
+        <Text type="paragraph">
+          To save your words into a specific folder, just shift click on the
+          folder(s) you wish to add it to and press Move! To add/remove folders,
+          use the +/- buttons on the top left. To rename a folder, double click
+          on the folder name in the left panel. As of now, in order to add a
+          folder to the top level, you'll need to unselect the current folder
+          (like how it is right now) before clicking '+'.
         </Text>
         {/* <Text type="paragraph">
             Inactive: For statistical analysis, around 50% of your collected cards will be
@@ -139,6 +149,16 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
           </a>
           .
         </Text>
+        <Text type="heading" style={{ marginTop: "15px" }} bold>
+          I've completed the beta testing form! Where are my hidden cards?
+        </Text>
+        <Text
+          type="paragraph"
+          style={{ marginTop: "10px" }}
+          //TODO: The jank is real
+        >
+          You'll see them very soon, we promise.
+        </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Hotkeys
         </Text>
@@ -147,15 +167,15 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
             <div>
               <HotKey>Shift</HotKey> + <HotKey>Click</HotKey>
             </div>
-            <div>Range Selection</div>
+            <div>Range Select Cards/Folders</div>
             <div>
               <HotKey>^|⌘</HotKey> + <HotKey>Click</HotKey>
             </div>
-            <div>Select Card</div>
+            <div>Select/Deselect Card/Folder</div>
             <div>
               <HotKey>^|⌘</HotKey> + <HotKey>A</HotKey>
             </div>
-            <div>Select All</div>
+            <div>Select All Cards</div>
             <div>
               <HotKey>^|⌘</HotKey> + <HotKey>C</HotKey>
             </div>
@@ -163,7 +183,7 @@ export const UserManual = ({ numCardsHidden }: { numCardsHidden: number }) => {
             <div>
               <HotKey>esc</HotKey>
             </div>
-            <div>Cancel Selection</div>
+            <div>Cancel Card Selection</div>
           </div>
         </Text>
       </div>
