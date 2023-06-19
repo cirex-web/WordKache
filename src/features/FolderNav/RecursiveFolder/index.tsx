@@ -9,6 +9,16 @@ import { Collapse } from "../../../components/Collapse";
 import { useFolderContext } from "../../../contexts/FolderProvider";
 import { useFolderNavContext } from "../../../contexts/FolderNavProvider";
 
+export const RecursiveFolderPlaceholder = () => {
+  return (
+    <li className={classNames.bind(css)("folderName", "loading")}>
+      <Text type="subheading" noWrap>
+        a
+      </Text>
+    </li>
+  );
+};
+
 export const RecursiveFolder = ({
   folder,
   depth = 0,
@@ -30,6 +40,7 @@ export const RecursiveFolder = ({
   const selected = selectedFolderIds?.includes(folder.id);
   const nameChangeRef = React.useRef(false);
 
+  //TODO: You know, there really shouldn't be an outer div... breaks li semantics
   return (
     <div
       onDrop={(ev) => {

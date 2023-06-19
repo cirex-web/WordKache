@@ -8,6 +8,8 @@
 .folders {
   padding: 5px 0;
   overflow-y: auto;
+  display: flex; /*So that the placeholder elements don't margin collapse*/
+  flex-direction: column;
 }
 .title {
   display: flex;
