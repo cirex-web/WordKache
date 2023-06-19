@@ -61,7 +61,7 @@ export const RecursiveFolder = ({
           style={{ paddingLeft: depth * 12 + 10 }}
           onMouseDown={(ev) => {
             if (ev.ctrlKey || ev.metaKey) {
-              if (activeFolderId === folder.id) setActiveFolderId("");
+              if (activeFolderId === folder.id) setActiveFolderId(null);
             } else setActiveFolderId(folder.id);
 
             handleFolderSelect(ev, folder.id);

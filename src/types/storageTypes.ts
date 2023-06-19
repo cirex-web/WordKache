@@ -41,3 +41,13 @@ export interface Filter {
     },
     id: string,
 }
+
+export interface IStorage {
+    cards: Card[],
+    folders: Folder[],
+    filters: Filter[],
+    debug?: any,
+    userId: string,
+    /** null means that you're just on the welcome screen */
+    currentlyActiveFolder: string | null
+}

@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { fakeData } from "./fakeStorage";
+import { IStorage } from "../../types/storageTypes";
+
+/** Values to use in case storage doesn't have a value or value is bad? */
+// const defaultValues: IStorage = {
+//     cards: [],
+//     folders: [],
+//     filters: [],
+//     userId: "",
+//     currentlyActiveFolder: null
+// }
 
 if (!chrome.storage) {
 
-    let manualStorage = fakeData;
+    let manualStorage: Partial<IStorage> = fakeData;
 
     type EventListener = (changes: {
         [key: string]: chrome.storage.StorageChange;
@@ -48,7 +58,6 @@ if (!chrome.storage) {
     chrome.storage.local.clear = (): Promise<void> => {
         return new Promise(re => {
             manualStorage = {};
-
             re();
         });
     }
@@ -69,7 +78,7 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
     const [value, setValue] = useState<T>();
 
     useEffect(() => {
-        ChromeStorage.get(key).then((val) => setValue((val ?? defaultValue) as T));
+        ChromeStorage.get(key).then((val) => setValue(val as T ?? defaultValue));
         const updateValue = (changes: {
             [key: string]: chrome.storage.StorageChange;
         }) => {
@@ -80,7 +89,10 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
         chrome.storage.local.onChanged.addListener(updateValue);
         return () => chrome.storage.local.onChanged.removeListener(updateValue);
     }, [key, defaultValue]);
-    return value;
+    const updateValue = (val: T) => {
+        ChromeStorage.setPair(key, val);
+    }
+    return [value, updateValue] as const;
 }
 
 export const ChromeStorage = {

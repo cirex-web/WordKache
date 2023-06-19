@@ -11,7 +11,7 @@ export const FolderContext = createContext<
       tree: FileDirectory[];
       addFolder: (
         folderName: string,
-        parentFolderId?: string | undefined
+        parentFolderId?: string | undefined | null
       ) => void;
       deleteFolders: (selectedFolderIds: string[]) => void;
       renameFolder: (folderName: string, folderId: string) => void;

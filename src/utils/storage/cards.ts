@@ -1,13 +1,10 @@
 import { nanoid } from "nanoid";
 import { Card } from "../../types/storageTypes";
-import { ChromeStorage, useStorage } from "./storage";
+import { useStorage } from "./storage";
 
 const emptyArray: any[] = [];
 export const useCards = () => {
-    const cards = useStorage<Card[]>("cards", emptyArray);
-    const updateStorage = (newCards: Card[]) => {
-        ChromeStorage.setPair("cards", newCards);
-    }
+    const [cards, updateCards] = useStorage<Card[]>("cards", emptyArray);
     /**
      * 
      * @param cardIds 
@@ -24,7 +21,7 @@ export const useCards = () => {
                 }
             } else newCards.push(card);
         }
-        updateStorage(newCards);
+        updateCards(newCards);
     };
     const deleteCards = (cardIds: string[]) => {
         if (!cards) return;
@@ -32,7 +29,7 @@ export const useCards = () => {
         for (const card of cards) {
             if (cardIds.includes(card.id)) card.deleted = true; //fake deletion
         }
-        updateStorage(cardsClone);
+        updateCards(cardsClone);
 
     };
     return { cards, moveCards, deleteCards };

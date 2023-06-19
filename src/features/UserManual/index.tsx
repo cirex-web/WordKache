@@ -1,7 +1,6 @@
 import css from "./index.module.css";
 import { Text } from "../../components/Text";
 import { Header } from "../../components/Header";
-import { useStorage } from "../../utils/storage/storage";
 
 const HotKey = ({ children }: { children: string }) => {
   return <div className={css.hotKeyContainer}>{children}</div>;
@@ -27,62 +26,9 @@ const HotKey = ({ children }: { children: string }) => {
 // };
 
 export const UserManual = () => {
-  const introPopupOpen = useStorage("introPopupOpen", false);
-  // const [boxOpen, setBoxOpen] = useState(false);
-  // const { formStatus } = useFormData();
-  // const popupRef = useRef<HTMLDivElement>(null);
-  // useEffect(() => {
-  //   if (!boxOpen) return;
-  //   const closeBox = (ev: MouseEvent) => {
-  //     if (!popupRef.current?.contains(ev.target as HTMLElement)) {
-  //       setBoxOpen(false);
-  //     }
-  //   };
-  //   window.addEventListener("click", closeBox);
-  //   return () => window.removeEventListener("click", closeBox);
-  // }, [boxOpen]);
-
-  // const HIDDEN_CARD_THRESHOLD_NUMBER = 30;
-
   return (
     <div className={css.container}>
-      {/* {formStatus && (
-        <Text type="paragraph" style={{ padding: "10px" }}>
-          {formStatus.done ? (
-            "Thanks for completing the form! You'll be able to see your hidden cards soon."
-          ) : (
-            <>
-              You have{" "}
-              <a
-                href={formStatus.url}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: "lightblue" }}
-              >
-                a form
-              </a>{" "}
-              available! It should only take 5 minutes to complete, and you'll
-              get to see your hidden cards afterwards!
-            </>
-          )}
-        </Text>
-      )} */}
       <Header headingText="Welcome to WordKache!" />
-      {/* <Text type="subheading" className={css.container}>
-        <Button
-          onClick={(ev) => {
-            setBoxOpen(!boxOpen);
-            ev.stopPropagation();
-          }}
-          style={{ padding: "10px", width: "100%" }}
-        >
-          <Icon name="help" />{" "}
-          {numCardsHidden > 0
-            ? `${numCardsHidden} Card${numCardsHidden !== 1 ? "s" : ""} Hidden`
-            : "Info"}
-        </Button>
-        
-      </Text> */}
       <div className={css.textContainer}>
         <Text type="subheading">
           To use WordKache, simply go to either Google Translate or DeepL,
@@ -162,7 +108,7 @@ export const UserManual = () => {
             <div>Cancel Card Selection</div>
           </div>
         </Text>
-        <div
+        {/* <div
           style={{
             marginTop: "20px",
             display: "flex",
@@ -170,13 +116,18 @@ export const UserManual = () => {
             gap: "5px",
           }}
         >
-          <input type="checkbox" id="doNotShowAgain" />
+          <input
+            type="checkbox"
+            id="doNotShowAgain"
+            checked={introPopupOpen}
+            onChange={() => setIntroPopupOpen(!introPopupOpen)}
+          />
           <Text type="paragraph">
             <label htmlFor="doNotShowAgain">
-              Do not show this page on startup
+              Do not show this page on startup again
             </label>
           </Text>
-        </div>
+        </div> */}
       </div>
     </div>
   );
