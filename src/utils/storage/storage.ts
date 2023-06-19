@@ -78,7 +78,7 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
     const [value, setValue] = useState<T>();
 
     useEffect(() => {
-        ChromeStorage.get(key).then((val) => setTimeout(() => setValue(val as T ?? defaultValue), 1000));
+        ChromeStorage.get(key).then((val) => setValue(val as T ?? defaultValue));
         const updateValue = (changes: {
             [key: string]: chrome.storage.StorageChange;
         }) => {
