@@ -79,7 +79,8 @@ export const UserManual = () => {
           style={{ marginTop: "10px" }}
           //TODO: The jank is real
         >
-          You'll see them very soon, we promise.
+          If you're reading this, you should see a newly created "Hidden Cards"
+          folder on the left!
         </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Hotkeys
