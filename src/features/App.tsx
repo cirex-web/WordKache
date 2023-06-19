@@ -19,7 +19,7 @@ function App() {
       </div>
       {activeFolderId === undefined ? (
         <div>
-          <Header headingText="Loading..." />
+          <Header />
         </div>
       ) : activeFolderId === null ? (
         // <ForwardingPage key="filters" />

@@ -8,7 +8,7 @@ export const Header = ({
   headingText,
 }: {
   children?: React.ReactNode;
-  headingText: string;
+  headingText?: string;
 }) => {
   return (
     <div className={css.header}>
