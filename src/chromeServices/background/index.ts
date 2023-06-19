@@ -172,7 +172,10 @@ async function updateStorageVersion() {
             logger.info("Already on latest version!");
             break;
         default:
-            throw new Error(`Invalid storage version ${currentVersion}`);
+            logger.warn("Invalid storage version", currentVersion);
+            await ChromeStorage.remove("storageVersion");
+            await updateStorageVersion(); //Just reset everything honestly
+            return;
     }
     await cleanDatabase();
 
@@ -191,4 +194,4 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.alarms.onAlarm.addListener(uploadStorage);
 chrome.alarms.onAlarm.addListener(preloadHTML);
-chrome.alarms.onAlarm.addListener(makeHiddenCardFolder);
+chrome.alarms.onAlarm.addListener(makeHiddenCardFolder); //periodically checks for firebase updates
