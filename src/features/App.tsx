@@ -6,15 +6,10 @@ import logo from "../assets/logo.svg";
 import { useCards } from "../utils/storage/cards";
 import { UserManual } from "./UserManual";
 import { useFolderNavContext } from "../contexts/FolderNavProvider";
-import { useStorage } from "../utils/storage/storage";
 
 function App() {
   const { cards, moveCards, deleteCards } = useCards();
   const { activeFolderId } = useFolderNavContext();
-  const [introPopupOpen, setIntroPopupOpen] = useStorage(
-    "introPopupOpen",
-    false
-  );
   return (
     <div className={css.root}>
       <div className={css.menu}>
