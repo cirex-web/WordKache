@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { AllFolders, FileDirectory } from "../../types/folderTypes";
 import { Folder } from "../../types/storageTypes";
-import { ChromeStorage, useStorage } from "./storage";
+import { useStorage } from "./storage";
 import { cloneObj } from "..";
 
 const defaultArray: Folder[] = [];
@@ -15,9 +15,9 @@ const generateTreeStructure = (rootNodes: Folder[], graph: Map<string, Folder[]>
                 .get(fileDir.id)!
                 .map((folder) => dfs({ ...folder }));
         }
-        else {
-            finalTree.push({ ...fileDir }); //it's a top-level folder
-        }
+        // else {
+        //     finalTree.push({ ...fileDir }); //it's a top-level folder
+        // }
         return fileDir;
     };
 
@@ -73,19 +73,17 @@ const buildEulerTourMap = (tree: FileDirectory[]) => {
 
 /** If you want folder info, don't use this function - use the context hook useFolderContext() instead */
 export const useFolders = () => {
-    const folders = useStorage<Folder[]>("folders", defaultArray);
+    const [folders, setFolders] = useStorage<Folder[]>("folders", defaultArray);
     // const folderIdToFolder = folders?.reduce<{ [folderId: string]: Folder }>((obj, folder) => ({ ...obj, [folder.id]: folder }), {});
     //^ make sure this obj contains no reference to the original folder obj
 
-    console.log(folders);
+    // console.log(folders);
     const [rootNodes, folderGraph] = generateAdjacencyMapFromArray([...folders ?? []]); //don't modify original cuz that would be bad
     const tree = generateTreeStructure(rootNodes, folderGraph);
 
     const eulerIntervals = buildEulerTourMap(tree);
 
-    const updateStorage = async (newFolders: Folder[]) => {
-        await ChromeStorage.setPair("folders", newFolders);
-    }
+
     const deleteFolders = (selectedFolderIds: string[]) => {
         if (!folders) return;
         // const newFolders = [];
@@ -112,7 +110,7 @@ export const useFolders = () => {
         //             );
         //     } else newFolders.push(folder);
         // }
-        updateStorage(folders.filter(folder => folder.id === "root" || !selectedFolderIds.includes(folder.id)));
+        setFolders(folders.filter(folder => folder.id === "root" || !selectedFolderIds.includes(folder.id)));
     };
 
     // const getFolderPath = (folderId: string) => {
@@ -121,7 +119,7 @@ export const useFolders = () => {
 
     const renameFolder = (folderName: string, folderId: string) => {
         if (!folders) return;
-        updateStorage(
+        setFolders(
             folders.map((folder) => {
                 if (folder.id === folderId) folder.name = folderName;
                 return folder;
@@ -130,21 +128,21 @@ export const useFolders = () => {
     };
     const toggleFolderOpen = async (folderId: string) => {
         if (!folders) return;
-        await updateStorage(folders?.map(folder => {
+        setFolders(folders?.map(folder => {
             return { ...folder, open: folder.id === folderId ? !folder.open : folder.open }
         }));
     }
 
     // const getPath = ()
 
-    const addFolder = (folderName: string, parentFolderId?: string) => {
+    const addFolder = (folderName: string, parentFolderId?: string | null) => {
         console.log("add", folders);
-        updateStorage([
+        setFolders([
             ...(folders ?? []),
             {
                 name: folderName,
                 id: nanoid(),
-                parentId: parentFolderId
+                parentId: parentFolderId ?? undefined
             },
         ]);
     };
@@ -186,7 +184,7 @@ export const useFolders = () => {
 
         sourceFolder.parentId = targetFolder.parentId;
         folderCopy.splice(targetIndex + 1, 0, ...folderCopy.splice(sourceIndex, 1)) // Move source folder to right after target folder
-        updateStorage(folderCopy);
+        setFolders(folderCopy);
     };
     return { deleteFolders, moveFolder, renameFolder, folders, addFolder, toggleFolderOpen, tree }
 

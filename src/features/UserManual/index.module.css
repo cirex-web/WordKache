@@ -1,8 +1,10 @@
 .container {
-  overflow: scroll;
+  display: flex;
+  flex-direction: column;
 }
 .textContainer {
   padding: 20px;
+  overflow-y: scroll;
 }
 /* .textBox {
   position: absolute;

@@ -1,7 +1,8 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { handleRowSelect } from "../utils/rangeSelect";
 import { getOrderedFolderIds } from "../utils/storage/folders";
 import { useFolderContext } from "./FolderProvider";
+import { ChromeStorage, useStorage } from "../utils/storage/storage";
 
 const FolderNavContext = createContext<
   | {
@@ -13,8 +14,8 @@ const FolderNavContext = createContext<
         folder: string
       ) => void;
       /** The current (aka "active") folder id */
-      activeFolderId: string;
-      setActiveFolderId: React.Dispatch<React.SetStateAction<string>>;
+      activeFolderId?: string | null;
+      setActiveFolderId: (val: string | null) => void;
     }
   | undefined
 >(undefined);
@@ -30,8 +31,19 @@ export const FolderNavContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [selectedFolderIds, setSelectedFolderIds] = useState([""]);
-  const [activeFolderId, setActiveFolderId] = useState("");
+  const [activeFolderId, setActiveFolderId] = useStorage<null | string>(
+    "currentlyActiveFolder",
+    null
+  );
+  const [selectedFolderIds, setSelectedFolderIds] = useState<string[]>([]);
+  useEffect(() => {
+    ChromeStorage.get("currentlyActiveFolder").then((activeFolderId) => {
+      if (typeof activeFolderId === "string") {
+        setSelectedFolderIds([activeFolderId]);
+      }
+    });
+  }, []);
+
   const { tree: fileTree } = useFolderContext();
   const pivotPointRef = useRef(0); //TODO:
 

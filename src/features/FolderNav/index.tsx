@@ -9,6 +9,7 @@ import { RecursiveFolder } from "./RecursiveFolder";
 export const FolderNav = () => {
   const { tree: fileTree, addFolder, deleteFolders } = useFolderContext();
   const { selectedFolderIds, activeFolderId } = useFolderNavContext();
+
   return (
     <div className={css.container}>
       <Text type="heading" bold className={css.title}>

@@ -2,8 +2,8 @@
   "name": "WordKache - Save your translations",
   "short_name": "WordKache",
   "description": "Save and export your online translations!",
-  "version": "0.6",
-  "version_name": "0.6 beta",
+  "version": "0.7",
+  "version_name": "0.7 beta",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",

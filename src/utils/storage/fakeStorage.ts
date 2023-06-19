@@ -1,7 +1,8 @@
-import { Card, Folder, Filter } from "../../types/storageTypes";
+import { IStorage } from "../../types/storageTypes";
+
 
 // just for npm start
-export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Filter[], "debug"?: any, "userId"?: string } = {
+export const fakeData: IStorage = {
     "cards": [
         {
             "back": {
@@ -477,6 +478,7 @@ export const fakeData: { "cards"?: Card[], "folders"?: Folder[], "filters"?: Fil
             "id": "1352389",
         },
     ],
+    introPopupOpen: true,
     userId: "AAAAA",
     debug: false
 }

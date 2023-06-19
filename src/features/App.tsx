@@ -11,32 +11,26 @@ function App() {
   const { cards, moveCards, deleteCards } = useCards();
   const { activeFolderId } = useFolderNavContext();
   return (
-    <>
+    <div className={css.root}>
       <div className={css.menu}>
         <img src={logo} className={css.logo} alt="logo" />
-
         <FolderNav />
       </div>
-      {!activeFolderId.length ? (
-        // <ForwardingPage key="filters" />
-        <UserManual
-          // numCardsHidden={
-          //   cards
-          //     ? cards.reduce<number>((sum, card) => sum + +!!card.hidden, 0)
-          //     : 0
-          // }
-        />
-      ) : (
-        cards && (
-          <WordTable
-            key={activeFolderId} /* So it re-renders everything */
-            deleteCards={deleteCards}
-            moveCards={moveCards}
-            cards={cards}
-          />
-        )
-      )}
-    </>
+      {activeFolderId !== undefined &&
+        (activeFolderId === null ? (
+          // <ForwardingPage key="filters" />
+          <UserManual />
+        ) : (
+          cards && (
+            <WordTable
+              key={activeFolderId} /* So it re-renders everything */
+              deleteCards={deleteCards}
+              moveCards={moveCards}
+              cards={cards}
+            />
+          )
+        ))}
+    </div>
   );
 }
 
