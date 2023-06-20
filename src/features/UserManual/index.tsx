@@ -61,15 +61,8 @@ export const UserManual = () => {
           I have feedback/questions!
         </Text>
         <Text type="paragraph">
-          We're actively monitoring all responses on{" "}
-          <a
-            href="https://forms.gle/bkos6SGzr6Jeo33n6"
-            target="_blank"
-            rel="noreferrer"
-          >
-            this form
-          </a>
-          .
+          Send an email to "cirex314@gmail.com"! We'd love to hear your
+          thoughts.
         </Text>
         <Text type="heading" style={{ marginTop: "15px" }} bold>
           I've completed the beta testing form! Where are my hidden cards?
@@ -79,7 +72,8 @@ export const UserManual = () => {
           style={{ marginTop: "10px" }}
           //TODO: The jank is real
         >
-          You'll see them very soon, we promise.
+          If you're reading this, you should see a newly created "Hidden Cards"
+          folder on the left!
         </Text>
         <Text type="heading" lineHeight={2} style={{ marginTop: "15px" }} bold>
           Hotkeys

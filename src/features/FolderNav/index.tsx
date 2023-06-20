@@ -4,8 +4,15 @@ import css from "./index.module.css";
 import { Button } from "../../components/Button";
 import { useFolderContext } from "../../contexts/FolderProvider";
 import { useFolderNavContext } from "../../contexts/FolderNavProvider";
-import { RecursiveFolder } from "./RecursiveFolder";
+import { RecursiveFolder, RecursiveFolderPlaceholder } from "./RecursiveFolder";
 
+const generateFolderPlaceholder = (folderCount: number) => {
+  const FolderPlaceholder: React.ReactNode[] = [];
+  for (let i = 0; i < folderCount; i++) {
+    FolderPlaceholder.push(<RecursiveFolderPlaceholder key={i} />);
+  }
+  return FolderPlaceholder;
+};
 export const FolderNav = () => {
   const { tree: fileTree, addFolder, deleteFolders } = useFolderContext();
   const { selectedFolderIds, activeFolderId } = useFolderNavContext();
@@ -30,11 +37,13 @@ export const FolderNav = () => {
           </Button>
         </Text>
       </Text>
-      <div className={css.folders}>
-        {fileTree.map((folders) => (
-          <RecursiveFolder folder={folders} key={folders.id} />
-        ))}
-      </div>
+      <ul className={css.folders}>
+        {fileTree.length === 0
+          ? generateFolderPlaceholder(3)
+          : fileTree.map((folders) => (
+              <RecursiveFolder folder={folders} key={folders.id} />
+            ))}
+      </ul>
     </div>
   );
 };

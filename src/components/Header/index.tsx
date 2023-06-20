@@ -5,10 +5,10 @@ import css from "./index.module.css";
  */
 export const Header = ({
   children,
-  headingText,
+  headingText = "​" /*This is a zero-width space. It's not empty. This is done so that the heading doesn't collapse on itself when there's no text*/,
 }: {
   children?: React.ReactNode;
-  headingText: string;
+  headingText?: string;
 }) => {
   return (
     <div className={css.header}>
